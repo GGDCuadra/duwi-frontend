@@ -1,8 +1,12 @@
 import React from 'react'
-//comentario que uso para ver si sí se sube mi repo :'c jaja borralo después que lo veas xD
-function MovieCard() {
+
+function MovieCard({Poster_Link, Series_Title, Genre}) {
   return (
-    <div>MovieCard</div>
+    <div> 
+      <img src={Poster_Link} />
+      <h2 className='text-clarito font-poppins'>{Series_Title}</h2>
+      <h2 className='text-clarito font-poppins'>{Genre}</h2>
+    </div>
   )
 }
 

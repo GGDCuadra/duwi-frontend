@@ -1,8 +1,13 @@
 import React from 'react'
-//comentario que uso para ver si sí se sube mi repo :'c jaja borralo después que lo veas xD
-function SeriesCard() {
+
+function SeriesCard({name, type, genres, image}) {
   return (
-    <div>SeriesCard</div>
+    <div>
+      <img src={image} />
+      <h2 className='text-clarito font-poppins'>{name}</h2>
+      <h2 className='text-clarito font-poppins'>{type}</h2>
+      <h2 className='text-clarito font-poppins'>{genres}</h2>
+    </div>
   )
 }
 
