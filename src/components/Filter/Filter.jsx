@@ -25,40 +25,40 @@ const Filters = () => {
             <form className={style.formFilters} onSubmit={handleSubmit}>
                 <div className={style.selectContainer}>
                     <select name="gender" onChange={handleChange}>
-                        <option value="">Select a genre</option>
-                        <option value="Action">Action</option>
-                        <option value="Adventure">Adventure</option>
+                        <option value="">Seleciona un genero</option>
+                        <option value="Action">Acción</option>
+                        <option value="Adventure">Aventura</option>
                         <option value="Drama">Drama</option>
-                        <option value="War">War</option>
-                        <option value="Nature">Nature</option>
-                        <option value="Crime">Crime</option>
+                        <option value="War">Guerra</option>
+                        <option value="Nature">Naturaleza</option>
+                        <option value="Crime">Crimen</option>
                         <option value="Thriller">Thriller</option>
-                        <option value="Science-Fiction">Science-Fiction</option>
-                        <option value="History">History</option>
-                        <option value="Biography">Biography</option>
-                        <option value="Fantasy">Fantasy</option>
-                        <option value="Animation">Animation</option>
-                        <option value="Music">Music</option>
+                        <option value="Science-Fiction">Ciencia ficción</option>
+                        <option value="History">Historia</option>
+                        <option value="Biography">Biografia</option>
+                        <option value="Fantasy">Fantacia</option>
+                        <option value="Animation">Animación</option>
+                        <option value="Music">Musica</option>
                         <option value="Romance">Romance</option>
-                        <option value="Mystery">Mystery</option>
+                        <option value="Mystery">Misterio</option>
 
                     </select>
                 </div>
                 <div className={style.selectContainer}>
                     <select name="sortByTitle" onChange={handleChange}>
-                        <option value="">Order by title</option>
+                        <option value="">Ordenar por titulo</option>
                         <option value="asc">A-Z</option>
                         <option value="desc">Z-A</option>
                     </select>
                 </div>
                 <div className={style.selectContainer}>
                     <select name="sortByReleaseDate" onChange={handleChange}>
-                        <option value="">Order by release date</option>
-                        <option value="asc">Oldest to Newest</option>
-                        <option value="desc">Newest to Oldest</option>
+                        <option value="">Ordenar por fecha de estreno</option>
+                        <option value="asc">Más reciente</option>
+                        <option value="desc">Más antiguos</option>
                     </select>
                 </div>
-                <button type="submit">APPLY FILTERS</button>
+                <button type="submit">Aplicar filtros</button>
             </form>
         </div>
     );

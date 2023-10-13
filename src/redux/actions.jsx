@@ -3,7 +3,8 @@ import {
     GET_ALL_MOVIES,
     GET_ALL_SERIES,
     GET_MOVIE_BY_TITLE,
-    GET_TOP_MOVIES
+    GET_TOP_MOVIES,
+    GET_TOP_SERIES
 } from './actions-types'
 
 export const getAllMovies = () => {
@@ -52,7 +53,16 @@ export const getTopMovies = () => {
         }
     }
 };
-
+export const getFilteredReport = (filters) => {
+    const endpoint = "http://localhost:3001/movies/genre/filter"
+    return async dispatch => {
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
+}
 export const getAllSeries = () => {
     const endpoint = 'http://localhost:3001/series';
     return async dispatch => {
@@ -77,6 +87,21 @@ export const getSerieByTitle = (title) => {
             console.log(data);
             dispatch({ 
                 type: GET_MOVIE_BY_TITLE, 
+                payload: data 
+            })
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+};
+
+export const getTopSeries = () => {
+    const endpoint = 'http://localhost:3001/top-movies'
+    return async dispatch => {
+        try {
+            const {data} = await axios.get(endpoint)
+            dispatch({ 
+                type: GET_TOP_SERIES, 
                 payload: data 
             })
         } catch (error) {

@@ -1,11 +1,13 @@
-import { GET_ALL_MOVIES, GET_ALL_SERIES } from "./actions-types";
+import { GET_ALL_MOVIES, GET_ALL_SERIES, GET_TOP_MOVIES, GET_TOP_SERIES } from "./actions-types";
 
 const initialState = {
     allMovies: [],
-    allSeries: []
+    allSeries: [],
+    topMovies: [],
+    topSeries: []
 }
 
-const reducer = (state = initialState, {type, payload}) => {
+const reducer = (state = initialState, { type, payload }) => {
     switch (type) {
         case GET_ALL_MOVIES:
             return {
@@ -15,11 +17,21 @@ const reducer = (state = initialState, {type, payload}) => {
         case GET_ALL_SERIES:
             return {
                 ...state,
-                allMovies: payload
+                allSeries: payload
+            }
+        case GET_TOP_MOVIES:
+            return {
+                ...state,
+                topMovies: payload
+            }
+        case GET_TOP_SERIES:
+            return {
+                ...state,
+                topSeries: payload
             }
         default:
-            break;
+            return state;
     }
 }
 
-export default reducer
+export default reducer;
