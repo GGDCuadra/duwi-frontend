@@ -1,8 +1,25 @@
-import React from 'react'
-//comentario que uso para ver si sí se sube mi repo :'c jaja borralo después que lo veas xD
+import React, { useEffect} from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllMovies, getAllSeries } from '../../redux/actions'
+import MovieCard from '../MovieCard/MovieCard'
+import Filters from '../Filter/Filter'
+
 function Cards() {
+
+  const dispatch = useDispatch()
+  const allMovies = useSelector((state) => state.allMovies)
+  const allSeries = useSelector((state) => state.allSeries)
+
+  useEffect(() => {
+    dispatch(getAllMovies(), getAllSeries())
+  }, [dispatch])
+
   return (
-    <div>Cards</div>
+    <div>
+      <Filters/>
+      <MovieCard allMovies={allMovies}/>
+      <MovieCard allSeries={allSeries}/>
+    </div>
   )
 }
 
