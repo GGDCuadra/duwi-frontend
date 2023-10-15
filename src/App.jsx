@@ -9,6 +9,7 @@ import './index.css'
 import MovieDetail from './components/MovieDetail/MovieDetail'
 import SeriesDetail from './components/SeriesDetail/SeriesDetail'
 import UserDashboard from './components/UserDashboard/UserDashboard'
+import FormCreate from './components/FormCreate/FormCreate'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -25,6 +26,7 @@ function App() {
       <Route path='/movie/:id' element={<MovieDetail/>}/>
       <Route path='/serie/:id' element={<SeriesDetail/>}/>
       <Route path='/user' element={<UserDashboard/>}/>
+      <Route path='/formCreateEdit' element={<FormCreate/>}/>
     </Routes>
    </div>
   )
