@@ -114,7 +114,6 @@ export const getFilteredSeries = (filters) => {
                     ...filters
                 }
             })
-            console.log(data);
             dispatch({
             type: GET_ALL_SERIES_FILTERED,
                 payload: data
@@ -125,7 +124,7 @@ export const getFilteredSeries = (filters) => {
     }
 }
 export const getTopSeries = () => {
-    const endpoint = 'http://localhost:3001/top-movies'
+    const endpoint = 'http://localhost:3001/top-series'
     return async dispatch => {
         try {
             const {data} = await axios.get(endpoint)
