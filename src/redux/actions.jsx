@@ -96,7 +96,7 @@ export const getSerieByTitle = (title) => {
 };
 
 export const getTopSeries = () => {
-    const endpoint = 'http://localhost:3001/top-movies'
+    const endpoint = 'http://localhost:3001/top-series'
     return async dispatch => {
         try {
             const {data} = await axios.get(endpoint)
