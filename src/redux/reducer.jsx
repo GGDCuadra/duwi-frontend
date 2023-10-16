@@ -1,4 +1,4 @@
-import { GET_ALL_MOVIES, GET_ALL_SERIES, GET_TOP_MOVIES, GET_TOP_SERIES } from "./actions-types";
+import { GET_ALL_MOVIES, GET_ALL_MOVIES_FILTERED, GET_ALL_SERIES, GET_TOP_MOVIES, GET_TOP_SERIES } from "./actions-types";
 
 const initialState = {
     allMovies: [],
@@ -28,6 +28,11 @@ const reducer = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 topSeries: payload
+            }
+        case GET_ALL_MOVIES_FILTERED:
+            return {
+                ...state,
+                allMovies: payload
             }
         default:
             return state;

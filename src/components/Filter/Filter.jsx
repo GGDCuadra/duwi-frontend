@@ -1,11 +1,14 @@
 import { useState } from "react";
 import style from './Filter.module.css'
-const Filters = () => {
-
+import { useDispatch } from "react-redux";
+import { getFilteredMovies } from "../../redux/actions";
+const Filters = ({ onFilterChange, currentFilters, currentMoviesPage }) => {
+    const dispatch = useDispatch()
     const [filters, setFilters] = useState({
-        gender: "",
+        genre: "",
         sortByTitle: "",
-        sortByReleaseDate: ""
+        page: currentMoviesPage, // Agregar parámetro de página
+        perPage: 10, // Agregar parámetro de resultados por página
     });
 
     function handleChange(event) {
@@ -18,13 +21,14 @@ const Filters = () => {
 
     function handleSubmit(event) {
         event.preventDefault();
+        onFilterChange(filters)
     }
 
     return (
         <div className={style.filterContainer}>
             <form className={style.formFilters} onSubmit={handleSubmit}>
                 <div className={style.selectContainer}>
-                    <select name="gender" onChange={handleChange}>
+                    <select name="genre" onChange={handleChange}>
                         <option value="">Seleciona un genero</option>
                         <option value="Action">Acción</option>
                         <option value="Adventure">Aventura</option>
@@ -49,13 +53,6 @@ const Filters = () => {
                         <option value="">Ordenar por titulo</option>
                         <option value="asc">A-Z</option>
                         <option value="desc">Z-A</option>
-                    </select>
-                </div>
-                <div className={style.selectContainer}>
-                    <select name="sortByReleaseDate" onChange={handleChange}>
-                        <option value="">Ordenar por fecha de estreno</option>
-                        <option value="asc">Más reciente</option>
-                        <option value="desc">Más antiguos</option>
                     </select>
                 </div>
                 <button type="submit">Aplicar filtros</button>

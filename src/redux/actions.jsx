@@ -1,14 +1,16 @@
 import axios from 'axios'
 import {
     GET_ALL_MOVIES,
+    GET_ALL_MOVIES_FILTERED,
     GET_ALL_SERIES,
     GET_MOVIE_BY_TITLE,
     GET_TOP_MOVIES,
     GET_TOP_SERIES
 } from './actions-types'
 
-export const getAllMovies = () => {
-    const endpoint = 'http://localhost:3001/movies'
+export const getAllEnabledMovies = (options) => {
+    const{page, perPage} = options
+    const endpoint = `http://localhost:3001/enabledMovies?page=${page}&perPage=${perPage}`
     return async dispatch => {
         try {
             const {data} = await axios.get(endpoint)
@@ -53,11 +55,19 @@ export const getTopMovies = () => {
         }
     }
 };
-export const getFilteredReport = (filters) => {
-    const endpoint = "http://localhost:3001/movies/genre/filter"
+export const getFilteredMovies = (filters) => {
+    const endpoint = "http://localhost:3001/enabledMovies"
     return async dispatch => {
         try {
-            
+            const {data} = await axios.get(endpoint,{
+                params: {
+                    ...filters
+                }
+            })
+            dispatch({
+                type: GET_ALL_MOVIES_FILTERED,
+                payload: data
+            })
         } catch (error) {
             
         }
