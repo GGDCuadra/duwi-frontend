@@ -2,12 +2,12 @@ import { useState } from "react";
 import style from './Filter.module.css'
 import { useDispatch } from "react-redux";
 import { getFilteredMovies } from "../../redux/actions";
-const Filters = ({ onFilterChange, currentFilters, currentMoviesPage }) => {
+const Filters = ({ onFilterChange, currentFilters, currentMoviesPage,currentSeriesPage }) => {
     const dispatch = useDispatch()
     const [filters, setFilters] = useState({
         genre: "",
         sortByTitle: "",
-        page: currentMoviesPage, // Agregar parámetro de página
+        page: currentMoviesPage || currentSeriesPage, // Agregar parámetro de página
         perPage: 10, // Agregar parámetro de resultados por página
     });
 

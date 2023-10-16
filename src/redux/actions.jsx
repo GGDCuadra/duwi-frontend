@@ -5,7 +5,8 @@ import {
     GET_ALL_SERIES,
     GET_MOVIE_BY_TITLE,
     GET_TOP_MOVIES,
-    GET_TOP_SERIES
+    GET_TOP_SERIES,
+    GET_ALL_SERIES_FILTERED
 } from './actions-types'
 
 export const getAllEnabledMovies = (options) => {
@@ -104,7 +105,25 @@ export const getSerieByTitle = (title) => {
         }
     }
 };
-
+export const getFilteredSeries = (filters) => {
+    const endpoint = "http://localhost:3001/series"
+    return async dispatch => {
+        try {
+            const {data} = await axios.get(endpoint,{
+                params: {
+                    ...filters
+                }
+            })
+            console.log(data);
+            dispatch({
+            type: GET_ALL_SERIES_FILTERED,
+                payload: data
+            })
+        } catch (error) {
+            
+        }
+    }
+}
 export const getTopSeries = () => {
     const endpoint = 'http://localhost:3001/top-movies'
     return async dispatch => {
