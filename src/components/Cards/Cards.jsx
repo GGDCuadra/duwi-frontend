@@ -75,9 +75,9 @@ function Cards({ type }) {
   return (
     <div>
       {type === "movies" && (
-        <div>
+        <div className='flex-col justify-items-center w-100'>
           <Filters type='movies' onFilterChange={handleFilterChange} currentFilters={filters} currentMoviesPage={currentMoviesPage} />
-          <div className='flex flex-wrap  m-5 w-100 h-100 gap-5'>
+          <div className='flex flex-wrap m-5 w-100 h-100 gap-5'>
             {
               allMovies.map(movie => (
                 <MovieCard
@@ -95,9 +95,9 @@ function Cards({ type }) {
       }
       {
         type === 'series' && (
-          <div>
+          <div className='w-full'>
             <Filters type='series' onFilterChange={handleFilterChange} currentFilters={filters} currentSeriesPage={currentSeriesPage} />
-            <div className="flex flex-wrap  m-5 w-100 h-100 gap-5">
+            <div className="w">
               {
                 allSeries.map(serie => (
                   <SeriesCard
