@@ -9,7 +9,7 @@ const FormCreate = () => {
     // const [genresSelect, setGenresSelect] =useState([]);
     const genresMovie =["Crime", "Drama", "Action", "Adventure", "Sci-Fi", "Biography", "History", "Fantasy", "Horror", "Mystery", "Thriller", "Western", "Comedy", "Romance", "Animation", "Family", "War", "Biography", "Music"];
     const genresSerie=["Drama", "Action", "War", "Crime", "Thriller", "Nature", "Adventure", "Science-Fiction", "Western", "Mystery", "Supernatural", "Family", "Romance", "Comedy", "Fantasy", "Medical", "Anime", "Food", "Travel", "History"]
-    const week=["Lunes", "Martes","Miércles","jueves", "Sábado", "Domingo"]
+    const week=["Lunes", "Martes","Miércoles","jueves", "Sábado", "Domingo"]
 
     const handleContentType = (type) =>{
         setContentType(type);
