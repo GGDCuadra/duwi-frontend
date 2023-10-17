@@ -104,7 +104,8 @@ function Cards({ type }) {
                   allSeries.map(serie => (
                     <SeriesCard
                       key={serie._id}
-                      name={serie.name}
+                      _id={serie._id}
+                    name={serie.name}
                       image={serie.image ? serie.image.original : ''}
                       genres={serie.genres}
                     />
