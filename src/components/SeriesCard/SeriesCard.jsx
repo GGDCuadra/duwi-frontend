@@ -9,12 +9,12 @@ function SeriesCard({name, _id, genres, image}) {
         <img src={image} />
       </div>
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out flex flex-col justify-end items-center text-center">
-        <h2 className="text-lila font-bold  font-poppins text-base p-5">{name}</h2>
-        <h2 className="text-lila font-bold  font-poppins text-base p-5">{genres}</h2>
+        <h2 className="text-lila font-bold font-poppins text-base p-5">{name}</h2>
+        <h2 className="text-lila font-bold font-poppins text-base p-5">{genres}</h2>
       </div>
       </Link>
     </div>
-  )
+  );
 }
 
-export default SeriesCard
+export default SeriesCard;

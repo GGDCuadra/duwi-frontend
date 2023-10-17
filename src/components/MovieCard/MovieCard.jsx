@@ -10,12 +10,11 @@ function MovieCard({ _id, Poster_Link, Series_Title, Genre }) {
         />
       </div>
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out flex flex-col justify-end items-center text-center group-hover:text-xl">
-        <h2 className="text-lila font-bold  font-poppins text-base p-5">
+        <h2 className="text-lila font-bold font-poppins text-base p-5">
           {Series_Title}
         </h2>
         <h2 className="text-lila font-bold font-poppins text-base p-4">
           {Genre}
-          
         </h2>
       </div>
       </Link>
