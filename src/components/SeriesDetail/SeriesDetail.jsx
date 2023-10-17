@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import Footer from '../Footer/Footer';
 import { Link } from 'react-router-dom';
 
 function SerieDetail() {
@@ -16,6 +17,7 @@ function SerieDetail() {
   const { name, genres, image, runtime, status, summary } = seriesDetail;
 
   return (
+    <>
     <div className="bg-white p-8 rounded-lg shadow-lg">
       <div className="flex">
         <div className="mr-4">
@@ -41,6 +43,8 @@ function SerieDetail() {
         </Link>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 

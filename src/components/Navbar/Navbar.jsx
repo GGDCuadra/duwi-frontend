@@ -28,7 +28,7 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
-        <div className="ml-4 overflow-hidden">
+        <div className="ml-4">
           <SearchBar />
         </div>
         <div className="ml-4 text-gray-800 hover:text-moradito">

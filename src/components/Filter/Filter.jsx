@@ -2,6 +2,7 @@ import { useState } from "react";
 import style from './Filter.module.css'
 import { useDispatch } from "react-redux";
 import { getFilteredMovies } from "../../redux/actions";
+
 const Filters = ({type, onFilterChange, currentFilters, currentMoviesPage, currentSeriesPage }) => {
     const dispatch = useDispatch()
     const [filters, setFilters] = useState({
@@ -25,11 +26,11 @@ const Filters = ({type, onFilterChange, currentFilters, currentMoviesPage, curre
     }
 
     return (
-        <div className={style.filterContainer}>
-            <form className={style.formFilters} onSubmit={handleSubmit}>
-                <div className={style.selectContainer}>
-                    <select name="genre" onChange={handleChange}>
-                    <option value="">Seleciona un genero</option>
+        <div className='justify-center mt-10'>
+            <form className='flex justify-center' onSubmit={handleSubmit}>
+                <div className='mr-4'>
+                    <select name="genre" className="border border-gray-300 rounded px-3 py-2 font-poppins" onChange={handleChange}>
+                    <option value="">Selecciona un genero</option>
                         {type === 'movies' && (
                             <>
                                 <option value="Action">Acción</option>
@@ -74,17 +75,17 @@ const Filters = ({type, onFilterChange, currentFilters, currentMoviesPage, curre
                         )}
                     </select>
                 </div>
-                <div className={style.selectContainer}>
-                    <select name="sortByTitle" onChange={handleChange}>
+                <div className='mr-'>
+                    <select name="sortByTitle" className="border border-gray-300 rounded px-3 py-2 font-poppins" onChange={handleChange}>
                         <option value="">Ordenar por titulo</option>
                         <option value="asc">A-Z</option>
                         <option value="desc">Z-A</option>
                     </select>
                 </div>
-                <button type="submit">Aplicar filtros</button>
+                <button type="submit" className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 ml-4 ext-lg font-poppins">Aplicar filtros</button>
             </form>
         </div>
     );
 };
 
-export default Filters;
+export default Filters

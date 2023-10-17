@@ -55,6 +55,7 @@ function Top10Movies() {
         {topMovies.map((movie) => (
           <MovieCard
             key={movie._id}
+            _id={movie._id}
             Series_Title={movie.Series_Title}
             Poster_Link={movie.Poster_Link}
             Genre={movie.Genre}
