@@ -14,7 +14,7 @@ const NAVIGATION_LINKS = [
 
 const Navbar = () => {
   return (
-    <nav className=" bg-fondito p-4 pr-20 pl-10 flex justify-between items-center h-30">
+    <nav className="bg-fondito p-4 pr-20 pl-10 flex justify-between items-center h-30">
       <div className="text-2xl font-bold text-oscuro">
         <img src={logo} alt="Logo" className="w-50 h-12 mt-2 ml-2" />
       </div>
@@ -28,7 +28,7 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
-        <div className="ml-4 overflow-hidden ">
+        <div className="ml-4">
           <SearchBar />
         </div>
         <div className="ml-4 text-gray-800 hover:text-moradito">
