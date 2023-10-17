@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import Footer from '../Footer/Footer';
 
 
 function SerieDetail() {
@@ -15,6 +16,7 @@ function SerieDetail() {
   const { name, genres, image, runtime, status, summary } = seriesDetail;
 
   return (
+    <>
     <div className="bg-white p-8 rounded-lg shadow-lg">
       <div className="flex">
         <div className="mr-4">
@@ -34,7 +36,10 @@ function SerieDetail() {
         <h2 className="text-xl font-bold text-oscuro font-poppins">Sinopsis:</h2>
         <p className="text-lg text-moradito font-poppins">{summary}</p>
       </div>
+      
     </div>
+    <Footer/>
+    </>
   );
 }
 
