@@ -26,10 +26,12 @@ function App() {
       <Route path='/about' element={<About/>}/>
       <Route path='/movies' element={<Cards type='movies'/>}/>
       <Route path='/series' element={<Cards type='series'/>}/>
+      <Route path='/movies' element={<Cards type='movies'/>}/>
+      <Route path='/series' element={<Cards type='series'/>}/>
       <Route path='/movie/:id' element={<MovieDetail/>}/>
       <Route path='/serie/:id' element={<SeriesDetail/>}/>
       <Route path='/user' element={<UserDashboard/>}/>
-      <Route path='/formCreateEdit/:type/:id' element={<FormCreate/>}/>
+      <Route path='/formCreateEdit' element={<FormCreate/>}/>
     </Routes>
    </div>
   )
