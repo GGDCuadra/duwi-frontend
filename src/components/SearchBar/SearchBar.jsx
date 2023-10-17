@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaSistrix } from "react-icons/fa";
 import { useSelector } from 'react-redux';
+import { Link } from "react-router-dom";
 
 function SearchBar() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,12 +41,16 @@ function SearchBar() {
             <ul className="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
               {filteredMovies.map(movie => (
                 <li key={movie._id} className="mb-2 hover:bg-lila rounded p-1 cursor-pointer">
-                  <h3 className="mb-2 hover:bg-lila rounded p-1 cursor-pointer">{movie.Series_Title}</h3>
+                  <Link to={`movie/${movie._id}`}>
+                    <h3 className="mb-2 hover:bg-lila rounded p-1 cursor-pointer">{movie.Series_Title}</h3>
+                  </Link>
                 </li>
               ))}
               {filteredSeries.map(serie => (
                 <li key={serie._id} className="mb-2 hover:bg-lila rounded p-1 cursor-pointer">
-                  <h3 className="mb-2 hover:bg-lila rounded p-1 cursor-pointer" >{serie.name}</h3>
+                  <Link to={`serie/${serie._id}`}>
+                    <h3 className="mb-2 hover:bg-lila rounded p-1 cursor-pointer" >{serie.name}</h3>
+                  </Link>
                 </li>
               ))}
             </ul>
