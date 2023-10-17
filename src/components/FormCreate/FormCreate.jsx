@@ -297,27 +297,39 @@ const FormCreate = () => {
     
   return (
     <>  
-        <div>
-            <label className={styles.formLabel}> Elija la opción que desea crear:</label>
-            
-            <input 
-                type="radio" 
-                id="movie" 
-                name="content-type" 
-                value="movie"
-                checked={contentType === "movie"}
-                onChange={() => handleContentType("movie")}></input>
-            <label htmlFor="movie">Película</label>
-            <input 
-                type="radio" 
-                id="serie" 
-                name="content-type" 
-                value="serie"
-                checked={contentType === "serie"}
-                onChange={() => handleContentType("serie")}></input>
-            <label htmlFor="serie">Serie</label>
-        </div>
+   <div className="flex justify-center items-center mt-10">
+  <div className="bg-white p-4 rounded-md shadow-md text-dark font-poppins">
+    <label className="text-xl mb-2 text-moradito">Elija la opción que desea crear:</label>
     
+    <div className="flex items-center mb-2">
+      <input
+        type="radio"
+        id="movie"
+        name="content-type"
+        value="movie"
+        checked={contentType === "movie"}
+        onChange={() => handleContentType("movie")}
+        className="mr-2"
+      />
+      <label htmlFor="movie" className="text-lg font-poppins text-moradito">Película</label>
+    </div>
+
+    <div className="flex items-center">
+      <input
+        type="radio"
+        id="serie"
+        name="content-type"
+        value="serie"
+        checked={contentType === "serie"}
+        onChange={() => handleContentType("serie")}
+        className="mr-2"
+      />
+      <label htmlFor="serie" className="text-lg font-poppins text-moradito">Serie</label>
+    </div>
+  </div>
+</div>
+
+
         
         {contentType === "movie" && (
             <Formik
@@ -340,13 +352,13 @@ const FormCreate = () => {
             }}
         >
             {({errors}) => (
-                <Form className={styles.form}>
+                <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10">
                     {console.log(errors)}
                 
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="id">ID:</label>
+                <div className="flex flex-col space-y-2">
+                    <label className="text-lg" htmlFor="id">ID:</label>
                     <Field
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md"
                     type="number" 
                     id="id" 
                     name="id" />
@@ -354,9 +366,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.id}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="Poster_Link">URL imagen</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="Poster_Link">URL imagen</label>
                     <Field 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
                     id="Poster_Link" 
                     name="Poster_Link" />
@@ -365,10 +378,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.Poster_Link}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="Series_Title">Título de la película</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="Series_Title">Título de la película</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
                     id="Series_Title" 
                     name="Series_Title" />
@@ -377,10 +390,10 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="Released_Year">Año de estreno</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="Released_Year">Año de estreno</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="number" 
                     id="Released_Year" 
                     name="Released_Year" />
@@ -390,10 +403,10 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="Certificate">Certificado</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="Certificate">Certificado</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
                     id="Certificate" 
                     name="Certificate" />
@@ -403,10 +416,10 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
                 
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="Runtime">Duración</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="Runtime">Duración</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
                     id="Runtime" 
                     name="Runtime" />
@@ -416,11 +429,11 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className={styles.formDiv}>
+                <div className="flex flex-col">
                     
-                    <label className={styles.formLabel} htmlFor="Genre">Género</label>
+                    <label className="text-lg" htmlFor="Genre">Género</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     as="select" 
                     id="Genre" 
                     name="Genre" 
@@ -435,10 +448,10 @@ const FormCreate = () => {
                 </div>
                 
                 
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="IMDB_Rating">Rating</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="IMDB_Rating">Rating</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="number" 
                     id="IMDB_Rating" 
                     name="IMDB_Rating" />
@@ -448,10 +461,10 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="Overview">Descripción</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="Overview">Descripción</label>
                     <Field 
-                    className={styles.formTextarea}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     name="Overview"
                     as="textarea"
                     placeholder="Overview"/>
@@ -461,10 +474,10 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="Meta_score">Puntuación promedio</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="Meta_score">Puntuación promedio</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="number" 
                     id="Meta_score" 
                     name="Meta_score" />
@@ -474,10 +487,10 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="Director">Director</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="Director">Director</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
                     id="Director" 
                     name="Director" />
@@ -487,10 +500,10 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="Star1">Estrella 1</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="Star1">Estrella 1</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
                     id="Star1" 
                     name="Star1" />
@@ -500,10 +513,10 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="Star2">Estrella 2</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="Star2">Estrella 2</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
                     id="Star2" 
                     name="Star2" />
@@ -513,10 +526,10 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="Star3">Esterlla 3</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="Star3">Esterlla 3</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
                     id="Star3" 
                     name="Star3" />
@@ -526,10 +539,10 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="Star4">Director</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="Star4">Director</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
                     id="Star4" 
                     name="Star4" />
@@ -539,10 +552,10 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="No_of_Votes">Número de votos</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="No_of_Votes">Número de votos</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="number" 
                     id="No_of_Votes" 
                     name="No_of_Votes" />
@@ -552,10 +565,10 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="Gross">Ganancia</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="Gross">Ganancia</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
                     id="Gross" 
                     name="Gross" />
@@ -564,10 +577,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.Gross}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="deshabilitar">Deshabilitar</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="deshabilitar">Deshabilitar</label>
                     <Field 
-                    className={styles.formInput}
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
                     id="deshabilitar" 
                     name="deshabilitar" />
@@ -577,10 +590,11 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                {sentForm && <p className={styles.formSucces}>Formulario enviado con éxito!</p>}
-                <button className={styles.formButton} type='submit' onClick={() => setButtonPressed('create')}>Crear</button>
-                <button className={styles.formButton} type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
-    
+                {sentForm && <p className="text-lg text-morado font-poppins">Formulario enviado con éxito!</p>}
+                <div className="flex space-x-4 mb-20">
+                <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('create')}>Crear</button>
+                <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila  py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
+                </div>           
             </Form>
             )}
 
@@ -610,13 +624,13 @@ const FormCreate = () => {
             }}
         >
             {({errors}) => (
-                <Form className={styles.form}>
+                <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10">
                     {console.log(errors)}
 
-                {/* <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="id">ID</label>
+                {/* <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="id">ID</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="id" 
                     name="id" />
@@ -624,10 +638,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.id}</div>
                     )}></ErrorMessage>
                 </div>   */}
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="url">URL imagen</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="url">URL imagen</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
                     id="url" 
                     name="url" />
@@ -635,10 +649,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.url}</div>
                     )}></ErrorMessage>
                 </div>    
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="name">Título de la serie</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="name">Título de la serie</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="name" 
                     name="name" />
@@ -646,10 +660,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.name}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="type">Tipo</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="type">Tipo</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="type" 
                     name="type" />
@@ -657,10 +671,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.type}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="language">Lenguaje</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="language">Lenguaje</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="language" 
                     name="language" />
@@ -669,10 +683,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.language}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="genres">Géneros</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="genres">Géneros</label>
                     <Field
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     as="select" 
                     id="genres" 
                     name="genres" 
@@ -692,10 +706,10 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="status">Estado</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="status">Estado</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="status" 
                     name="status" />
@@ -704,10 +718,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.status}</div>
                     )}></ErrorMessage>                    
                 </div>
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="runtime">Duración</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="runtime">Duración</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="number" 
                     id="runtime" 
                     name="runtime" />
@@ -716,10 +730,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.runtime}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                <label className={styles.formLabel} htmlFor="premiered">Fecha de estreno</label>
+                <div className="flex flex-col">
+                <label className="text-lg" htmlFor="premiered">Fecha de estreno</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="date" 
                     id="premiered" 
                     name="premiered" />
@@ -728,10 +742,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.premiered}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="officialSite">Sitio oficial</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="officialSite">Sitio oficial</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="officialSite" 
                     name="officialSite" />
@@ -740,10 +754,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.officialSite}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="schedule.time">Hora</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="schedule.time">Hora</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="schedule.time" 
                     name="schedule.time" />
@@ -752,10 +766,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.schedule.time}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="schedule.days">Días</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="schedule.days">Días</label>
                     <Field
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     as="select" 
                     id="schedule.days" 
                     name="schedule.days" 
@@ -768,10 +782,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.schedule.days}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="rating.average">Promedio de calificación</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="rating.average">Promedio de calificación</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="number" 
                     id="rating.average" 
                     name="rating.average" />
@@ -780,10 +794,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.rating.average}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="weight">Peso</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="weight">Peso</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="number" 
                     id="weight" 
                     name="weight" />
@@ -792,10 +806,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.weight}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="network.id">ID de la red</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="network.id">ID de la red</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="number" 
                     id="network.id" 
                     name="network.id" />
@@ -804,10 +818,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.network.id}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="network.name">Nombre de la red</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="network.name">Nombre de la red</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="network.name" 
                     name="network.name" />
@@ -816,10 +830,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.network.name}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="network.country.name">Nombre del pais</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="network.country.name">Nombre del pais</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="network.country.name" 
                     name="network.country.name" />
@@ -828,10 +842,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.network.country.name}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="network.country.code">Código postal</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="network.country.code">Código postal</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="network.country.code" 
                     name="network.country.code" />
@@ -840,10 +854,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.network.country.code}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="network.country.timezone">Zona horaria</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="network.country.timezone">Zona horaria</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="network.country.timezone" 
                     name="network.country.timezone" />
@@ -852,10 +866,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.network.country.timezone}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="webChannel">Canal web</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="webChannel">Canal web</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="webChannel" 
                     name="webChannel" />
@@ -864,10 +878,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.webChannel}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="externals.tvrage">TVRage</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="externals.tvrage">TVRage</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="number" 
                     id="externals.tvrage" 
                     name="externals.tvrage" />
@@ -876,10 +890,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.externals.tvrage}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="externals.thetvdb">TheTVDB</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="externals.thetvdb">TheTVDB</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="number" 
                     id="externals.thetvdb" 
                     name="externals.thetvdb" />
@@ -888,10 +902,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.externals.thetvdb}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="externals.imdb">IMDb</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="externals.imdb">IMDb</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="externals.imdb" 
                     name="externals.imdb" />
@@ -900,10 +914,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.externals.imdb}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="image.medium">Imagen Media</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="image.medium">Imagen Media</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="image.medium" 
                     name="image.medium" />
@@ -912,10 +926,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.image.medium}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="image.original">Imagen Original</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="image.original">Imagen Original</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="image.original" 
                     name="image.original" />
@@ -924,10 +938,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.image.original}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="summary">Resumen</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="summary">Resumen</label>
                     <Field 
-                    className={styles.formTextarea} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     name="summary"
                     as="textarea" 
                     placeholder="Resumen..." 
@@ -937,10 +951,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.summary}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="updated">Valor de actualización</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="updated">Valor de actualización</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="number" 
                     id="updated" 
                     name="updated" />
@@ -949,10 +963,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.updated}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="_links.self.href">Enlace self</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="_links.self.href">Enlace self</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="_links.self.href" 
                     name="_links.self.href" />
@@ -961,10 +975,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors._links.self.href}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="_links.previousepisode.href">Enlace episodio previo</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="_links.previousepisode.href">Enlace episodio previo</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="_links.previousepisode.href" 
                     name="_links.previousepisode.href" />
@@ -973,10 +987,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors._links.previousepisode.href}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className={styles.formDiv}>
-                    <label className={styles.formLabel} htmlFor="deshabilitar">Deshabilitar</label>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="deshabilitar">Deshabilitar</label>
                     <Field 
-                    className={styles.formInput} 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
                     id="deshabilitar" 
                     name="deshabilitar" />
@@ -987,9 +1001,10 @@ const FormCreate = () => {
                 </div>
                 
                 {sentForm && <p className={styles.formSucces}>Formulario enviado con éxito!</p>}
-                <button className={styles.formButton} type='submit' onClick={() => setButtonPressed('create')}>Crear</button>
-                <button className={styles.formButton} type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
-    
+                <div className="flex space-x-4 mb-20">
+                <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('create')}>Crear</button>
+                <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
+                </div>
             </Form>
             )}
 
