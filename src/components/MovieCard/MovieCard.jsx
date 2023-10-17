@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 function MovieCard({ _id, Poster_Link, Series_Title, Genre }) {
   return (
     <div className="relative w-60 h-80 rounded-lg shadow-md overflow-hidden group">
+      <Link to={`/movie/${_id}`}>
       <div className="w-full rounded-lg transition-filter group-hover:blur-[2px] ">
         <img
           src={Poster_Link}
@@ -16,6 +18,7 @@ function MovieCard({ _id, Poster_Link, Series_Title, Genre }) {
           
         </h2>
       </div>
+      </Link>
     </div>
   );
 }
