@@ -299,7 +299,7 @@ const FormCreate = () => {
     <>  
    <div className="flex justify-center items-center mt-10">
   <div className="bg-white p-4 rounded-md shadow-md text-dark font-poppins">
-    <label className="text-xl mb-2 text-moradito">Elija la opción que desea crear:</label>
+    <label className="text-xl mb-2 text-moradito">Elija una opción:</label>
     
     <div className="flex items-center mb-2">
       <input
