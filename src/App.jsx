@@ -11,8 +11,6 @@ import SeriesDetail from './components/SeriesDetail/SeriesDetail'
 import UserDashboard from './components/UserDashboard/UserDashboard'
 import FormCreate from './components/FormCreate/FormCreate'
 import Cards from './components/Cards/Cards'
-import FormCreate from './components/FormCreate/FormCreate'
-import Cards from './components/Cards/Cards'
 
 function App() {
   const [count, setCount] = useState(0)
