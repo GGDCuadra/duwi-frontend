@@ -11,6 +11,8 @@ import SeriesDetail from './components/SeriesDetail/SeriesDetail'
 import UserDashboard from './components/UserDashboard/UserDashboard'
 import FormCreate from './components/FormCreate/FormCreate'
 import Cards from './components/Cards/Cards'
+import FormCreate from './components/FormCreate/FormCreate'
+import Cards from './components/Cards/Cards'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -24,6 +26,8 @@ function App() {
       <Route path='/login' element={<Login/>}/>
       <Route path='/register' element={<Register/>}/>
       <Route path='/about' element={<About/>}/>
+      <Route path='/movies' element={<Cards type='movies'/>}/>
+      <Route path='/series' element={<Cards type='series'/>}/>
       <Route path='/movies' element={<Cards type='movies'/>}/>
       <Route path='/series' element={<Cards type='series'/>}/>
       <Route path='/movie/:id' element={<MovieDetail/>}/>
