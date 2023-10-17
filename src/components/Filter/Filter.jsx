@@ -7,7 +7,6 @@ const Filters = ({type, onFilterChange, currentFilters, currentMoviesPage, curre
     const dispatch = useDispatch()
     const [filters, setFilters] = useState({
         genre: "",
-        genre: "",
         sortByTitle: "",
         page: currentMoviesPage || currentSeriesPage, // Agregar parámetro de página
         perPage: 10, // Agregar parámetro de resultados por página
