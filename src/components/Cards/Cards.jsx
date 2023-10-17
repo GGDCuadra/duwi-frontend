@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllEnabledMovies, getAllSeries, getFilteredMovies, getFilteredSeries } from '../../redux/actions'
+import {BiSolidLeftArrow, BiSolidRightArrow} from'react-icons/bi'
 import MovieCard from '../MovieCard/MovieCard'
 import SeriesCard from '../SeriesCard/SeriesCard'
+import Footer from '../Footer/Footer'
 import Filters from '../Filter/Filter'
 
 function Cards({ type }) {
@@ -75,9 +77,10 @@ function Cards({ type }) {
   return (
     <div>
       {type === "movies" && (
-        <div className='flex-col justify-items-center w-100'>
-          <Filters type='movies' onFilterChange={handleFilterChange} currentFilters={filters} currentMoviesPage={currentMoviesPage} />
-          <div className='flex flex-wrap m-5 w-100 h-100 gap-5'>
+        <div className=''>
+        <Filters type='movies' onFilterChange={handleFilterChange} currentFilters={filters} currentMoviesPage={currentMoviesPage} />
+        <div className='justify-items-center w-100 flex justify-center mt-10'>
+          <div className="flex flex-wrap justify-center gap-4 w-9/12">
             {
               allMovies.map(movie => (
                 <MovieCard
@@ -90,14 +93,14 @@ function Cards({ type }) {
             }
           </div>
         </div>
-
+      </div>
       )
       }
       {
         type === 'series' && (
           <div className='w-full'>
             <Filters type='series' onFilterChange={handleFilterChange} currentFilters={filters} currentSeriesPage={currentSeriesPage} />
-            <div className="w">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-5 m-5 justify-center">
               {
                 allSeries.map(serie => (
                   <SeriesCard
@@ -112,12 +115,16 @@ function Cards({ type }) {
           </div>
         )
       }
-      <div>
-        <button onClick={handlePrevPage}>prev</button>
-        <h3>{type==='movies'? currentMoviesPage : currentSeriesPage}</h3>
-        <button onClick={handleNextPage}>next</button>
+      <div className='flex justify-center mt-5 mb-5'>
+        <button className='mr-5' onClick={handlePrevPage}>
+          <BiSolidLeftArrow />
+        </button>
+        <h3>{type === 'movies' ? currentMoviesPage : currentSeriesPage}</h3>
+        <button className='ml-5' onClick={handleNextPage}>
+            <BiSolidRightArrow />
+        </button>
       </div>
-
+      <Footer/>
     </div>
   )
 }
