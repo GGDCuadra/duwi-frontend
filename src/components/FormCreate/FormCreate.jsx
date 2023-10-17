@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage} from 'formik'
 import * as yup from 'yup';
 import styles from './FormCreate.module.css'
+import axios from 'axios';
 
 const FormCreate = () => {
     const genresMovie =["Crime", "Drama", "Action", "Adventure", "Sci-Fi", "Biography", "History", "Fantasy", "Horror", "Mystery", "Thriller", "Western", "Comedy", "Romance", "Animation", "Family", "War", "Biography", "Music"];
@@ -85,96 +86,35 @@ const FormCreate = () => {
     const {type, id} = useParams();
 
     useEffect(()=>{
-        if (!isNaN(id) && type == "movie"){
-            setInitialValuesMovies( {
-                "id": 99,
-              "Poster_Link": "https://image.tmdb.org/t/p/original/lyQBXzOQSuE59IsHyhrp0qIiPAz.jpg",
-              "Series_Title": "The Shawshank Redemption",
-              "Released_Year": 1994,
-              "Certificate": "R",
-              "Runtime": "142 min",
-              "Genre": "Drama",
-              "IMDB_Rating": 9,
-              "Overview": "Una descripción actualizada de la película",
-              "Meta_score": 80,
-              "Director": "Frank Darabont",
-              "Star1": "Tim Robbins",
-              "Star2": "Morgan Freeman",
-              "Star3": "Bob Gunton",
-              "Star4": "William Sadler",
-              "No_of_Votes": 2343110,
-              "Gross": "28,341,469",
-              "deshabilitar": "true"
-            })
+        if (id && type == "movie"){
+
+            async function getMovieById() {
+                try {
+                    const {data} = await (axios.get(`http://localhost:3001/movies/byObjectId/${id}`))
+                    setInitialValuesMovies(data)
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+            getMovieById();
             // data = getmoviesbyid
             //setInitialValues(data)
-        } else if (!isNaN(id) && type == "serie"){
+        } else if (id && type == "serie"){
             
-            let data = {
-                "_id": "65272476997ab46b311cb693",
-                "url": "http://www.tvmaze.com/shows/465/band-of-brothers",
-                "name": "Band of Brothers",
-                "type": "Scripted",
-                "language": "English",
-                "genres": [
-                  "Drama",
-                  "Action",
-                  "War"
-                ],
-                "status": "Ended",
-                "runtime": 60,
-                "premiered": "2001-09-09",
-                "officialSite": "http://www.hbo.com/band-of-brothers",
-                "schedule": {
-                  "time": "20:00",
-                  "days": [
-                    "Sunday"
-                  ]
-                },
-                "rating": {
-                  "average": 9.5
-                },
-                "weight": 96,
-                "network": {
-                  "id": 8,
-                  "name": "HBO",
-                  "country": {
-                    "name": "United States",
-                    "code": "US",
-                    "timezone": "America/New_York"
-                  }
-                },
-                "webChannel": null,
-                "externals": {
-                  "tvrage": 2708,
-                  "thetvdb": 74205,
-                  "imdb": "tt0185906"
-                },
-                "image": {
-                  "medium": "http://static.tvmaze.com/uploads/images/medium_portrait/80/201679.jpg",
-                  "original": "http://static.tvmaze.com/uploads/images/original_untouched/80/201679.jpg"
-                },
-                "summary": "<p>Drawn from interviews with survivors of Easy Company, as well as their journals and letters, <b>Band of Brothers</b> chronicles the experiences of these men from paratrooper training in Georgia through the end of the war. As an elite rifle company parachuting into Normandy early on D-Day morning, participants in the Battle of the Bulge, and witness to the horrors of war, the men of Easy knew extraordinary bravery and extraordinary fear - and became the stuff of legend. Based on Stephen E. Ambrose's acclaimed book of the same name.</p>",
-                "updated": 1581996681,
-                "_links": {
-                  "self": {
-                    "href": "http://api.tvmaze.com/shows/465"
-                  },
-                  "previousepisode": {
-                    "href": "http://api.tvmaze.com/episodes/42799"
-                  }
-                },
-                "self": "http://api.tvmaze.com/shows/465",
-                "previousepisode": "http://api.tvmaze.com/episodes/42799",
-                "deshabilitar": "deshabilitada"
-              }
-              console.log(data)
+            async function getSerieById() {
+                try {
+                    const {data} = await (axios.get(`http://localhost:3001/series/${id}`))
+                    setInitialValuesSeries(data)
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+            getSerieById();
             const cleanData ={}
-            Object.keys(data).forEach((key) =>{
-                cleanData[key] = data[key] !== null ? data[key] : '';
-            })
-            console.log(data)
-            setInitialValuesSeries(data)
+            // Object.keys(data).forEach((key) =>{
+            //     cleanData[key] = data[key] !== null ? data[key] : '';
+            // })
+            // console.log(data)
             //data = getseriesbyid
             //setInitialValues(data)
         }
@@ -203,7 +143,7 @@ const FormCreate = () => {
         .string()
         .required("Debe completar este campo"),
         Runtime: yup
-        .number()
+        .string()
         .typeError("Debe ingresar un número")
         .required("Debe completar este campo"),
         Genre: yup
@@ -271,7 +211,7 @@ const FormCreate = () => {
             timezone: yup.string().required('Debe completar este campo'),
             }),
         }),
-        webChannel: yup.string().url('Ingresa una URL válida').nullable(),
+        webChannel: yup.string().nullable(),
         externals: yup.object().shape({
             tvrage: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
             thetvdb: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
@@ -299,7 +239,7 @@ const FormCreate = () => {
     <>  
    <div className="flex justify-center items-center mt-10">
   <div className="bg-white p-4 rounded-md shadow-md text-dark font-poppins">
-    <label className="text-xl mb-2 text-moradito">Elija la opción que desea crear:</label>
+    <label className="text-xl mb-2 text-moradito">Elija una opción:</label>
     
     <div className="flex items-center mb-2">
       <input
@@ -341,8 +281,26 @@ const FormCreate = () => {
                 //Aqui debo agregar la ruta del post de movies pasandolé values
                 console.log(values)
                 if (buttonPressed === 'create') {
+                    async function postMovie() {
+                        try {
+                            await axios.post(`http://localhost:3001/movies`, values)
+                            
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+                    postMovie();
                     console.log("axios.post")
                   } else if (buttonPressed === 'edit') {
+                    async function putMovie() {
+                        try {
+                            await axios.put(`http://localhost:3001/movies/byObjectId/${id}`, values)
+                            
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+                    putMovie();
                     console.log("axios.put")
                   }
                 setButtonPressed("")
@@ -527,7 +485,7 @@ const FormCreate = () => {
                 </div>
 
                 <div className="flex flex-col">
-                <label className="text-lg" htmlFor="Star3">Esterlla 3</label>
+                <label className="text-lg" htmlFor="Star3">Estrella 3</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
@@ -540,7 +498,7 @@ const FormCreate = () => {
                 </div>
 
                 <div className="flex flex-col">
-                <label className="text-lg" htmlFor="Star4">Director</label>
+                <label className="text-lg" htmlFor="Star4">Esterlla 4</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
@@ -611,9 +569,27 @@ const FormCreate = () => {
             onSubmit={(values, {resetForm}) =>{
                 console.log(values)
                 if (buttonPressed === 'create') {
+                    async function postSerie() {
+                        try {
+                            await axios.post(`http://localhost:3001/postSeries`, values)
+                            
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+                    postSerie();
                     console.log("axios.post")
                     
                   } else if (buttonPressed === 'edit') {
+                    async function putSerie() {
+                        try {
+                            await axios.put(`http://localhost:3001/series/${id}`, values)
+                            
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+                    putSerie();
                     console.log("axios.put")
                     
                   }
