@@ -29,7 +29,7 @@ function App() {
       <Route path='/movie/:_id' element={<MovieDetail/>}/>
       <Route path='/serie/:_id' element={<SeriesDetail/>}/>
       <Route path='/user' element={<UserDashboard/>}/>
-      <Route path='/formCreateEdit' element={<FormCreate/>}/>
+      <Route path='/formCreateEdit/:type/:id' element={<FormCreate/>}/>
     </Routes>
    </div>
   )
