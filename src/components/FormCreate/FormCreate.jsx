@@ -90,7 +90,7 @@ const FormCreate = () => {
 
             async function getMovieById() {
                 try {
-                    const {data} = await (axios.get(`http://localhost:3001/movies/${id}`))
+                    const {data} = await (axios.get(`http://localhost:3001/movies/byObjectId/${id}`))
                     setInitialValuesMovies(data)
                 } catch (error) {
                     console.log(error)
@@ -143,7 +143,7 @@ const FormCreate = () => {
         .string()
         .required("Debe completar este campo"),
         Runtime: yup
-        .number()
+        .string()
         .typeError("Debe ingresar un número")
         .required("Debe completar este campo"),
         Genre: yup
@@ -211,7 +211,7 @@ const FormCreate = () => {
             timezone: yup.string().required('Debe completar este campo'),
             }),
         }),
-        webChannel: yup.string().url('Ingresa una URL válida').nullable(),
+        webChannel: yup.string().nullable(),
         externals: yup.object().shape({
             tvrage: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
             thetvdb: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
@@ -294,7 +294,7 @@ const FormCreate = () => {
                   } else if (buttonPressed === 'edit') {
                     async function putMovie() {
                         try {
-                            await axios.put(`http://localhost:3001/movies/${id}`, values)
+                            await axios.put(`http://localhost:3001/movies/byObjectId/${id}`, values)
                             
                         } catch (error) {
                             console.log(error)
@@ -485,7 +485,7 @@ const FormCreate = () => {
                 </div>
 
                 <div className="flex flex-col">
-                <label className="text-lg" htmlFor="Star3">Esterlla 3</label>
+                <label className="text-lg" htmlFor="Star3">Estrella 3</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
@@ -498,7 +498,7 @@ const FormCreate = () => {
                 </div>
 
                 <div className="flex flex-col">
-                <label className="text-lg" htmlFor="Star4">Director</label>
+                <label className="text-lg" htmlFor="Star4">Esterlla 4</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
@@ -569,9 +569,27 @@ const FormCreate = () => {
             onSubmit={(values, {resetForm}) =>{
                 console.log(values)
                 if (buttonPressed === 'create') {
+                    async function postSerie() {
+                        try {
+                            await axios.post(`http://localhost:3001/postSeries`, values)
+                            
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+                    postSerie();
                     console.log("axios.post")
                     
                   } else if (buttonPressed === 'edit') {
+                    async function putSerie() {
+                        try {
+                            await axios.put(`http://localhost:3001/series/${id}`, values)
+                            
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+                    putSerie();
                     console.log("axios.put")
                     
                   }
