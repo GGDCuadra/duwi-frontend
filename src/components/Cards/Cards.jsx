@@ -106,7 +106,7 @@ function Cards({ type }) {
                     <SeriesCard
                       key={serie._id}
                       _id={serie._id}
-                    name={serie.name}
+                      name={serie.name}
                       image={serie.image ? serie.image.original : ''}
                       genres={serie.genres}
                     />

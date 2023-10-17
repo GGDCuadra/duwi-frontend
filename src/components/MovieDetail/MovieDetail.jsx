@@ -25,6 +25,7 @@ function MovieDetail() {
           <p className="text-lg font-bold text-moradito font-poppins">{Released_Year}</p>
           <p className="text-lg font-bold text-moradito font-poppins">{Genre}</p>
         </div>
+        
       </div>
       <div className="text-center mt-8">
         <h2 className="text-xl font-bold text-oscuro font-poppins">Director:</h2>
