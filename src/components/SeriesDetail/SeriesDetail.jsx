@@ -1,10 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
+import { Link } from 'react-router-dom';
 
 function SerieDetail() {
   const { _id } = useParams();
+  const type = "serie";
   const allSeries = useSelector((state) => state.allSeries);
   const seriesDetail = allSeries.find((serie) => serie._id === _id);
 
@@ -33,6 +34,11 @@ function SerieDetail() {
       <div className="text-center mt-8">
         <h2 className="text-xl font-bold text-oscuro font-poppins">Sinopsis:</h2>
         <p className="text-lg text-moradito font-poppins">{summary}</p>
+      </div>
+      <div>
+        <Link to={`/formCreateEdit/${type}/${_id}`}>
+        <button>Editar</button>
+        </Link>
       </div>
     </div>
   );
