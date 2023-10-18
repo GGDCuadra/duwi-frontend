@@ -14,7 +14,7 @@ function MovieDetail() {
     return <div>Loading...</div>;
   }
 
-  const { Series_Title, Released_Year, Genre, Poster_Link, trailer, Director, Overview, Star1, Star2, Star3, Star4 } = moviesDetail;
+  const { Series_Title, Released_Year, Genre, Poster_Link, Trailer, Director, Overview, Star1, Star2, Star3, Star4 } = moviesDetail;
   return (
     <div>
       <div className="bg-white p-8 rounded-lg flex">
@@ -26,6 +26,15 @@ function MovieDetail() {
           <p className="text-lg font-bold text-moradito font-poppins">{Released_Year}</p>
           <p className="text-lg font-bold text-moradito font-poppins">{Genre}</p>
         </div>
+        <iframe
+            width="560"
+            height="315"
+            src={Trailer}
+            title="Trailer"
+            frameBorder="0"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture;autoplay"
+            allowFullScreen
+          ></iframe>
         
       </div>
       <Link to={`/formCreateEdit/${type}/${_id}`}>
