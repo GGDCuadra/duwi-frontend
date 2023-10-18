@@ -37,7 +37,12 @@ function SearchBar() {
 
       {searchTerm && (
         <div className="absolute mt-1 right-0 left-0 mx-auto max-h-60 overflow-y-auto z-10 rounded-xl">
-          <div className="bg-clarito p-2 rounded shadow-md">
+ {filteredMovies.length === 0 && filteredSeries.length === 0 ? (
+            <div className="bg-red-500 p-2 rounded shadow-md text-white">
+              No results found. Please try a different search.
+            </div>
+          ) : (
+         <div className="bg-clarito p-2 rounded shadow-md">
             <ul className="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
               {filteredMovies.map(movie => (
                 <li key={movie._id} className="mb-2 hover:bg-lila rounded p-1 cursor-pointer">
@@ -55,6 +60,7 @@ function SearchBar() {
               ))}
             </ul>
           </div>
+          )}
         </div>
       )}
     </div>
