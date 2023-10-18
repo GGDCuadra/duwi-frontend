@@ -18,32 +18,36 @@ function SerieDetail() {
 
   return (
     <>
-    <div className="bg-white p-8 rounded-lg shadow-lg">
-      <div className="flex">
-        <div className="mr-4">
-          <img src={image ? image.original : ""} alt={name} className="w-64 h-96 object-cover rounded-lg shadow-lg" />
+      <div className="bg-white p-8 rounded-lg shadow-lg">
+        <div className="flex">
+          <div className="mr-4">
+            <img src={image ? image.original : ""} alt={name} className="w-64 h-96 object-cover rounded-lg shadow-lg" />
+          </div>
+          <div className="text-center">
+            <h1 className="text-xl font-bold text-morado font-poppins">{name}</h1>
+            <p className="text-lg font-bold text-moradito font-poppins">{runtime}</p>
+            <p className="text-lg font-bold text-moradito font-poppins">{genres}</p>
+          </div>
         </div>
-        <div className="text-center">
-          <h1 className="text-xl font-bold text-morado font-poppins">{name}</h1>
-          <p className="text-lg font-bold text-moradito font-poppins">{runtime}</p>
-          <p className="text-lg font-bold text-moradito font-poppins">{genres}</p>
-        </div>
-      </div>
-      <div className="text-center mt-8">
-        <h2 className="text-xl font-bold text-oscuro font-poppins">Estado:</h2>
-        <p className="text-lg font-bold text-moradito font-poppins">{status}</p>
-      </div>
-      <div className="text-center mt-8">
-        <h2 className="text-xl font-bold text-oscuro font-poppins">Sinopsis:</h2>
-        <p className="text-lg text-moradito font-poppins">{summary}</p>
-      </div>
-      <div>
-        <Link to={`/formCreateEdit/${type}/${_id}`}>
-        <button>Editar</button>
+        <div className='mt-11'>
+          <Link className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 mt-10 ext-lg font-poppins" to={`/formCreateEdit/${type}/${_id}`}>
+          <button>Editar</button>
         </Link>
+        </div>
+        
+        <div className="text-center mt-8">
+          <h2 className="text-xl font-bold text-oscuro font-poppins">Estado:</h2>
+          <p className="text-lg font-bold text-moradito font-poppins">{status}</p>
+        </div>
+        <div className="text-center mt-8">
+          <h2 className="text-xl font-bold text-oscuro font-poppins">Sinopsis:</h2>
+          <p className="text-lg text-moradito font-poppins">{summary}</p>
+        </div>
+        <div>
+
+        </div>
       </div>
-    </div>
-    <Footer/>
+      <Footer />
     </>
   );
 }

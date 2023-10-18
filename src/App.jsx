@@ -30,6 +30,7 @@ function App() {
       <Route path='/serie/:_id' element={<SeriesDetail/>}/>
       <Route path='/user' element={<UserDashboard/>}/>
       <Route path='/formCreateEdit/:type/:id' element={<FormCreate/>}/>
+      <Route path='/formCreateEdit/' element={<FormCreate/>}/>
     </Routes>
    </div>
   )
