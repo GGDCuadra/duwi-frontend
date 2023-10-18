@@ -15,7 +15,6 @@ function MovieDetail() {
   }
 
   const { Series_Title, Released_Year, Genre, Poster_Link, trailer, Director, Overview, Star1, Star2, Star3, Star4 } = moviesDetail;
-
   return (
     <div>
       <div className="bg-white p-8 rounded-lg flex">
@@ -29,6 +28,9 @@ function MovieDetail() {
         </div>
         
       </div>
+      <Link to={`/formCreateEdit/${type}/${_id}`}>
+        <button className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 ml-[65px] ext-lg font-poppins">Editar</button>
+        </Link>
       <div className="text-center mt-8">
         <h2 className="text-xl font-bold text-oscuro font-poppins">Director:</h2>
         <ul className="list-disc list-inside">
@@ -49,9 +51,7 @@ function MovieDetail() {
         <p className="text-lg text-moradito font-poppins">{Overview}</p>
       </div>
       <div>
-        <Link to={`/formCreateEdit/${type}/${_id}`}>
-        <button>Editar</button>
-        </Link>
+        
       </div>
       <Footer/>
     </div>

@@ -30,7 +30,7 @@ function SearchBar() {
           value={searchTerm}
           onChange={handleSearch}
         />
-        <button className="absolute right-5 top-1/2 -translate-y-1/2">
+        <button className="absolute right-5 top-1/2 -translate-y-1/2">  
           <FaSistrix className="text-2xl"></FaSistrix>
         </button>
       </form>
