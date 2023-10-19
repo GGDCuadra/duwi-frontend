@@ -1,0 +1,58 @@
+.form {
+    min-height: 600px;
+    margin-top: 50px;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.formDiv {
+    margin-bottom: 20px;
+}
+.formLabel {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: black ;
+}
+.formTextarea {
+    width: 45%;
+    border-radius: 5px;
+    border: 2px solid black;
+    font-size: 18px;
+    padding: 10px;
+    margin-bottom: 5px;
+    color: black;
+}
+.formButton {
+	display: block;
+	background: #0085FF;
+	font-weight: 600;
+	font-family: 'Open Sans', sans-serif;
+	border: none;
+	cursor: pointer;
+	width: 100%;
+	padding: 10px;
+	border-radius: 5px;
+	color: #fff;
+	font-size: 16px;
+	transition: .3s ease all;
+}
+
+.formSucces {
+	text-align: center;
+	font-size: 14px;
+	padding-top: 20px;
+	color: #02a802;
+}
+
+.formError {
+	color: #e92b2d;
+	font-weight: 600;
+	font-size: 12px;
+}
+.formInput {
+    border: 2px solid black;
+    border-radius: 5px;
+}
