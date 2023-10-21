@@ -11,6 +11,7 @@ import SeriesDetail from './components/SeriesDetail/SeriesDetail'
 import UserDashboard from './components/UserDashboard/UserDashboard'
 import FormCreate from './components/FormCreate/FormCreate'
 import Cards from './components/Cards/Cards'
+import DashboardPage from './components/dashboard/dashboard'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -31,6 +32,8 @@ function App() {
       <Route path='/user' element={<UserDashboard/>}/>
       <Route path='/formCreateEdit/:type/:id' element={<FormCreate/>}/>
       <Route path='/formCreateEdit/' element={<FormCreate/>}/>
+      <Route path='/dashboard' element={<DashboardPage/>}/>
+      
     </Routes>
    </div>
   )
