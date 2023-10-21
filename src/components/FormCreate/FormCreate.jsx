@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import { useParams } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage} from 'formik'
+import { Formik, Form, Field, ErrorMessage, FieldArray} from 'formik'
 import * as yup from 'yup';
-import styles from './FormCreate.module.css'
+import styles from "./FormCreate.module.css"
 import axios from 'axios';
 
 const FormCreate = () => {
@@ -11,6 +11,8 @@ const FormCreate = () => {
     const week=["Lunes", "Martes","Miércles","Jueves", "Sábado", "Domingo"];
     const initialValuesMoviesCreate = {
         id: '',
+        actors: [],
+        actorName: '',
         Poster_Link: '',
         Series_Title: '',
         Released_Year: '',
@@ -27,7 +29,7 @@ const FormCreate = () => {
         Star4: '',
         No_of_Votes: '',
         Gross: '',
-        deshabilitar: '',
+        deshabilitar: 'null',
         
     }
     const initialValuesSeriesCreate = {
@@ -77,12 +79,15 @@ const FormCreate = () => {
         previousepisode: {
             href: '',
         },
+        deshabilitar: 'null'
     }}
     const [sentForm, setSentForm] = useState(false);
     const [contentType, setContentType] = useState('');
     const [buttonPressed, setButtonPressed] = useState(null);
     const [initialValuesMovies, setInitialValuesMovies] =useState(initialValuesMoviesCreate);
     const [initialValuesSeries, setInitialValuesSeries] =useState(initialValuesSeriesCreate);
+    const [image, setImage] = useState('');
+    const [loading, setLoading] = useState(false)
     const {type, id} = useParams();
 
     useEffect(()=>{
@@ -97,8 +102,7 @@ const FormCreate = () => {
                 }
             }
             getMovieById();
-            // data = getmoviesbyid
-            //setInitialValues(data)
+            
         } else if (id && type == "serie"){
             
             async function getSerieById() {
@@ -110,13 +114,7 @@ const FormCreate = () => {
                 }
             }
             getSerieById();
-            const cleanData ={}
-            // Object.keys(data).forEach((key) =>{
-            //     cleanData[key] = data[key] !== null ? data[key] : '';
-            // })
-            // console.log(data)
-            //data = getseriesbyid
-            //setInitialValues(data)
+            
         }
     }, [id, type])
    
@@ -124,14 +122,31 @@ const FormCreate = () => {
     const handleContentType = (type) =>{
         setContentType(type);
     }
+    async function handleFileUpload(event) {
+        const files = event.target.files;
+        const formData = new FormData();
+        formData.append('file', files[0]);
+        formData.append('upload_preset', 'imagesPF');
+        setLoading(true)
+        try {
+            const response = await axios.post(`https://api.cloudinary.com/v1_1/dzrp4xd2g/image/upload`, formData);
+            console.log(response)
+            const imageURL = response.data.secure_url;
+            console.log(imageURL)
+            setImage(imageURL)
+            setLoading(false)
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
     
 
 
     const FormSchemaMovies = yup.object().shape({
-        id: yup.number()
-        .typeError("Debe ingresar un número")
-        .required("Debe completar este campo"),
-        Poster_Link: yup.string().url("Debes ingresar una URL válida").required('Debe completar este campo'),        
+        // id: yup.number()
+        // .typeError("Debe ingresar un número")
+        // .required("Debe completar este campo"),
+              
         Series_Title: yup
         .string()
         .required("Debe completar este campo"),
@@ -139,20 +154,18 @@ const FormCreate = () => {
         .number()
         .typeError("Debe ingresar un número")
         .required("Debe completar este campo"),
-        Certificate: yup
-        .string()
-        .required("Debe completar este campo"),
+        // Certificate: yup
+        // .string()
+        // .required("Debe completar este campo"),
         Runtime: yup
         .string()
         .typeError("Debe ingresar un número")
         .required("Debe completar este campo"),
-        Genre: yup
-        .string()
-        .required("Debe completar este campo"),
-        IMDB_Rating: yup
-        .number()
-        .typeError("Debe ingresar un número")
-        .required("Debe completar este campo"),
+        Genre: yup.array().of(yup.string()).min(1, 'Debes seleccionar al menos un género'),
+        // IMDB_Rating: yup
+        // .number()
+        // .typeError("Debe ingresar un número")
+        // .required("Debe completar este campo"),
         Overview: yup
         .string()
         .required("Debe completar este campo"),
@@ -163,21 +176,21 @@ const FormCreate = () => {
         Director: yup
         .string()
         .required("Debe ingresar el director de la película"),
-        Star1: yup
-        .string()
-        .required("Debe completar este campo"),
-        Star2: yup
-        .string()
-        .required("Debe completar este campo"),
-        Star3: yup
-        .string()
-        .required("Debe completar este campo"),
-        Star4: yup
-        .string()
-        .required("Debe completar este campo"),
-        No_of_Votes: yup.number()
-        .typeError("Debe ingresar un número")
-        .required("Debe completar este campo"),
+        // Star1: yup
+        // .string()
+        // .required("Debe completar este campo"),
+        // Star2: yup
+        // .string()
+        // .required("Debe completar este campo"),
+        // Star3: yup
+        // .string()
+        // .required("Debe completar este campo"),
+        // Star4: yup
+        // .string()
+        // .required("Debe completar este campo"),
+        // No_of_Votes: yup.number()
+        // .typeError("Debe ingresar un número")
+        // .required("Debe completar este campo"),
         Gross: yup
         .string()
         .required("Debe completar este campo"),
@@ -272,6 +285,7 @@ const FormCreate = () => {
 
         
         {contentType === "movie" && (
+            
             <Formik
             initialValues={initialValuesMovies}
             
@@ -280,27 +294,42 @@ const FormCreate = () => {
             onSubmit={(values, {resetForm}) =>{
                 //Aqui debo agregar la ruta del post de movies pasandolé values
                 console.log(values)
+                // const updatedValues = {
+                //     ...values,
+                //     actors: [...values.actors, values.actorName],
+                //   };
+                //   console.log(updatedValues)
+                  
                 if (buttonPressed === 'create') {
-                    async function postMovie() {
-                        try {
-                            await axios.post(`http://localhost:3001/movies`, values)
+                    console.log(image)
+                    const genresAsString = values.Genre.join(', ');
+                    const dataToSend = {
+                        ...values,
+                        Genre: genresAsString,
+                        Poster_Link: image
+                      };
+                     
+                    // async function postMovie() {
+                    //     try {
+                    //         await axios.post(`http://localhost:3001/movies`, values)
                             
-                        } catch (error) {
-                            console.log(error)
-                        }
-                    }
-                    postMovie();
+                    //     } catch (error) {
+                    //         console.log(error)
+                    //     }
+                    // }
+                    // postMovie();
+                    console.log(dataToSend)
                     console.log("axios.post")
                   } else if (buttonPressed === 'edit') {
-                    async function putMovie() {
-                        try {
-                            await axios.put(`http://localhost:3001/movies/byObjectId/${id}`, values)
+                    // async function putMovie() {
+                    //     try {
+                    //         await axios.put(`http://localhost:3001/movies/byObjectId/${id}`, values)
                             
-                        } catch (error) {
-                            console.log(error)
-                        }
-                    }
-                    putMovie();
+                    //     } catch (error) {
+                    //         console.log(error)
+                    //     }
+                    // }
+                    // putMovie();
                     console.log("axios.put")
                   }
                 setButtonPressed("")
@@ -309,11 +338,11 @@ const FormCreate = () => {
                 // setTimeout(()=> setSentForm(false), 4000)
             }}
         >
-            {({errors}) => (
+            {({errors, values}) => (
                 <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10">
                     {console.log(errors)}
                 
-                <div className="flex flex-col space-y-2">
+                {/* <div className="flex flex-col space-y-2">
                     <label className="text-lg" htmlFor="id">ID:</label>
                     <Field
                     className="p-2 border border-lila rounded-md"
@@ -323,14 +352,46 @@ const FormCreate = () => {
                     <ErrorMessage name= "id" component={()=>(
                         <div className={styles.formError}>{errors.id}</div>
                     )}></ErrorMessage>
+                </div> */}
+                <div>
+            <label>Actores:</label>
+            <Field
+              name="actorName"
+              type="text"
+              placeholder="Nombre del actor"
+            />
+            <FieldArray name="actors">
+              {arrayHelpers => (
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      arrayHelpers.push(values.actorName);
+                      actions.setFieldValue('actorName', ''); // Limpiar el campo actorName
+                    }}
+                  >
+                    Agregar Actor
+                  </button>
+                  <div>
+                    <ul>
+                      {values.actors.map((actor, index) => (
+                        <li key={index}>{actor}</li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
+              )}
+            </FieldArray>
+          </div>
                 <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="Poster_Link">URL imagen</label>
+                    <label className="text-lg" htmlFor="Poster_Link">Carga una imagen</label>
                     <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2"
-                    type="text" 
+                    // className="p-2 border border-lila rounded-md ml-3 mb-2"
+                    type="file" 
                     id="Poster_Link" 
-                    name="Poster_Link" />
+                    name="Poster_Link" 
+                    onChange={handleFileUpload}/>
+                    {loading? (<h3>Cargando imagen...</h3>) : (<img src={image} style={{width: "300px"}}></img>)}
                     
                     <ErrorMessage name= "Poster_Link" component={()=>(
                         <div className={styles.formError}>{errors.Poster_Link}</div>
@@ -360,8 +421,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.Released_Year}</div>
                     )}></ErrorMessage>
                 </div>
-
-                <div className="flex flex-col">
+                {
+                    type==="movie" ?
+                    
+                    <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Certificate">Certificado</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2"
@@ -372,7 +435,10 @@ const FormCreate = () => {
                     <ErrorMessage name= "Certificate" component={()=>(
                         <div className={styles.formError}>{errors.Certificate}</div>
                     )}></ErrorMessage>
-                </div>
+                    </div>
+                    : null
+                }
+                
                 
                 <div className="flex flex-col">
                 <label className="text-lg" htmlFor="Runtime">Duración</label>
@@ -389,12 +455,13 @@ const FormCreate = () => {
 
                 <div className="flex flex-col">
                     
-                    <label className="text-lg" htmlFor="Genre">Género</label>
+                    <label className="text-lg" htmlFor="Genre">Géneros</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2"
                     as="select" 
                     id="Genre" 
                     name="Genre" 
+                    multiple={true}
                     >
                     {
                         genresMovie.map((g, index)=>  <option key={index} value={g}>{g}</option>)
@@ -404,20 +471,24 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.Genre}</div>
                     )}></ErrorMessage>
                 </div>
-                
-                
-                <div className="flex flex-col">
-                <label className="text-lg" htmlFor="IMDB_Rating">Rating</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2"
-                    type="number" 
-                    id="IMDB_Rating" 
-                    name="IMDB_Rating" />
+                {
+                    type==="movie" ?
                     
-                    <ErrorMessage name= "IMDB_Rating" component={()=>(
-                        <div className={styles.formError}>{errors.IMDB_Rating}</div>
-                    )}></ErrorMessage>
-                </div>
+                    <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="IMDB_Rating">Rating</label>
+                        <Field 
+                        className="p-2 border border-lila rounded-md ml-3 mb-2"
+                        type="number" 
+                        id="IMDB_Rating" 
+                        name="IMDB_Rating" />
+                        
+                        <ErrorMessage name= "IMDB_Rating" component={()=>(
+                            <div className={styles.formError}>{errors.IMDB_Rating}</div>
+                        )}></ErrorMessage>
+                    </div>
+                    : null
+                }
+                
 
                 <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Overview">Descripción</label>
@@ -458,7 +529,7 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
 
-                <div className="flex flex-col">
+                {/* <div className="flex flex-col">
                 <label className="text-lg" htmlFor="Star1">Estrella 1</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2"
@@ -508,20 +579,23 @@ const FormCreate = () => {
                     <ErrorMessage name= "Star4" component={()=>(
                         <div className={styles.formError}>{errors.Star4}</div>
                     )}></ErrorMessage>
-                </div>
-
-                <div className="flex flex-col">
-                <label className="text-lg" htmlFor="No_of_Votes">Número de votos</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2"
-                    type="number" 
-                    id="No_of_Votes" 
-                    name="No_of_Votes" />
-                    
-                    <ErrorMessage name= "No_of_Votes" component={()=>(
-                        <div className={styles.formError}>{errors.No_of_Votes}</div>
-                    )}></ErrorMessage>
-                </div>
+                </div> */}
+                {
+                    type==="movie" ?
+                    <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="No_of_Votes">Número de votos</label>
+                        <Field 
+                        className="p-2 border border-lila rounded-md ml-3 mb-2"
+                        type="number" 
+                        id="No_of_Votes" 
+                        name="No_of_Votes" />
+                        
+                        <ErrorMessage name= "No_of_Votes" component={()=>(
+                            <div className={styles.formError}>{errors.No_of_Votes}</div>
+                        )}></ErrorMessage>
+                    </div>
+                    : null
+                }
 
                 <div className="flex flex-col">
                 <label className="text-lg" htmlFor="Gross">Ganancia</label>
@@ -535,8 +609,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.Gross}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className="flex flex-col">
-                <label className="text-lg" htmlFor="deshabilitar">Deshabilitar</label>
+                {
+                    type==="movie" ?
+                    <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="deshabilitar">Deshabilitar</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
@@ -546,12 +622,18 @@ const FormCreate = () => {
                     <ErrorMessage name= "deshabilitar" component={()=>(
                         <div className={styles.formError}>{errors.deshabilitar}</div>
                     )}></ErrorMessage>
-                </div>
+                    </div>
+                    : null
+                }
+                
 
                 {sentForm && <p className="text-lg text-morado font-poppins">Formulario enviado con éxito!</p>}
                 <div className="flex space-x-4 mb-20">
-                <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('create')}>Crear</button>
-                <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila  py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
+                    {type === "movie" ? 
+                    <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila  py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
+                    :
+                    <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('create')}>Crear</button>
+                    }
                 </div>           
             </Form>
             )}
@@ -561,6 +643,7 @@ const FormCreate = () => {
 
 
         {contentType === "serie" && (
+           
             <Formik
             initialValues={initialValuesSeries}
             
@@ -569,27 +652,27 @@ const FormCreate = () => {
             onSubmit={(values, {resetForm}) =>{
                 console.log(values)
                 if (buttonPressed === 'create') {
-                    async function postSerie() {
-                        try {
-                            await axios.post(`http://localhost:3001/postSeries`, values)
+                    // async function postSerie() {
+                    //     try {
+                    //         await axios.post(`http://localhost:3001/postSeries`, values)
                             
-                        } catch (error) {
-                            console.log(error)
-                        }
-                    }
-                    postSerie();
+                    //     } catch (error) {
+                    //         console.log(error)
+                    //     }
+                    // }
+                    // postSerie();
                     console.log("axios.post")
                     
                   } else if (buttonPressed === 'edit') {
-                    async function putSerie() {
-                        try {
-                            await axios.put(`http://localhost:3001/series/${id}`, values)
+                    // async function putSerie() {
+                    //     try {
+                    //         await axios.put(`http://localhost:3001/series/${id}`, values)
                             
-                        } catch (error) {
-                            console.log(error)
-                        }
-                    }
-                    putSerie();
+                    //     } catch (error) {
+                    //         console.log(error)
+                    //     }
+                    // }
+                    // putSerie();
                     console.log("axios.put")
                     
                   }
@@ -978,8 +1061,11 @@ const FormCreate = () => {
                 
                 {sentForm && <p className={styles.formSucces}>Formulario enviado con éxito!</p>}
                 <div className="flex space-x-4 mb-20">
-                <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('create')}>Crear</button>
-                <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
+                {type === "serie" ? 
+                    <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila  py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
+                    :
+                    <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('create')}>Crear</button>
+                    }
                 </div>
             </Form>
             )}
