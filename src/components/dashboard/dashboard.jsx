@@ -1,63 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function Dashboard() {
-  const [googleCredentialId, setGoogleCredentialId] = useState(null);
-  const [mongoUserId, setMongoUserId] = useState(null);
+  const { user, isAuthenticated } = useAuth0();
 
-  useEffect(() => {
-    // Realiza una solicitud para obtener el ID de la credencial de Google
-    // Esto dependerá de cómo almacenas y recuperas esta información después de iniciar sesión con Google
+  const sendUserInfoToBackend = async (userInfo) => {
+    try {
+      const response = await fetch('http://localhost:3001/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userInfo),
+      });
 
-    // Simulación de solicitud, reemplaza esto con la lógica real de tu aplicación
-    const getGoogleCredentialId = async () => {
-      try {
-        const response = await fetch('URL_DE_TU_SERVIDOR_PARA_OBTENER_ID_DE_GOOGLE');
-        const data = await response.json();
-        setGoogleCredentialId(data.googleCredentialId); // Asume que recibes el ID de Google en el servidor
-      } catch (error) {
-        console.error('Error al obtener el ID de Google:', error);
+      if (response.status === 201) {
+        console.log('Información del usuario enviada con éxito al backend.');
+      } else {
+        console.error('Hubo un problema al enviar la información del usuario al backend.');
       }
-    };
-
-    getGoogleCredentialId();
-  }, []);
-
-  useEffect(() => {
-    // Una vez que tengas el ID de la credencial de Google, puedes buscar el usuario en la lista de usuarios
-    // en http://localhost:3001/users
-
-    // Simulación de búsqueda en la lista de usuarios, reemplaza con la lógica real
-    const findMongoUserId = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/users');
-        const users = await response.json();
-        
-        // Busca el usuario que coincide con el ID de la credencial de Google
-        const userWithGoogleId = users.find(user => user.googleCredentialId === googleCredentialId);
-        
-        if (userWithGoogleId) {
-          setMongoUserId(userWithGoogleId._id); // Establece el ID de MongoDB del usuario encontrado
-        } else {
-          console.error('Usuario no encontrado en la lista de usuarios.');
-        }
-      } catch (error) {
-        console.error('Error al buscar el usuario:', error);
-      }
-    };
-
-    if (googleCredentialId) {
-      findMongoUserId();
+    } catch (error) {
+      console.error('Error al enviar información del usuario al backend:', error);
     }
-  }, [googleCredentialId]);
+  };
 
-  return (
-    <div>
-      <h2>Dashboard</h2>
-      {mongoUserId && (
-        <p>El ID de MongoDB del usuario es: {mongoUserId}</p>
-      )}
-    </div>
-  );
+  if (isAuthenticated) {
+    const userInfo = {
+      username: user.given_name,
+      email: user.email,
+    };
+
+    sendUserInfoToBackend(userInfo);
+
+    return (
+      <div>
+        <img src={user.picture} alt={user.name} />
+        <p>Bienvenido, {user.name}</p>
+        <p>Correo, {user.email}</p>
+        <p>Usuario, {user.given_name}</p>
+      </div>
+    );
+  } else {
+    return (
+      <p>Debes iniciar sesión para ver el contenido del Dashboard.</p>
+    );
+  }
 }
 
 export default Dashboard;

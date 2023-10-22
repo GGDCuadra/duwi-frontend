@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Login.css';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function LoginPage() {
   const [loginEmail, setLoginEmail] = useState('');
@@ -10,6 +10,8 @@ function LoginPage() {
   const [registerPassword, setRegisterPassword] = useState('');
   const [registerFechaDeNacimiento, setRegisterFechaDeNacimiento] = useState('');
   const [error, setError] = useState(null);
+  const [userInformation, setUserInformation] = useState(null);
+  const { loginWithRedirect } = useAuth0();
 
   const handleLogin = async () => {
     setError(null);
@@ -18,7 +20,6 @@ function LoginPage() {
       setError('Por favor, ingresa tanto el correo electrónico como la contraseña.');
       return;
     }
-
     try {
       const response = await fetch('http://localhost:3001/users');
       const users = await response.json();
@@ -28,7 +29,18 @@ function LoginPage() {
         return;
       }
       if (user.password === loginPassword) {
-        window.location.href = '/home';
+        // Realiza una solicitud para obtener información adicional del usuario
+        const userInfoResponse = await fetch(`http://localhost:3001/users/${user._id}`);
+        const userInfo = await userInfoResponse.json();
+        setUserInformation({
+          _id: user._id,
+          username: userInfo.username,
+          email: user.email,
+          rol: user.rol,
+          fecha_de_nacimiento: user.fecha_de_nacimiento,
+        });
+
+        console.log('userInformation:', userInformation);
       } else {
         setError('La contraseña es incorrecta.');
       }
@@ -44,115 +56,92 @@ function LoginPage() {
       setError('Por favor, ingresa todos los campos.');
       return;
     }
+    const response = await fetch('http://localhost:3001/users');
+    const users = await response.json();
+    const existingUser = users.find((user) => user.email === registerEmail);
 
-    try {
-      const response = await fetch('http://localhost:3001/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: registerUsername,
-          email: registerEmail,
-          password: registerPassword,
-          fecha_de_nacimiento: registerFechaDeNacimiento,
-          activo: "true",
-        }),
-      });
-      if (response.status === 201) {
-        window.location.href = '/login';
-      } else {
-        setError('Hubo un problema al registrar la cuenta. Inténtalo de nuevo.');
+    if (existingUser) {
+      setError('El correo electrónico ya está registrado.');
+    } else {
+      const userData = {
+        username: registerUsername,
+        email: registerEmail,
+        password: registerPassword,
+        fecha_de_nacimiento: registerFechaDeNacimiento,
+      };
+      try {
+        const postResponse = await fetch('http://localhost:3001/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userData),
+        });
+        if (postResponse.status === 201) {
+          window.location.href = '/login';
+        } else {
+          setError('Hubo un problema al registrar la cuenta. Inténtalo de nuevo.');
+        }
+      } catch (error) {
+        console.error('Error de registro:', error);
+        setError('Se produjo un error al registrar la cuenta. Por favor, inténtalo de nuevo.');
       }
-    } catch (error) {
-      console.error('Error de registro:', error);
-      setError('Se produjo un error al registrar la cuenta. Por favor, inténtalo de nuevo.');
-    }
-  };
-
-  const responseGoogle = async (response) => {
-    console.log(response);
-    const userData = {
-      username: registerUsername,
-      email: registerEmail,
-      password: registerPassword,
-      fecha_de_nacimiento: registerFechaDeNacimiento,
-    };
-    try {
-      const postResponse = await fetch('http://localhost:3001/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ credential: response, ...userData }), 
-      });
-  
-      if (postResponse.status === 201) {
-        console.log('Datos del cliente guardados con éxito');
-       
-      } else {
-        console.error('Hubo un problema al guardar los datos del cliente');
-      }
-    } catch (error) {
-      console.error('Error al enviar los datos del cliente al servidor:', error);
     }
   };
 
   return (
-    <GoogleOAuthProvider clientId="180611375057-jp26g0lhg353gbs6h5q56tp01lf37kkk.apps.googleusercontent.com">
-      <div className="container">
-        <div className="form-box">
-          <h2>Iniciar Sesión</h2>
-          {error && <p className="error-message">{error}</p>}
-          <input
-            type="email"
-            placeholder="Correo electrónico"
-            value={loginEmail}
-            onChange={(e) => setLoginEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={loginPassword}
-            onChange={(e) => setLoginPassword(e.target.value)}
-          />
-          <button onClick={handleLogin}>Iniciar Sesión</button>
-          <GoogleLogin
-            onSuccess={responseGoogle}
-            onError={() => { console.log('Inicio de sesión fallido'); }}
-          />
-        </div>
-        <div className="form-box">
-          <h2>Registro</h2>
-          {error && <p className="error-message">{error}</p>}
-          <input
-            type="text"
-            placeholder="Nombre de usuario"
-            value={registerUsername}
-            onChange={(e) => setRegisterUsername(e.target.value)}
-          />
-          <input
-            type="email"
-            placeholder="Correo electrónico"
-            value={registerEmail}
-            onChange={(e) => setRegisterEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={registerPassword}
-            onChange={(e) => setRegisterPassword(e.target.value)}
-          />
-          <input
-            type="date"
-            placeholder="Fecha de nacimiento"
-            value={registerFechaDeNacimiento}
-            onChange={(e) => setRegisterFechaDeNacimiento(e.target.value)}
-          />
-          <button onClick={handleRegister}>Registrarse</button>
-        </div>
+    <div className="container">
+      <div className="form-box">
+        <h2>Iniciar Sesión</h2>
+        {error && <p className="error-message">{error}</p>}
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          value={loginEmail}
+          onChange={(e) => setLoginEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Contraseña"
+          value={loginPassword}
+          onChange={(e) => setLoginPassword(e.target.value)}
+        />
+        <button onClick={handleLogin}>Iniciar Sesión</button>
+
+        <button onClick={() => loginWithRedirect()}>Iniciar Sesión con Auth0</button>
+      
+     
       </div>
-    </GoogleOAuthProvider>
+      <div className="form-box">
+        <h2>Registro</h2>
+        {error && <p className="error-message">{error}</p>}
+        <input
+          type="text"
+          placeholder="Nombre de usuario"
+          value={registerUsername}
+          onChange={(e) => setRegisterUsername(e.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          value={registerEmail}
+          onChange={(e) => setRegisterEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Contraseña"
+          value={registerPassword}
+          onChange={(e) => setRegisterPassword(e.target.value)}
+        />
+        <input
+          type="date"
+          placeholder="Fecha de nacimiento"
+          value={registerFechaDeNacimiento}
+          onChange={(e) => setRegisterFechaDeNacimiento(e.target.value)}
+        />
+        <button onClick={handleRegister}>Registrarse</button>
+      </div>
+    </div>
   );
 }
 
