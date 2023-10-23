@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaSistrix } from "react-icons/fa";
 import { useSelector } from 'react-redux';
-
+import { Link } from "react-router-dom";
 
 function SearchBar() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,7 +22,7 @@ function SearchBar() {
   );
 
   return (
-    <div className="fiexed relative">
+    <div className="relative">
       <form className="w-full">
         <input
           className="bg-search outline-none focus:outline-none rounded-full px-4 py-2 shadow w-full font-poppins"
@@ -30,27 +30,39 @@ function SearchBar() {
           value={searchTerm}
           onChange={handleSearch}
         />
-        <button className="absolute right-5 top-1/2 -translate-y-1/2">
+        <button className="absolute right-5 top-1/2 -translate-y-1/2">  
           <FaSistrix className="text-2xl"></FaSistrix>
         </button>
       </form>
 
-      <div>
-        {searchTerm && (
-          <div className="mt-4 bg-white p-2 rounded shadow-md">
-            {filteredMovies.map(movie => (
-              <div>
-              <h3>{movie.Series_Title}</h3>
+      {searchTerm && (
+        <div className="absolute mt-1 right-0 left-0 mx-auto max-h-60 overflow-y-auto z-10 rounded-xl">
+ {filteredMovies.length === 0 && filteredSeries.length === 0 ? (
+            <div className="bg-red-500 p-2 rounded shadow-md text-white">
+              No results found. Please try a different search.
             </div>
-            ))}
-            {filteredSeries.map(serie => (
-              <div>
-                <h3>{serie.name}</h3>
-              </div>
-            ))}
+          ) : (
+         <div className="bg-clarito p-2 rounded shadow-md">
+            <ul className="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+              {filteredMovies.map(movie => (
+                <li key={movie._id} className="mb-2 hover:bg-lila rounded p-1 cursor-pointer">
+                  <Link to={`movie/${movie._id}`}>
+                    <h3 className="mb-2 hover:bg-lila rounded p-1 cursor-pointer">{movie.Series_Title}</h3>
+                  </Link>
+                </li>
+              ))}
+              {filteredSeries.map(serie => (
+                <li key={serie._id} className="mb-2 hover:bg-lila rounded p-1 cursor-pointer">
+                  <Link to={`serie/${serie._id}`}>
+                    <h3 className="mb-2 hover:bg-lila rounded p-1 cursor-pointer" >{serie.name}</h3>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

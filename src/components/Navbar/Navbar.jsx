@@ -9,7 +9,7 @@ const NAVIGATION_LINKS = [
   { path: '/movies', label: 'Películas' },
   { path: '/series', label: 'Series' },
   { path: '/estrenos', label: 'Estrenos' },
-  { path: '/proximamente', label: 'Próximamente' },
+  { path: '/formCreateEdit', label: 'Crear / Editar' },
 ]; 
 
 const Navbar = () => {

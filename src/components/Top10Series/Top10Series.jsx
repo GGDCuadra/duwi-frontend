@@ -55,6 +55,7 @@ function Top10Series() {
         {topSeries.map((serie) => (
           <SeriesCard
             key={serie._id}
+            _id={serie._id}
             name={serie.name}
             genres={serie.genres}
             image={serie.image ? serie.image.original : ''}
