@@ -14,7 +14,17 @@ const NAVIGATION_LINKS = [
 ]; 
 
 const Navbar = () => {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+
+  const handleLoginOrLogout = () => {
+    if (isAuthenticated) {
+      // Si el usuario está autenticado, realizar logout
+      logout({ returnTo: window.location.origin });
+    } else {
+      // Si el usuario no está autenticado, realizar login
+      loginWithRedirect();
+    }
+  };
 
   return (
     <nav className="bg-fondito p-4 pr-20 pl-10 flex justify-between items-center h-30">
@@ -44,10 +54,8 @@ const Navbar = () => {
         <div className="ml-4 text-gray-800 hover:text-moradito">
           <FaMoon />
         </div>
-        <div className="ml-4 text-gray-800 hover:text-moradito">
-          <Link to="/login">
-            <FaSignInAlt />
-          </Link>
+        <div className="ml-4 text-gray-800 hover:text-moradito" onClick={handleLoginOrLogout}>
+          {isAuthenticated ? "Cerrar Sesión" : "Iniciar Sesión"}
         </div>
       </div>
     </nav>
