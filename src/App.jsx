@@ -12,6 +12,8 @@ import UserDashboard from './components/UserDashboard/UserDashboard'
 import FormCreate from './components/FormCreate/FormCreate'
 import Cards from './components/Cards/Cards'
 import DashboardPage from './components/dashboard/dashboard'
+import FavoriteMovies from './components/FavoriteMovies/FavoriteMovies'
+import FavoriteSeries from './components/FavoritesSeries/FavoritesSeries'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -33,7 +35,8 @@ function App() {
       <Route path='/formCreateEdit/:type/:id' element={<FormCreate/>}/>
       <Route path='/formCreateEdit/' element={<FormCreate/>}/>
       <Route path='/dashboard' element={<DashboardPage/>}/>
-      
+      <Route path='/favoritemovies' element={<FavoriteMovies/>}/>
+      <Route path='/favoriteseries' element={<FavoriteSeries/>}/>
     </Routes>
    </div>
   )
