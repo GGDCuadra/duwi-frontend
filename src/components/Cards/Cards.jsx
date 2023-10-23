@@ -84,9 +84,10 @@ function Cards({ type }) {
                   <MovieCard
                     key={movie._id}
                     _id={movie._id}
-                    Series_Title={movie.Series_Title}
                     Poster_Link={movie.Poster_Link}
                     Genre={movie.Genre}
+                    Series_Title={movie.Series_Title}
+                    Released_Year= {movie.Released_Year}
                   />
                 ))
               }

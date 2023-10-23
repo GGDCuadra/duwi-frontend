@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-function MovieCard({ _id, Poster_Link, Series_Title, Genre }) {
+function MovieCard({ _id, Poster_Link, Series_Title, Genre, Released_Year }) {
   return (
     <div className="relative w-60 h-80 rounded-lg shadow-md overflow-hidden group">
       <Link to={`/movie/${_id}`}>
@@ -15,6 +15,9 @@ function MovieCard({ _id, Poster_Link, Series_Title, Genre }) {
         </h2>
         <h2 className="text-lila font-bold font-poppins text-base p-4">
           {Genre}
+        </h2>
+        <h2 className="text-lila font-bold font-poppins text-base p-4">
+          {Released_Year}
         </h2>
       </div>
       </Link>
