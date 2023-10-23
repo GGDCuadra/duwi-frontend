@@ -8,7 +8,6 @@ import { Navbar } from './components/Navbar/Navbar'
 import './index.css'
 import MovieDetail from './components/MovieDetail/MovieDetail'
 import SeriesDetail from './components/SeriesDetail/SeriesDetail'
-import UserDashboard from './components/UserDashboard/UserDashboard'
 import FormCreate from './components/FormCreate/FormCreate'
 import Cards from './components/Cards/Cards'
 import DashboardPage from './components/dashboard/dashboard'
@@ -32,7 +31,6 @@ function App() {
       <Route path='/series' element={<Cards type='series'/>}/>
       <Route path='/movie/:_id' element={<MovieDetail/>}/>
       <Route path='/serie/:_id' element={<SeriesDetail/>}/>
-      <Route path='/user' element={<UserDashboard/>}/>
       <Route path='/formCreateEdit/:type/:id' element={<FormCreate/>}/>
       <Route path='/formCreateEdit/' element={<FormCreate/>}/>
       <Route path='/dashboard' element={<DashboardPage/>}/>

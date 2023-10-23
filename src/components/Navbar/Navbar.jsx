@@ -28,14 +28,16 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
-        <div className="ml-4">
+        <div className="ml-4 overflow-hidden">
           <SearchBar />
         </div>
         <div className="ml-4 text-gray-800 hover:text-moradito">
           <FaMoon />
         </div>
         <div className="ml-4 text-gray-800 hover:text-moradito">
-          <FaSignInAlt />
+          <Link to="/login">
+            <FaSignInAlt />
+          </Link>
         </div>
       </div>
     </nav>
