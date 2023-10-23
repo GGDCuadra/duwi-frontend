@@ -12,6 +12,7 @@ function LoginPage() {
   const [error, setError] = useState(null);
   const [userInformation, setUserInformation] = useState(null);
   const { loginWithRedirect } = useAuth0();
+  const [show, setShow] = useState('login')
 
   const handleLogin = async () => {
     setError(null);
@@ -88,10 +89,15 @@ function LoginPage() {
       }
     }
   };
-
+  const handleShow = (event) => {
+    const {value } = event.target
+    setShow(value)
+  }
   return (
-    <div className="container">
-      <div className="form-box">
+  <div className="container justify-center">
+    {
+      show === 'login' && (
+        <div className="form-box">
         <h2>Iniciar Sesión</h2>
         {error && <p className="error-message">{error}</p>}
         <input
@@ -108,11 +114,16 @@ function LoginPage() {
         />
         <button onClick={handleLogin}>Iniciar Sesión</button>
 
-        <button onClick={() => loginWithRedirect()}>Iniciar Sesión con Auth0</button>
-      
-     
+        <button class='mt-3' onClick={() => loginWithRedirect()}>Iniciar Sesión con Auth0</button>
+
+        <button class='mt-3' value='register' onClick={handleShow}>¿No tienes una cuenta? Regístrate</button>
       </div>
-      <div className="form-box">
+      )
+    }
+    
+    {
+      show === 'register' && (
+        <div className="form-box">
         <h2>Registro</h2>
         {error && <p className="error-message">{error}</p>}
         <input
@@ -140,7 +151,14 @@ function LoginPage() {
           onChange={(e) => setRegisterFechaDeNacimiento(e.target.value)}
         />
         <button onClick={handleRegister}>Registrarse</button>
+        <button class='mt-3' value='login' onClick={handleShow}>¿Ya tienes una cuenta?</button>
       </div>
+      )
+    }  
+
+
+      
+      
     </div>
   );
 }
