@@ -110,6 +110,7 @@ function Cards({ type }) {
                       name={serie.name}
                       image={serie.image ? serie.image.original : ''}
                       genres={serie.genres}
+                      premiered={serie.premiered}
                     />
                   ))
                 }
