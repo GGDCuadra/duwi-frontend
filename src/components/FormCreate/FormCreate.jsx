@@ -18,7 +18,7 @@ const FormCreate = () => {
         Released_Year: '',
         Certificate: '',
         Runtime: '',
-        Genre: '',
+        Genre:[],
         IMDB_Rating: '',
         Overview: '',
         Meta_score: '',
@@ -78,9 +78,9 @@ const FormCreate = () => {
         },
         previousepisode: {
             href: '',
-        },
-        deshabilitar: 'null'
-    }}
+        }, },
+        deshabilitar: 'null' 
+        }
     const [sentForm, setSentForm] = useState(false);
     const [contentType, setContentType] = useState('');
     const [buttonPressed, setButtonPressed] = useState(null);
@@ -96,7 +96,11 @@ const FormCreate = () => {
             async function getMovieById() {
                 try {
                     const {data} = await (axios.get(`http://localhost:3001/movies/byObjectId/${id}`))
+                    console.log(data)
+                    data.Genre = data.Genre.split(',').map(genre => genre.trim());
+                    console.log(data)
                     setInitialValuesMovies(data)
+                    
                 } catch (error) {
                     console.log(error)
                 }
@@ -198,7 +202,7 @@ const FormCreate = () => {
         
     })
     const FormSchemaSeries = yup.object().shape({
-        url: yup.string().url("Debes ingresar una URL válida").required('Debe completar este campo'),
+        // url: yup.string().url("Debes ingresar una URL válida").required('Debe completar este campo'),
         name: yup.string().required('Debe completar este campo'),
         type: yup.string().required('Debe completar este campo'),
         language: yup.string().required('Debe completar este campo'),
@@ -308,6 +312,7 @@ const FormCreate = () => {
                         Genre: genresAsString,
                         Poster_Link: image
                       };
+                    delete dataToSend.actorName;
                      
                     // async function postMovie() {
                     //     try {
@@ -338,11 +343,13 @@ const FormCreate = () => {
                 // setTimeout(()=> setSentForm(false), 4000)
             }}
         >
-            {({errors, values}) => (
+            {({errors, values, setFieldValue}) => (
                 <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10">
                     {console.log(errors)}
-                
-                {/* <div className="flex flex-col space-y-2">
+                {/* {
+                    type==="movie" ?
+                    
+                    <div className="flex flex-col space-y-2">
                     <label className="text-lg" htmlFor="id">ID:</label>
                     <Field
                     className="p-2 border border-lila rounded-md"
@@ -352,41 +359,28 @@ const FormCreate = () => {
                     <ErrorMessage name= "id" component={()=>(
                         <div className={styles.formError}>{errors.id}</div>
                     )}></ErrorMessage>
-                </div> */}
-                <div>
-            <label>Actores:</label>
-            <Field
-              name="actorName"
-              type="text"
-              placeholder="Nombre del actor"
-            />
-            <FieldArray name="actors">
-              {arrayHelpers => (
-                <div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      arrayHelpers.push(values.actorName);
-                      actions.setFieldValue('actorName', ''); // Limpiar el campo actorName
-                    }}
-                  >
-                    Agregar Actor
-                  </button>
-                  <div>
-                    <ul>
-                      {values.actors.map((actor, index) => (
-                        <li key={index}>{actor}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )}
-            </FieldArray>
-          </div>
-                <div className="flex flex-col">
+                    </div>
+                    : null
+                } */}
+                {
+                    type==="movie" ?
+                    
+                    <div className="flex flex-col space-y-2">
+                    <label className="text-lg" htmlFor="Poster_Link">URL imagen</label>
+                    <Field
+                    className="p-2 border border-lila rounded-md"
+                    type="string" 
+                    id="Poster_Link" 
+                    name="Poster_Link" />
+                    <ErrorMessage name= "Poster_Link" component={()=>(
+                        <div className={styles.formError}>{errors.Poster_Link}</div>
+                    )}></ErrorMessage>
+                    </div>
+                    : 
+                    <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Poster_Link">Carga una imagen</label>
                     <Field 
-                    // className="p-2 border border-lila rounded-md ml-3 mb-2"
+                    className="p-2  rounded-md ml-3 mb-2"
                     type="file" 
                     id="Poster_Link" 
                     name="Poster_Link" 
@@ -396,7 +390,10 @@ const FormCreate = () => {
                     <ErrorMessage name= "Poster_Link" component={()=>(
                         <div className={styles.formError}>{errors.Poster_Link}</div>
                     )}></ErrorMessage>
-                </div>
+                    </div>
+                }
+                
+                
                 <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Series_Title">Título de la película</label>
                     <Field 
@@ -475,7 +472,7 @@ const FormCreate = () => {
                     type==="movie" ?
                     
                     <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="IMDB_Rating">Rating</label>
+                    <label className="text-lg" htmlFor="IMDB_Rating">Rating de IMDB</label>
                         <Field 
                         className="p-2 border border-lila rounded-md ml-3 mb-2"
                         type="number" 
@@ -491,30 +488,34 @@ const FormCreate = () => {
                 
 
                 <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="Overview">Descripción</label>
+                    <label className="text-lg" htmlFor="Overview">Descripción de IMDB</label>
                     <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2"
+                    className="p-4 border border-lila rounded-md ml-3 mb-4"
                     name="Overview"
                     as="textarea"
-                    placeholder="Overview"/>
+                    />
                     
                     <ErrorMessage name= "Overview" component={()=>(
                         <div className={styles.formError}>{errors.Overview}</div>
                     )}></ErrorMessage>
                 </div>
-
-                <div className="flex flex-col">
-                <label className="text-lg" htmlFor="Meta_score">Puntuación promedio</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2"
-                    type="number" 
-                    id="Meta_score" 
-                    name="Meta_score" />
-                    
-                    <ErrorMessage name= "Meta_score" component={()=>(
-                        <div className={styles.formError}>{errors.Meta_score}</div>
-                    )}></ErrorMessage>
-                </div>
+                {
+                    type==="movie" ?
+                    <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="Meta_score">Puntuación promedio</label>
+                        <Field 
+                        className="p-2 border border-lila rounded-md ml-3 mb-2"
+                        type="number" 
+                        id="Meta_score" 
+                        name="Meta_score" />
+                        
+                        <ErrorMessage name= "Meta_score" component={()=>(
+                            <div className={styles.formError}>{errors.Meta_score}</div>
+                        )}></ErrorMessage>
+                    </div>
+                    : null
+                }
+                
 
                 <div className="flex flex-col">
                 <label className="text-lg" htmlFor="Director">Director</label>
@@ -528,58 +529,110 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.Director}</div>
                     )}></ErrorMessage>
                 </div>
-
-                {/* <div className="flex flex-col">
-                <label className="text-lg" htmlFor="Star1">Estrella 1</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2"
-                    type="text" 
-                    id="Star1" 
-                    name="Star1" />
-                    
-                    <ErrorMessage name= "Star1" component={()=>(
-                        <div className={styles.formError}>{errors.Star1}</div>
-                    )}></ErrorMessage>
+                {
+                    type==="movie" ?
+                    <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="Star1">Estrella 1</label>
+                        <Field 
+                        className="p-2 border border-lila rounded-md ml-3 mb-2"
+                        type="text" 
+                        id="Star1" 
+                        name="Star1" />
+                        
+                        <ErrorMessage name= "Star1" component={()=>(
+                            <div className={styles.formError}>{errors.Star1}</div>
+                        )}></ErrorMessage>
+                    </div>
+                    : null
+                }
+                
+                {
+                    type==="movie" ?
+                    <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="Star2">Estrella 2</label>
+                        <Field 
+                        className="p-2 border border-lila rounded-md ml-3 mb-2"
+                        type="text" 
+                        id="Star2" 
+                        name="Star2" />
+                        
+                        <ErrorMessage name= "Star2" component={()=>(
+                            <div className={styles.formError}>{errors.Star2}</div>
+                        )}></ErrorMessage>
+                    </div>
+                    : null
+                }
+                
+                {
+                    type==="movie" ?
+                    <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="Star3">Estrella 3</label>
+                        <Field 
+                        className="p-2 border border-lila rounded-md ml-3 mb-2"
+                        type="text" 
+                        id="Star3" 
+                        name="Star3" />
+                        
+                        <ErrorMessage name= "Star3" component={()=>(
+                            <div className={styles.formError}>{errors.Star3}</div>
+                        )}></ErrorMessage>
+                    </div>
+                    : null
+                }
+                
+                {
+                    type==="movie" ?
+                    <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="Star4">Esterlla 4</label>
+                        <Field 
+                        className="p-2 border border-lila rounded-md ml-3 mb-2"
+                        type="text" 
+                        id="Star4" 
+                        name="Star4" />
+                        
+                        <ErrorMessage name= "Star4" component={()=>(
+                            <div className={styles.formError}>{errors.Star4}</div>
+                        )}></ErrorMessage>
+                    </div>
+                    : null
+                }
+                {
+                    type!=="movie"  ?
+                    <div className="flex flex-col">
+                        <label className="text-lg" htmlFor="actorName">Actores principales</label>
+                        <Field
+                        className="p-2 border border-lila rounded-md ml-3 mb-2"
+                        name="actorName"
+                        type="text"
+                        placeholder="Nombre del actor"
+                        />
+                        <FieldArray name="actors">
+                        {arrayHelpers => (
+                            <div>
+                            <button
+                                className="text-sm font-poppins bg-white  border border-moradito  text-moradito  py-1 px-2 rounded-xl"
+                                type="button"
+                                onClick={() => {
+                                arrayHelpers.push(values.actorName);
+                                actions.setFieldValue('actorName', ''); // Limpiar el campo actorName
+                                }}
+                            >
+                                Agregar Actor
+                            </button>
+                            <div>
+                                <ul>
+                                {values.actors.map((actor, index) => (
+                                    <li key={index}>{actor}<button className='text-sm ml-2 text-red-500' type='button' onClick={() => arrayHelpers.remove(index)}>X</button></li>
+                                ))}
+                                </ul>
+                            </div>
+                        </div>
+                    )}
+                    </FieldArray>
                 </div>
-
-                <div className="flex flex-col">
-                <label className="text-lg" htmlFor="Star2">Estrella 2</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2"
-                    type="text" 
-                    id="Star2" 
-                    name="Star2" />
-                    
-                    <ErrorMessage name= "Star2" component={()=>(
-                        <div className={styles.formError}>{errors.Star2}</div>
-                    )}></ErrorMessage>
-                </div>
-
-                <div className="flex flex-col">
-                <label className="text-lg" htmlFor="Star3">Estrella 3</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2"
-                    type="text" 
-                    id="Star3" 
-                    name="Star3" />
-                    
-                    <ErrorMessage name= "Star3" component={()=>(
-                        <div className={styles.formError}>{errors.Star3}</div>
-                    )}></ErrorMessage>
-                </div>
-
-                <div className="flex flex-col">
-                <label className="text-lg" htmlFor="Star4">Esterlla 4</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2"
-                    type="text" 
-                    id="Star4" 
-                    name="Star4" />
-                    
-                    <ErrorMessage name= "Star4" component={()=>(
-                        <div className={styles.formError}>{errors.Star4}</div>
-                    )}></ErrorMessage>
-                </div> */}
+                    : null
+                }
+                
                 {
                     type==="movie" ?
                     <div className="flex flex-col">
@@ -598,7 +651,7 @@ const FormCreate = () => {
                 }
 
                 <div className="flex flex-col">
-                <label className="text-lg" htmlFor="Gross">Ganancia</label>
+                <label className="text-lg" htmlFor="Gross">Ganancia de IMDB</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2"
                     type="text" 
@@ -612,13 +665,15 @@ const FormCreate = () => {
                 {
                     type==="movie" ?
                     <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="deshabilitar">Deshabilitar</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2"
-                    type="text" 
+                    <label className="text-lg" htmlFor="deshabilitar">Vista</label>
+                    <Field
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
+                    as="select" 
                     id="deshabilitar" 
-                    name="deshabilitar" />
-                    
+                    name="deshabilitar" >
+                    <option value="null">Habilitar</option>
+                    <option value="true">Deshabilitar</option>
+                    </Field>
                     <ErrorMessage name= "deshabilitar" component={()=>(
                         <div className={styles.formError}>{errors.deshabilitar}</div>
                     )}></ErrorMessage>
@@ -652,6 +707,11 @@ const FormCreate = () => {
             onSubmit={(values, {resetForm}) =>{
                 console.log(values)
                 if (buttonPressed === 'create') {
+                    const dataToSend = {
+                        ...values,
+                        url: image
+                      };
+                    console.log(dataToSend)
                     // async function postSerie() {
                     //     try {
                     //         await axios.post(`http://localhost:3001/postSeries`, values)
@@ -664,6 +724,7 @@ const FormCreate = () => {
                     console.log("axios.post")
                     
                   } else if (buttonPressed === 'edit') {
+                    console.log(values)
                     // async function putSerie() {
                     //     try {
                     //         await axios.put(`http://localhost:3001/series/${id}`, values)
@@ -697,7 +758,9 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.id}</div>
                     )}></ErrorMessage>
                 </div>   */}
-                <div className="flex flex-col">
+                {
+                    type === 'serie' ?
+                    <div className="flex flex-col">
                     <label className="text-lg" htmlFor="url">URL imagen</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2"
@@ -707,7 +770,24 @@ const FormCreate = () => {
                     <ErrorMessage name= "url" component={()=>(
                         <div className={styles.formError}>{errors.url}</div>
                     )}></ErrorMessage>
-                </div>    
+                    </div>
+                    : 
+                    <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="url">Carga una imagen</label>
+                    <Field 
+                    className="p-2  rounded-md ml-3 mb-2"
+                    type="file" 
+                    id="url" 
+                    name="url" 
+                    onChange={handleFileUpload}/>
+                    {loading? (<h3>Cargando imagen...</h3>) : (<img src={image} style={{width: "300px"}}></img>)}
+                    
+                    <ErrorMessage name= "url" component={()=>(
+                        <div className={styles.formError}>{errors.url}</div>
+                    )}></ErrorMessage>
+                    </div>
+                }
+                   
                 <div className="flex flex-col">
                     <label className="text-lg" htmlFor="name">Título de la serie</label>
                     <Field 
@@ -813,8 +893,9 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.officialSite}</div>
                     )}></ErrorMessage>
                 </div>
+
                 <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="schedule.time">Hora</label>
+                    <label className="text-lg" htmlFor="schedule.time">Hora de transmisión</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
@@ -826,7 +907,7 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
                 <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="schedule.days">Días</label>
+                    <label className="text-lg" htmlFor="schedule.days">Días de transmisión</label>
                     <Field
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     as="select" 
@@ -853,7 +934,9 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.rating.average}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className="flex flex-col">
+                {
+                    type==="serie" ?
+                    <div className="flex flex-col">
                     <label className="text-lg" htmlFor="weight">Peso</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
@@ -864,7 +947,10 @@ const FormCreate = () => {
                     <ErrorMessage name= "weight" component={()=>(
                         <div className={styles.formError}>{errors.weight}</div>
                     )}></ErrorMessage>
-                </div>
+                    </div>
+                    : null
+                }
+                
                 <div className="flex flex-col">
                     <label className="text-lg" htmlFor="network.id">ID de la red</label>
                     <Field 
@@ -914,7 +1000,7 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
                 <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="network.country.timezone">Zona horaria</label>
+                    <label className="text-lg" htmlFor="network.country.timezone">Zona horaria del país</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
@@ -937,7 +1023,9 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.webChannel}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className="flex flex-col">
+                {
+                    type==="serie" ?
+                    <div className="flex flex-col">
                     <label className="text-lg" htmlFor="externals.tvrage">TVRage</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
@@ -948,8 +1036,12 @@ const FormCreate = () => {
                     <ErrorMessage name= "externals.tvrage" component={()=>(
                         <div className={styles.formError}>{errors.externals.tvrage}</div>
                     )}></ErrorMessage>
-                </div>
-                <div className="flex flex-col">
+                     </div>
+                    : null
+                }
+                {
+                    type==="serie" ?
+                    <div className="flex flex-col">
                     <label className="text-lg" htmlFor="externals.thetvdb">TheTVDB</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
@@ -960,8 +1052,12 @@ const FormCreate = () => {
                     <ErrorMessage name= "externals.thetvdb" component={()=>(
                         <div className={styles.formError}>{errors.externals.thetvdb}</div>
                     )}></ErrorMessage>
-                </div>
-                <div className="flex flex-col">
+                    </div>
+                    : null
+                }
+                {
+                    type==="serie" ?
+                    <div className="flex flex-col">
                     <label className="text-lg" htmlFor="externals.imdb">IMDb</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
@@ -972,8 +1068,12 @@ const FormCreate = () => {
                     <ErrorMessage name= "externals.imdb" component={()=>(
                         <div className={styles.formError}>{errors.externals.imdb}</div>
                     )}></ErrorMessage>
-                </div>
-                <div className="flex flex-col">
+                    </div>
+                    : null
+                }
+                {
+                    type==="serie" ?
+                    <div className="flex flex-col">
                     <label className="text-lg" htmlFor="image.medium">Imagen Media</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
@@ -984,8 +1084,12 @@ const FormCreate = () => {
                     <ErrorMessage name= "image.medium" component={()=>(
                         <div className={styles.formError}>{errors.image.medium}</div>
                     )}></ErrorMessage>
-                </div>
-                <div className="flex flex-col">
+                    </div>
+                    : null
+                }
+                {
+                    type==="serie" ?
+                    <div className="flex flex-col">
                     <label className="text-lg" htmlFor="image.original">Imagen Original</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
@@ -996,9 +1100,13 @@ const FormCreate = () => {
                     <ErrorMessage name= "image.original" component={()=>(
                         <div className={styles.formError}>{errors.image.original}</div>
                     )}></ErrorMessage>
-                </div>
+                    </div>
+                    : null
+                }
+                
+                
                 <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="summary">Resumen</label>
+                    <label className="text-lg" htmlFor="summary">Descripción de IMDB</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     name="summary"
@@ -1022,7 +1130,10 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.updated}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className="flex flex-col">
+                
+                {
+                    type==="serie" ?
+                    <div className="flex flex-col">
                     <label className="text-lg" htmlFor="_links.self.href">Enlace self</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
@@ -1033,8 +1144,12 @@ const FormCreate = () => {
                     <ErrorMessage name= "_links.self.href" component={()=>(
                         <div className={styles.formError}>{errors._links.self.href}</div>
                     )}></ErrorMessage>
-                </div>
-                <div className="flex flex-col">
+                     </div>
+                    : null
+                }
+                {
+                    type==="serie" ?
+                    <div className="flex flex-col">
                     <label className="text-lg" htmlFor="_links.previousepisode.href">Enlace episodio previo</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
@@ -1045,19 +1160,30 @@ const FormCreate = () => {
                     <ErrorMessage name= "_links.previousepisode.href" component={()=>(
                         <div className={styles.formError}>{errors._links.previousepisode.href}</div>
                     )}></ErrorMessage>
-                </div>
-                <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="deshabilitar">Deshabilitar</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    type="text" 
-                    id="deshabilitar" 
-                    name="deshabilitar" />
+                    </div>
+                    : null
+                }
+                
+                {
+                    type==="serie" ?
                     
+                    <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="deshabilitar">Vista</label>
+                    <Field
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
+                    as="select" 
+                    id="deshabilitar" 
+                    name="deshabilitar" >
+                    <option value="null">Habilitar</option>
+                    <option value="true">Deshabilitar</option>
+                    </Field>
                     <ErrorMessage name= "deshabilitar" component={()=>(
                         <div className={styles.formError}>{errors.deshabilitar}</div>
                     )}></ErrorMessage>
-                </div>
+                    </div>
+                    : null
+                }
+                
                 
                 {sentForm && <p className={styles.formSucces}>Formulario enviado con éxito!</p>}
                 <div className="flex space-x-4 mb-20">
