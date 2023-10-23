@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
 function Dashboard() {
   const { user, isAuthenticated } = useAuth0();
+  const [isEmailExists, setIsEmailExists] = useState(false);
+
+  const checkEmailExistence = async (email) => {
+    try {
+      const response = await fetch(`http://localhost:3001/users?email=${email}`);
+      if (response.status === 200) {
+        setIsEmailExists(true);
+      }
+    } catch (error) {
+      console.error('Error al verificar la existencia del correo:', error);
+    }
+  };
 
   const sendUserInfoToBackend = async (userInfo) => {
     try {
+      // Primero, verifica si el correo existe
+      await checkEmailExistence(userInfo.email);
+
+      if (isEmailExists) {
+        console.log('El correo ya está registrado en la base de datos.');
+        return;
+      }
+
+      // Si el correo no existe, crea el usuario
       const response = await fetch('http://localhost:3001/users', {
         method: 'POST',
         headers: {
@@ -24,12 +45,20 @@ function Dashboard() {
     }
   };
 
+  useEffect(() => {
+    if (isAuthenticated && user && user.email) {
+      // En el montaje inicial, verifica el correo del usuario
+      checkEmailExistence(user.email);
+    }
+  }, [isAuthenticated, user]);
+
   if (isAuthenticated) {
     const userInfo = {
       username: user.given_name,
       email: user.email,
     };
 
+    // Envía la información del usuario
     sendUserInfoToBackend(userInfo);
 
     return (
