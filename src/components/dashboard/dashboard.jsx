@@ -4,6 +4,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 function Dashboard() {
   const { user, isAuthenticated } = useAuth0();
   const [isEmailExists, setIsEmailExists] = useState(false);
+  const [userInfoByEmail, setUserInfoByEmail] = useState(null);
 
   const checkEmailExistence = async (email) => {
     try {
@@ -13,6 +14,18 @@ function Dashboard() {
       }
     } catch (error) {
       console.error('Error al verificar la existencia del correo:', error);
+    }
+  };
+
+  const fetchUserInfoByEmail = async (email) => {
+    try {
+      const response = await fetch(`http://localhost:3001/usersByEmail?email=${email}`);
+      if (response.status === 200) {
+        const userData = await response.json();
+        setUserInfoByEmail(userData);
+      }
+    } catch (error) {
+      console.error('Error al obtener información del usuario por email:', error);
     }
   };
 
@@ -49,6 +62,8 @@ function Dashboard() {
     if (isAuthenticated && user && user.email) {
       // En el montaje inicial, verifica el correo del usuario
       checkEmailExistence(user.email);
+      // Obtén información del usuario por email
+      fetchUserInfoByEmail(user.email);
     }
   }, [isAuthenticated, user]);
 
@@ -67,6 +82,12 @@ function Dashboard() {
         <p>Bienvenido, {user.name}</p>
         <p>Correo, {user.email}</p>
         <p>Usuario, {user.given_name}</p>
+        {userInfoByEmail && (
+          <div>
+            <p>ID de Mongo: {userInfoByEmail._id}</p>
+            {/* Agrega más campos de userInfoByEmail si es necesario */}
+          </div>
+        )}
       </div>
     );
   } else {
