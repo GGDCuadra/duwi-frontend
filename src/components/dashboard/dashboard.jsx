@@ -1,115 +1,100 @@
-import { Link } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import React, { useState, useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 
-function DashboardUser() {
+function Dashboard() {
   const { user, isAuthenticated } = useAuth0();
+  const [isEmailExists, setIsEmailExists] = useState(false);
+  const [userInfoByEmail, setUserInfoByEmail] = useState(null);
 
-  return (
-    <div className="container mx-auto px-4 py-8 flex flex-col items-center">
-      <div className="mb-8 text-center">
-        {isAuthenticated ? (
-          <>
-            <h2 className="text-2xl font-bold mb-4 font-poppins">
-              Bienvenido, {user.name}
-            </h2>
-            <img
-              src={user.picture}
-              alt={user.name}
-              className="rounded-full w-32 h-32 object-cover object-center mb-4"
-            />
-          </>
-        ) : (
-          <p className="text-xl font-medium font-poppins text-lila mb-20">
-            Debes iniciar sesión para ver el contenido del Dashboard.
-          </p>
+  const checkEmailExistence = async (email) => {
+    try {
+      const response = await fetch(`http://localhost:3001/users?email=${email}`);
+      if (response.status === 200) {
+        setIsEmailExists(true);
+      }
+    } catch (error) {
+      console.error('Error al verificar la existencia del correo:', error);
+    }
+  };
+
+  const fetchUserInfoByEmail = async (email) => {
+    try {
+      const response = await fetch(`http://localhost:3001/usersByEmail?email=${email}`);
+      if (response.status === 200) {
+        const userData = await response.json();
+        setUserInfoByEmail(userData);
+      }
+    } catch (error) {
+      console.error('Error al obtener información del usuario por email:', error);
+    }
+  };
+
+  const sendUserInfoToBackend = async (userInfo) => {
+    try {
+      // Primero, verifica si el correo existe
+      await checkEmailExistence(userInfo.email);
+
+      if (isEmailExists) {
+        console.log('El correo ya está registrado en la base de datos.');
+        return;
+      }
+
+      // Si el correo no existe, crea el usuario
+      const response = await fetch('http://localhost:3001/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userInfo),
+      });
+
+      if (response.status === 201) {
+        console.log('Información del usuario enviada con éxito al backend.');
+      } else {
+        console.error('Hubo un problema al enviar la información del usuario al backend.');
+      }
+    } catch (error) {
+      console.error('Error al enviar información del usuario al backend:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated && user && user.email) {
+      // En el montaje inicial, verifica el correo del usuario
+      checkEmailExistence(user.email);
+      // Obtén información del usuario por email
+      fetchUserInfoByEmail(user.email);
+    }
+  }, [isAuthenticated, user]);
+
+  if (isAuthenticated) {
+    const userInfo = {
+      username: user.given_name,
+      email: user.email,
+    };
+
+    // Envía la información del usuario
+    sendUserInfoToBackend(userInfo);
+
+    return (
+      <div>
+        <img src={user.picture} alt={user.name} />
+        <p>Bienvenido, {user.name}</p>
+        <p>Correo, {user.email}</p>
+        <p>Usuario, {user.given_name}</p>
+        {userInfoByEmail && (
+          <div>
+            <p>ID de Mongo: {userInfoByEmail._id}</p>
+            {/* Agrega más campos de userInfoByEmail si es necesario */}
+          </div>
         )}
       </div>
-      <div className="flex flex-wrap justify-center mb-8">
-        <div className="mr-4 mb-4 order-2 md:order-1">
-          <Link
-            to="/edit-user"
-            className="text-morado hover:text-moradito font-medium font-poppins mx-10"
-          >
-            Modificar usuario y contraseña
-          </Link>
-        </div>
-        <div className="mr-4 mb-4 order-3 md:order-2">
-          <Link
-            to="/edit-profile"
-            className="text-gray-700 hover:text-moradito font-medium font-poppins mx-10"
-          >
-            Modificar foto de perfil
-          </Link>
-        </div>
-        <div className="mr-4 mb-4 order-4 md:order-3">
-          <Link
-            to="/favorite-movies"
-            className="text-gray-700 hover:text-moradito font-medium font-poppins mx-10"
-          >
-            Películas favoritas
-          </Link>
-        </div>
-        <div className="mr-4 mb-4 order-5 md:order-4">
-          <Link
-            to="/favorite-series"
-            className="text-gray-700 hover:text-moradito font-medium font-poppins"
-          >
-            Series favoritas
-          </Link>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 gap-8 mr-96">
-        <div className="text-left">
-          <h3 className="text-xl text-moradito font-normal m-8 font-poppins">
-            Series que ves actualmente
-          </h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Aquí van las cards de "las series que ves actualmente" */}
-        </div>
-        <div className="text-left">
-          <h3 className="text-xl text-moradito font-normal m-8 font-poppins">
-            Series vistas
-          </h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Aquí van las cards de las "series vistas" */}
-        </div>
-        <div className="text-left">
-          <h3 className="text-xl text-moradito font-normal m-8 font-poppins">
-            Series que quieres ver
-          </h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Aquí van las cards de las "series que quieres ver" */}
-        </div>
-        <div className="text-left">
-          <h3 className="text-xl text-moradito font-normal m-8 font-poppins">
-            Películas que ves actualmente
-          </h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Aquí van las cards de las "películas vistas" */}
-        </div>
-        <div className="text-left">
-          <h3 className="text-xl text-moradito font-normal m-8 font-poppins">
-            Películas vistas
-          </h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Aquí van las cards de las "películas vistas" */}
-        </div>
-        <div className="text-left">
-          <h3 className="text-xl text-moradito font-normal m-8 font-poppins">
-            Películas que quieres ver
-          </h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Aquí van las cards de las "películas que quieres ver" */}
-        </div>
-      </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <p>Debes iniciar sesión para ver el contenido del Dashboard.</p>
+    );
+  }
 }
 
-export default DashboardUser;
+export default Dashboard;
