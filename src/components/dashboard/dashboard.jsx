@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import styles from "./dashboard.css"; // Asegúrate de que la ruta del archivo CSS sea correcta
 
 function Dashboard() {
   const { user, isAuthenticated } = useAuth0();
   const [isEmailExists, setIsEmailExists] = useState(false);
   const [userInfoByEmail, setUserInfoByEmail] = useState(null);
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
+  const [favoriteSeries, setFavoriteSeries] = useState([]); // Agrega un estado para las series favoritas
 
   const checkEmailExistence = async (email) => {
     try {
@@ -58,43 +61,101 @@ function Dashboard() {
     }
   };
 
+  const fetchFavoriteMovies = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/favorites/movies/${userId}`);
+      if (response.status === 200) {
+        const favoriteMoviesData = await response.json();
+        setFavoriteMovies(favoriteMoviesData);
+      }
+    } catch (error) {
+      console.error('Error al obtener las películas favoritas:', error);
+    }
+  };
+
+  // Nueva función para obtener series favoritas
+  const fetchFavoriteSeries = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/favorites/${userId}`);
+      if (response.status === 200) {
+        const favoriteSeriesData = await response.json();
+        setFavoriteSeries(favoriteSeriesData);
+      }
+    } catch (error) {
+      console.error('Error al obtener las series favoritas:', error);
+    }
+  };
+
   useEffect(() => {
     if (isAuthenticated && user && user.email) {
-      // En el montaje inicial, verifica el correo del usuario
-      checkEmailExistence(user.email);
-      // Obtén información del usuario por email
-      fetchUserInfoByEmail(user.email);
+      checkEmailExistence(user.email).then(() => {
+        const userInfo = {
+          username: user.given_name,
+          email: user.email,
+        };
+  
+        // Envía la información del usuario si el correo no existe
+        if (!isEmailExists) {
+          sendUserInfoToBackend(userInfo);
+        }
+  
+        // Después de enviar la información del usuario, obtén más detalles del usuario
+        fetchUserInfoByEmail(user.email);
+      });
     }
   }, [isAuthenticated, user]);
+  
+  
 
-  if (isAuthenticated) {
-    const userInfo = {
-      username: user.given_name,
-      email: user.email,
-    };
-
-    // Envía la información del usuario
-    sendUserInfoToBackend(userInfo);
-
-    return (
-      <div>
-        <img src={user.picture} alt={user.name} />
-        <p>Bienvenido, {user.name}</p>
-        <p>Correo, {user.email}</p>
-        <p>Usuario, {user.given_name}</p>
-        {userInfoByEmail && (
-          <div>
-            <p>ID de Mongo: {userInfoByEmail._id}</p>
-            {/* Agrega más campos de userInfoByEmail si es necesario */}
-          </div>
+  useEffect(() => {
+    if (userInfoByEmail && userInfoByEmail._id) {
+      fetchFavoriteMovies(userInfoByEmail._id);
+      fetchFavoriteSeries(userInfoByEmail._id); // Llama a la función para obtener series favoritas
+    }
+  }, [userInfoByEmail]);
+  
+ 
+  return (
+    <div className="dashboard-container">
+      {isAuthenticated ? (
+        <div>
+          <img src={user.picture} alt={user.name} className="user-avatar" />
+          <h1>Bienvenido, {user.name}</h1>
+          <p>Correo: {user.email}</p>
+          <p>Usuario: {user.given_name}</p>
+          {userInfoByEmail && (
+            <div className="user-details">
+              <p>ID de Mongo: {userInfoByEmail._id}</p>
+              <p>Rol: {userInfoByEmail.rol}</p>
+            </div>
+          )}
+          {userInfoByEmail && userInfoByEmail.rol === "Admin" && (
+          <button className="orange-button">Panel Administrador ultrasecreto</button>
         )}
-      </div>
-    );
-  } else {
-    return (
-      <p>Debes iniciar sesión para ver el contenido del Dashboard.</p>
-    );
-  }
+          <div className="favorite-section">
+            <div className="favorite-box">
+              <h2>Películas Favoritas</h2>
+              <ul>
+                {favoriteMovies.map((movie) => (
+                <li key={movie._id}>{movie.movieId}</li>
+                     ))}
+               </ul>
+            </div>
+            <div className="favorite-box">
+              <h2>Series Favoritas</h2>
+              <ul>
+                {favoriteSeries.map((series) => (
+                <li key={series._id}>{series.seriesId}</li>
+                ))}
+                </ul>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <p>Debes iniciar sesión para ver el contenido del Dashboard.</p>
+      )}
+    </div>
+  );
 }
 
 export default Dashboard;
