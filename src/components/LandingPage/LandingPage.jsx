@@ -26,10 +26,14 @@ function LandingPage() {
         </div>
       </div>
       <div className="text-3xl font-normal m-8 font-poppins">
+        <div className='ml-24'>
         <Top10Movies />
+        </div>
       </div>
       <div className="text-3xl font-normal m-8 font-poppins">
+      <div className='ml-24'>
         <Top10Series />
+        </div>
       </div>
       <Footer />
     </div>

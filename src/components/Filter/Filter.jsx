@@ -8,6 +8,7 @@ const Filters = ({type, onFilterChange, currentFilters, currentMoviesPage, curre
     const [filters, setFilters] = useState({
         genre: "",
         sortByTitle: "",
+        sortByYear: "",
         page: currentMoviesPage || currentSeriesPage, // Agregar parámetro de página
         perPage: 10, // Agregar parámetro de resultados por página
     });
@@ -81,6 +82,13 @@ const Filters = ({type, onFilterChange, currentFilters, currentMoviesPage, curre
                         <option value="asc">A-Z</option>
                         <option value="desc">Z-A</option>
                     </select>
+                </div>
+                <div>
+                <select name="sortByYear" className="border border-gray-300 rounded px-3 py-2 font-poppins" onChange={handleChange}>
+                    <option value="">Ordenar por año</option>
+                    <option value="asc">Ascendente</option>
+                    <option value="desc">Descendente</option>
+                </select>
                 </div>
                 <button type="submit" className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 ml-4 ext-lg font-poppins">Aplicar filtros</button>
             </form>
