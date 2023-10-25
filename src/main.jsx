@@ -16,7 +16,7 @@ const { VITE_PAYPAL_CLIENT_ID } = import.meta.env
 
 rootElement.render(
   <React.StrictMode>
-    <PayPalScriptProvider options={{ clientId: VITE_PAYPAL_CLIENT_ID }}>
+    <PayPalScriptProvider options={{ clientId: "ATMLVmLHv0YEwCBlrsTN876rIIPsFqEHl6nuZyidnWBeWL3ongFuZb2iIS6pw9Q-t0mha_tcypiqG_jb" }}>
       <Provider store={store}>
         <BrowserRouter>
           <Auth0Provider
