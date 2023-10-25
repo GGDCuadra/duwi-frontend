@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import "./dashboard.css"; // Asegúrate de que la ruta del archivo CSS sea correcta
+import styles from "./dashboard.css"; // Asegúrate de que la ruta del archivo CSS sea correcta
+import { Link } from 'react-router-dom';
 
 function Dashboard() {
   const { user, isAuthenticated } = useAuth0();
@@ -130,7 +131,9 @@ function Dashboard() {
             </div>
           )}
           {userInfoByEmail && userInfoByEmail.rol === "Admin" && (
+          <Link to="/admin">
           <button className="orange-button">Panel Administrador ultrasecreto</button>
+        </Link>
         )}
           <div className="favorite-section">
             <div className="favorite-box">
