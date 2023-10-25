@@ -97,15 +97,19 @@ const FormCreate = () => {
                 try {
                     const {data} = await (axios.get(`http://localhost:3001/movies/byObjectId/${id}`))
                     console.log(data)
+                    
                     data.Genre = data.Genre.split(',').map(genre => genre.trim());
-                    console.log(data)
-                    setInitialValuesMovies(data)
+                    const results = {...data,
+                    actors: []}
+                    
+                    console.log(results)
+                    setInitialValuesMovies(results)
                     
                 } catch (error) {
                     console.log(error)
                 }
             }
-            getMovieById();
+         getMovieById();
             
         } else if (id && type == "serie"){
             
@@ -134,6 +138,7 @@ const FormCreate = () => {
         setLoading(true)
         try {
             const response = await axios.post(`https://api.cloudinary.com/v1_1/dzrp4xd2g/image/upload`, formData);
+            //AGREGAR EL USER DE CLOUD COMO VARIABLE DE ENTORNO
             console.log(response)
             const imageURL = response.data.secure_url;
             console.log(imageURL)
@@ -173,10 +178,10 @@ const FormCreate = () => {
         Overview: yup
         .string()
         .required("Debe completar este campo"),
-        Meta_score: yup
-        .number()
-        .typeError("Debe ingresar un número")
-        .required("Debe completar este campo"),
+        // Meta_score: yup
+        // .number()
+        // .typeError("Debe ingresar un número")
+        // .required("Debe completar este campo"),
         Director: yup
         .string()
         .required("Debe ingresar el director de la película"),
@@ -218,7 +223,7 @@ const FormCreate = () => {
         rating: yup.object().shape({
             average: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
         }),
-        weight: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
+        // weight: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
         network: yup.object().shape({
             id: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
             name: yup.string().required('Debe completar este campo'), 
@@ -229,25 +234,25 @@ const FormCreate = () => {
             }),
         }),
         webChannel: yup.string().nullable(),
-        externals: yup.object().shape({
-            tvrage: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
-            thetvdb: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
-            imdb: yup.string().required('Debe completar este campo'),
-        }),
-        image: yup.object().shape({
-            medium: yup.string().url('Ingresa una URL válida para la imagen media').required('Debes completar este campo'),
-            original: yup.string().url('Ingresa una URL válida para la imagen original').required('Debes completar este campo'),
-        }),
+        // externals: yup.object().shape({
+        //     tvrage: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
+        //     thetvdb: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
+        //     imdb: yup.string().required('Debe completar este campo'),
+        // }),
+        // image: yup.object().shape({
+        //     medium: yup.string().url('Ingresa una URL válida para la imagen media').required('Debes completar este campo'),
+        //     original: yup.string().url('Ingresa una URL válida para la imagen original').required('Debes completar este campo'),
+        // }),
         summary: yup.string().required('Debe completar este campo'),
         updated: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
-        _links: yup.object().shape({
-            self: yup.object().shape({
-            href: yup.string().url('Ingresa una URL válida para el enlace self').required('Debes completar este campo'),
-            }),
-            previousepisode: yup.object().shape({
-            href: yup.string().url('Ingresa una URL válida para el enlace previousepisode').required('Debes completar este campo'),
-            }),
-  })
+        // _links: yup.object().shape({
+        //     self: yup.object().shape({
+        //     href: yup.string().url('Ingresa una URL válida para el enlace self').required('Debes completar este campo'),
+        //     }),
+        //     previousepisode: yup.object().shape({
+        //     href: yup.string().url('Ingresa una URL válida para el enlace previousepisode').required('Debes completar este campo'),
+        //     }),
+        //  })
         
     })
     
@@ -296,13 +301,7 @@ const FormCreate = () => {
             validationSchema={FormSchemaMovies}
 
             onSubmit={(values, {resetForm}) =>{
-                //Aqui debo agregar la ruta del post de movies pasandolé values
-                console.log(values)
-                // const updatedValues = {
-                //     ...values,
-                //     actors: [...values.actors, values.actorName],
-                //   };
-                //   console.log(updatedValues)
+                                
                   
                 if (buttonPressed === 'create') {
                     console.log(image)
@@ -314,54 +313,43 @@ const FormCreate = () => {
                       };
                     delete dataToSend.actorName;
                      
-                    // async function postMovie() {
-                    //     try {
-                    //         await axios.post(`http://localhost:3001/movies`, values)
+                    async function postMovie() {
+                        try {
+                            await axios.post(`http://localhost:3001/movies`, dataToSend)
                             
-                    //     } catch (error) {
-                    //         console.log(error)
-                    //     }
-                    // }
-                    // postMovie();
-                    console.log(dataToSend)
-                    console.log("axios.post")
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+                    postMovie();
+
                   } else if (buttonPressed === 'edit') {
-                    // async function putMovie() {
-                    //     try {
-                    //         await axios.put(`http://localhost:3001/movies/byObjectId/${id}`, values)
+                    const genresAsString = values.Genre.join(', ');
+                    const dataToSend = {
+                        ...values,
+                        Genre: genresAsString
+                      };
+                    delete dataToSend.actorName;
+                    async function putMovie() {
+                        try {
+                            await axios.put(`http://localhost:3001/movies/byObjectId/${id}`, dataToSend)
                             
-                    //     } catch (error) {
-                    //         console.log(error)
-                    //     }
-                    // }
-                    // putMovie();
-                    console.log("axios.put")
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+                    putMovie();                
                   }
                 setButtonPressed("")
                 resetForm(initialValuesMovies);
                 setSentForm(true)
-                // setTimeout(()=> setSentForm(false), 4000)
+                setTimeout(()=> setSentForm(false), 4000)
             }}
         >
             {({errors, values, setFieldValue}) => (
                 <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10">
                     {console.log(errors)}
-                {/* {
-                    type==="movie" ?
-                    
-                    <div className="flex flex-col space-y-2">
-                    <label className="text-lg" htmlFor="id">ID:</label>
-                    <Field
-                    className="p-2 border border-lila rounded-md"
-                    type="number" 
-                    id="id" 
-                    name="id" />
-                    <ErrorMessage name= "id" component={()=>(
-                        <div className={styles.formError}>{errors.id}</div>
-                    )}></ErrorMessage>
-                    </div>
-                    : null
-                } */}
+                
                 {
                     type==="movie" ?
                     
@@ -596,8 +584,7 @@ const FormCreate = () => {
                     </div>
                     : null
                 }
-                {
-                    type!=="movie"  ?
+               
                     <div className="flex flex-col">
                         <label className="text-lg" htmlFor="actorName">Actores principales</label>
                         <Field
@@ -630,8 +617,7 @@ const FormCreate = () => {
                     )}
                     </FieldArray>
                 </div>
-                    : null
-                }
+                  
                 
                 {
                     type==="movie" ?
@@ -705,59 +691,48 @@ const FormCreate = () => {
             validationSchema={FormSchemaSeries}
 
             onSubmit={(values, {resetForm}) =>{
-                console.log(values)
+                
                 if (buttonPressed === 'create') {
                     const dataToSend = {
                         ...values,
                         url: image
                       };
-                    console.log(dataToSend)
-                    // async function postSerie() {
-                    //     try {
-                    //         await axios.post(`http://localhost:3001/postSeries`, values)
+                    
+                    async function postSerie() {
+                        try {
+                            await axios.post(`http://localhost:3001/postSeries`, dataToSend)
                             
-                    //     } catch (error) {
-                    //         console.log(error)
-                    //     }
-                    // }
-                    // postSerie();
-                    console.log("axios.post")
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+                    postSerie();
+                    
                     
                   } else if (buttonPressed === 'edit') {
                     console.log(values)
-                    // async function putSerie() {
-                    //     try {
-                    //         await axios.put(`http://localhost:3001/series/${id}`, values)
+                    async function putSerie() {
+                        try {
+                            await axios.put(`http://localhost:3001/series/${id}`, values)
                             
-                    //     } catch (error) {
-                    //         console.log(error)
-                    //     }
-                    // }
-                    // putSerie();
-                    console.log("axios.put")
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+                    putSerie();
                     
                   }
                 setButtonPressed("")
                 resetForm(initialValuesSeries);
                 setSentForm(true)
-                // setTimeout(()=> setSentForm(false), 4000)
+                setTimeout(()=> setSentForm(false), 4000)
             }}
         >
             {({errors}) => (
                 <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10">
                     {console.log(errors)}
 
-                {/* <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="id">ID</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    type="text" 
-                    id="id" 
-                    name="id" />
-                    <ErrorMessage name= "id" component={()=>(
-                        <div className={styles.formError}>{errors.id}</div>
-                    )}></ErrorMessage>
-                </div>   */}
+                
                 {
                     type === 'serie' ?
                     <div className="flex flex-col">
@@ -834,11 +809,7 @@ const FormCreate = () => {
                         genresSerie.map(a=>  <option key={a} value={a}>{a}</option>)
                         }
                     </Field> 
-                        {/* {
-                        genresSelect.map(b => <div key={b}><span>{b}<button name={b} type='button' onClick={remove}>x</button></span></div>)
-                        
-                        }  */}
-                        
+                                              
 
                     <ErrorMessage name= "genres" component={()=>(
                         <div className={styles.formError}>{errors.genres}</div>
