@@ -34,10 +34,9 @@ function SearchBar() {
           <FaSistrix className="text-2xl"></FaSistrix>
         </button>
       </form>
-
       {searchTerm && (
         <div className="absolute mt-1 right-0 left-0 mx-auto max-h-60 overflow-y-auto z-10 rounded-xl">
- {filteredMovies.length === 0 && filteredSeries.length === 0 ? (
+        {filteredMovies.length === 0 && filteredSeries.length === 0 ? (
             <div className="bg-red-500 p-2 rounded shadow-md text-white">
               No results found. Please try a different search.
             </div>
@@ -66,5 +65,4 @@ function SearchBar() {
     </div>
   );
 }
-
 export default SearchBar;
