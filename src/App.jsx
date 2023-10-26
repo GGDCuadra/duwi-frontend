@@ -40,9 +40,7 @@ function App() {
       <Route path='/donaciones' element={<Donation/>} />
       <Route path='/favoritemovies' element={<FavoriteMovies/>}/>
       <Route path='/favoriteseries' element={<FavoriteSeries/>}/>
-      <Route path='/admin' element={<DashboardAdmin/>}/>
-      <Route path='/usuarios' element={<UserList/>} />
-
+      <Route path='/admin/*' element={<DashboardAdmin/>}/>
     </Routes>
    </div>
   )
