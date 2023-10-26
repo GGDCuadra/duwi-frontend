@@ -20,19 +20,22 @@ function SerieDetail() {
   }
 
   const { name, genres, image, runtime, status, summary , Trailer } = seriesDetail;
-
+  console.log();
   const handleFavorite = async() => {
     if (!isFav) {
       setIsFav(true);
-
+      const genreJoin = genres.join(", ")
+      const imageOriginal = image ? image.original : null
+      const dataSeries = {
+        name,
+        genres: genreJoin,
+        image : imageOriginal,
+        seriesId: _id,
+        userId: "SOY GENRRY"
+      }
       // Realizar una solicitud POST a http://localhost:3001/favorites para guardar el favorito
-      const { data } = await axios.post('http://localhost:3001/favorites', {
-          seriesId: _id, 
-          userId: 'ID_DEL_USUARIO',
-          name: name,
-          genre: genres
-        })
-        console.log(data);
+      const { data } = await axios.post('http://localhost:3001/favorites', dataSeries);
+      console.log(data);
     }
   };
 
@@ -54,7 +57,7 @@ function SerieDetail() {
             src={Trailer}
             title="Trailer"
             frameBorder="0"
-            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture;autoplay"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture;"
             allowFullScreen
           ></iframe>
         </div>
