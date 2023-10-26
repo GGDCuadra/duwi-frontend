@@ -52,14 +52,12 @@ const DashboardAdmin = () => {
         </ul>
       </nav>
       <div className="w-full  flex flex-col">
-      <div className="bg-purple-100 text-black py-8 text-2xl font-bold text-center mb-1">Panel de Administrador</div>
+      <div className="bg-purple-100 text-black py-8 text-2xl font-bold text-center mb-1">Panel de Administrador
+      </div>
         
-      {/* Content */}
       <div className="w-full p-3">
         <Routes>
-          <Route
-            path="/admin/*"
-            element={
+          <Route path="/admin/*" element={
               <>
                 <Outlet />
               </>
