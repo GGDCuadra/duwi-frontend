@@ -16,6 +16,9 @@ import FavoriteMovies from './components/FavoriteMovies/FavoriteMovies'
 import FavoriteSeries from './components/FavoritesSeries/FavoritesSeries'
 import DashboardAdmin from './components/Admin/DasboardAdmin'
 
+
+
+
 function App() {
   const [count, setCount] = useState(0)
 
@@ -39,6 +42,9 @@ function App() {
       <Route path='/favoritemovies' element={<FavoriteMovies/>}/>
       <Route path='/favoriteseries' element={<FavoriteSeries/>}/>
       <Route path='/admin/*' element={<DashboardAdmin/>}/>
+   
+
+      
     </Routes>
    </div>
   )
