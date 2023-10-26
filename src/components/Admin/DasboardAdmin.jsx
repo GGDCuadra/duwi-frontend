@@ -39,7 +39,7 @@ const DashboardAdmin = () => {
             </li>
             <li className="mb-4">
               <Link
-                to="/banear-usuario"
+                to="/usuarios"
                 className="text-clarito hover:bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300"
               >
                 Lista de Usuarios
