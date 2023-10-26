@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Route, Routes, Outlet } from 'react-router-dom';
 import Donaciones from './AllDonations';
+import UserList from './UserList';
 
 const DashboardAdmin = () => {
   return (
@@ -26,7 +27,7 @@ const DashboardAdmin = () => {
             </Link>
           </li>
           <li className="mb-5">
-            <Link to="/admin/banear-usuario"
+            <Link to="/admin/Userlist"
               className="text-clarito hover:bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300">
               Lista de Usuarios
             </Link>
@@ -65,6 +66,7 @@ const DashboardAdmin = () => {
               </>
             }/>
         </Routes>
+        <UserList/>
         <Donaciones />
       </div>
     </div>
