@@ -34,9 +34,11 @@ const Donaciones = () => {
     return isAsc ? a[orderBy] < b[orderBy] : a[orderBy] > b[orderBy];
   });
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  const handleChangePage = newPage => {
+    if (newPage >= 0 && newPage <= Math.ceil(sortedDonaciones.length / rowsPerPage) - 1) {
+      setPage(newPage);
+    }
+  };  
 
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -108,14 +110,14 @@ const Donaciones = () => {
           </span>
           <button
             className="bg-blue-500 text-white p-2 rounded-md ml-4"
-            onClick={() => handleChangePage('prev')}
+            onClick={() => handleChangePage(page - 1)}
             disabled={page === 0}
           >
             Anterior
           </button>
           <button
             className="bg-blue-500 text-white p-2 rounded-md ml-2"
-            onClick={() => handleChangePage('next')}
+            onClick={() => handleChangePage(page + 1)}
             disabled={page >= Math.ceil(sortedDonaciones.length / rowsPerPage) - 1}
           >
             Siguiente
