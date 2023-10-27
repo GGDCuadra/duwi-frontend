@@ -114,7 +114,10 @@ function Dashboard() {
     }
   }, [userInfoByEmail]);
   
- 
+  if(isAuthenticated){
+    localStorage.setItem('userData', JSON.stringify(userInfoByEmail))
+  }
+  console.log(favoriteSeries);
   return (
     <div className="dashboard-container">
       {isAuthenticated ? (
@@ -137,7 +140,10 @@ function Dashboard() {
               <h2>Películas Favoritas</h2>
               <ul>
                 {favoriteMovies.map((movie) => (
-                <li key={movie._id}>{movie.movieId}</li>
+                <li key={movie._id}>
+                  <img src={movie.image}></img>
+                  <h2>{movie.name}</h2>
+                  </li>
                      ))}
                </ul>
             </div>
@@ -145,7 +151,11 @@ function Dashboard() {
               <h2>Series Favoritas</h2>
               <ul>
                 {favoriteSeries.map((series) => (
-                <li key={series._id}>{series.seriesId}</li>
+                <li key={series._id}>
+                  <img src={series.image}></img>
+                  <h2>{series.name}</h2>
+                  
+                </li>
                 ))}
                 </ul>
             </div>

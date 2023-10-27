@@ -20,7 +20,9 @@ function SerieDetail() {
   }
 
   const { name, genres, image, runtime, status, summary , Trailer } = seriesDetail;
-  console.log();
+  const userData = localStorage.getItem('userData');
+  const userInfo = JSON.parse(userData);
+  console.log(userInfo);
   const handleFavorite = async() => {
     if (!isFav) {
       setIsFav(true);
@@ -31,7 +33,7 @@ function SerieDetail() {
         genres: genreJoin,
         image : imageOriginal,
         seriesId: _id,
-        userId: "SOY GENRRY"
+        userId: userInfo._id
       }
       // Realizar una solicitud POST a http://localhost:3001/favorites para guardar el favorito
       const { data } = await axios.post('http://localhost:3001/favorites', dataSeries);
