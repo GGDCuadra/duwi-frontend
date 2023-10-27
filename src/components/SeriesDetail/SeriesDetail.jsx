@@ -26,12 +26,7 @@ function SerieDetail() {
   const handleFavorite = async() => {
     if (!isFav) {
       setIsFav(true);
-      const genreJoin = genres.join(", ")
-      const imageOriginal = image ? image.original : null
       const dataSeries = {
-        name,
-        genres: genreJoin,
-        image : imageOriginal,
         seriesId: _id,
         userId: userInfo._id
       }

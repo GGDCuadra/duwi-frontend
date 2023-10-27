@@ -27,10 +27,7 @@ function MovieDetail() {
     if (!isFav) {
       setIsFav(true);
       const dataSeries = {
-        name: Series_Title,
-        genres: Genre,
-        image : Poster_Link,
-        moviesId: _id,
+        movieId: _id,
         userId: userInfo._id
       }
       console.log(dataSeries);

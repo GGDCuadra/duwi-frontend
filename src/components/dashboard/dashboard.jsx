@@ -170,10 +170,7 @@ function Dashboard() {
     }
   };
   
-  if(isAuthenticated){
-    localStorage.setItem('userData', JSON.stringify(userInfoByEmail))
-  }
-  console.log(favoriteSeries);
+
   return (
     <div className="dashboard-container">
   
