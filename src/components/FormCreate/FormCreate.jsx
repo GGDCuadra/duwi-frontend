@@ -1,3 +1,4 @@
+
 import React, {useEffect, useState} from 'react'
 import { useParams } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FieldArray} from 'formik'
@@ -86,8 +87,7 @@ const FormCreate = () => {
     const [buttonPressed, setButtonPressed] = useState(null);
     const [initialValuesMovies, setInitialValuesMovies] =useState(initialValuesMoviesCreate);
     const [initialValuesSeries, setInitialValuesSeries] =useState(initialValuesSeriesCreate);
-    const [image, setImage] = useState('');
-    const [loading, setLoading] = useState(false)
+    const [file, setFile] = useState({});
     const {type, id} = useParams();
 
     useEffect(()=>{
@@ -130,24 +130,7 @@ const FormCreate = () => {
     const handleContentType = (type) =>{
         setContentType(type);
     }
-    async function handleFileUpload(event) {
-        const files = event.target.files;
-        const formData = new FormData();
-        formData.append('file', files[0]);
-        formData.append('upload_preset', 'imagesPF');
-        setLoading(true)
-        try {
-            const response = await axios.post(`https://api.cloudinary.com/v1_1/dzrp4xd2g/image/upload`, formData);
-            //AGREGAR EL USER DE CLOUD COMO VARIABLE DE ENTORNO
-            console.log(response)
-            const imageURL = response.data.secure_url;
-            console.log(imageURL)
-            setImage(imageURL)
-            setLoading(false)
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
+    
     
 
 
@@ -233,7 +216,7 @@ const FormCreate = () => {
             timezone: yup.string().required('Debe completar este campo'),
             }),
         }),
-        webChannel: yup.string().nullable(),
+        //webChannel: yup.string().nullable(),
         // externals: yup.object().shape({
         //     tvrage: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
         //     thetvdb: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
@@ -300,19 +283,32 @@ const FormCreate = () => {
             
             validationSchema={FormSchemaMovies}
 
-            onSubmit={(values, {resetForm}) =>{
-                                
+            onSubmit={async (values, {resetForm}) =>{
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', 'imagesPF');
+                
+                try {
+                    const response = await axios.post(`https://api.cloudinary.com/v1_1/dzrp4xd2g/image/upload`, formData);
+                    //AGREGAR EL USER DE CLOUD COMO VARIABLE DE ENTORNO
+                    
+                    const imageURL = response.data.secure_url;
+                    
+                    values.Poster_Link = imageURL
+                    
+                    
+                } catch (error) {
+                    console.log(error.message)
+                }
                   
                 if (buttonPressed === 'create') {
-                    console.log(image)
+                    
                     const genresAsString = values.Genre.join(', ');
                     const dataToSend = {
                         ...values,
                         Genre: genresAsString,
-                        Poster_Link: image
                       };
                     delete dataToSend.actorName;
-                     
                     async function postMovie() {
                         try {
                             await axios.post(`http://localhost:3001/movies`, dataToSend)
@@ -322,6 +318,7 @@ const FormCreate = () => {
                         }
                     }
                     postMovie();
+                    console.log(dataToSend)
 
                   } else if (buttonPressed === 'edit') {
                     const genresAsString = values.Genre.join(', ');
@@ -349,20 +346,16 @@ const FormCreate = () => {
             {({errors, values, setFieldValue}) => (
                 <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10">
                     {console.log(errors)}
+                    {console.log(values)}
                 
                 {
-                    type==="movie" ?
+                    values.Poster_Link ?
                     
                     <div className="flex flex-col space-y-2">
-                    <label className="text-lg" htmlFor="Poster_Link">URL imagen</label>
-                    <Field
-                    className="p-2 border border-lila rounded-md"
-                    type="string" 
-                    id="Poster_Link" 
-                    name="Poster_Link" />
-                    <ErrorMessage name= "Poster_Link" component={()=>(
-                        <div className={styles.formError}>{errors.Poster_Link}</div>
-                    )}></ErrorMessage>
+                    <label className="text-lg" htmlFor="Poster_Link">Imagen</label>
+                    <button onClick={() =>{setFieldValue('Poster_Link', '')}}>X</button>
+                    <img src={values.Poster_Link} style={{width: "300px"}}></img>
+                    
                     </div>
                     : 
                     <div className="flex flex-col">
@@ -371,9 +364,23 @@ const FormCreate = () => {
                     className="p-2  rounded-md ml-3 mb-2"
                     type="file" 
                     id="Poster_Link" 
+                    accept="image/*"
                     name="Poster_Link" 
-                    onChange={handleFileUpload}/>
-                    {loading? (<h3>Cargando imagen...</h3>) : (<img src={image} style={{width: "300px"}}></img>)}
+                    onChange={(event) => {
+                        const selectedFile = event.currentTarget.files[0];
+                  
+                        if (selectedFile) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            const urlImage = event.target.result;
+                            setFieldValue('Poster_Link', urlImage);
+                            setFile(selectedFile)
+                          };
+                          reader.readAsDataURL(selectedFile);
+                        } else {
+                          setFieldValue('Poster_Link', ''); // Si no se selecciona ningún archivo, establece el campo en vacío
+                        }
+                      }}/>
                     
                     <ErrorMessage name= "Poster_Link" component={()=>(
                         <div className={styles.formError}>{errors.Poster_Link}</div>
@@ -601,7 +608,7 @@ const FormCreate = () => {
                                 type="button"
                                 onClick={() => {
                                 arrayHelpers.push(values.actorName);
-                                actions.setFieldValue('actorName', ''); // Limpiar el campo actorName
+                                setFieldValue('actorName', ''); // Limpiar el campo actorName
                                 }}
                             >
                                 Agregar Actor
@@ -690,13 +697,25 @@ const FormCreate = () => {
             
             validationSchema={FormSchemaSeries}
 
-            onSubmit={(values, {resetForm}) =>{
+            onSubmit={async (values, {resetForm}) =>{
                 
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', 'imagesPF');
+                
+                try {
+                    const response = await axios.post(`https://api.cloudinary.com/v1_1/dzrp4xd2g/image/upload`, formData);
+                    //AGREGAR EL USER DE CLOUD COMO VARIABLE DE ENTORNO
+                    
+                    const imageURL = response.data.secure_url;
+                    
+                    values.image.original = imageURL
+                    
+                    
+                } catch (error) {
+                    console.log(error.message)
+                }
                 if (buttonPressed === 'create') {
-                    const dataToSend = {
-                        ...values,
-                        url: image
-                      };
                     
                     async function postSerie() {
                         try {
@@ -710,7 +729,7 @@ const FormCreate = () => {
                     
                     
                   } else if (buttonPressed === 'edit') {
-                    console.log(values)
+                   
                     async function putSerie() {
                         try {
                             await axios.put(`http://localhost:3001/series/${id}`, values)
@@ -728,40 +747,50 @@ const FormCreate = () => {
                 setTimeout(()=> setSentForm(false), 4000)
             }}
         >
-            {({errors}) => (
-                <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10">
-                    {console.log(errors)}
-
+            {({errors, values, setFieldValue}) => (
                 
-                {
-                    type === 'serie' ?
-                    <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="url">URL imagen</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2"
-                    type="text" 
-                    id="url" 
-                    name="url" />
-                    <ErrorMessage name= "url" component={()=>(
-                        <div className={styles.formError}>{errors.url}</div>
-                    )}></ErrorMessage>
+                <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10">
+                    
+                    {
+                    values.image.original ?
+                    
+                    <div className="flex flex-col space-y-2">
+                    <label className="text-lg" htmlFor="image.original">Imagen</label>
+                    <button onClick={() =>{setFieldValue('image.original', '')}}>X</button>
+                    <img src={values.image.original} style={{width: "300px"}}></img>
+                    
                     </div>
                     : 
                     <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="url">Carga una imagen</label>
+                    <label className="text-lg" htmlFor="image.original">Carga una imagen</label>
                     <Field 
                     className="p-2  rounded-md ml-3 mb-2"
                     type="file" 
-                    id="url" 
-                    name="url" 
-                    onChange={handleFileUpload}/>
-                    {loading? (<h3>Cargando imagen...</h3>) : (<img src={image} style={{width: "300px"}}></img>)}
+                    id="image.original" 
+                    accept="image/*"
+                    name="image.original" 
+                    onChange={(event) => {
+                        const selectedFile = event.currentTarget.files[0];
+                  
+                        if (selectedFile) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            const urlImage = event.target.result;
+                            setFieldValue('image.original', urlImage);
+                            setFile(selectedFile)
+                          };
+                          reader.readAsDataURL(selectedFile);
+                        } else {
+                          setFieldValue('image.original', ''); 
+                        }
+                      }}/>
                     
-                    <ErrorMessage name= "url" component={()=>(
-                        <div className={styles.formError}>{errors.url}</div>
+                    <ErrorMessage name= "image.original" component={()=>(
+                        <div className={styles.formError}>{errors.image.original}</div>
                     )}></ErrorMessage>
                     </div>
                 }
+                
                    
                 <div className="flex flex-col">
                     <label className="text-lg" htmlFor="name">Título de la serie</label>
@@ -983,15 +1012,15 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
                 <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="webChannel">Canal web</label>
+                    <label className="text-lg" htmlFor="webChannel.name">Canal web</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
-                    id="webChannel" 
-                    name="webChannel" />
+                    id="webChannel.name" 
+                    name="webChannel.name" />
                     
-                    <ErrorMessage name= "webChannel" component={()=>(
-                        <div className={styles.formError}>{errors.webChannel}</div>
+                    <ErrorMessage name= "webChannel.name" component={()=>(
+                        <div className={styles.formError}>{errors.webChannel.name}</div>
                     )}></ErrorMessage>
                 </div>
                 {
@@ -1042,38 +1071,7 @@ const FormCreate = () => {
                     </div>
                     : null
                 }
-                {
-                    type==="serie" ?
-                    <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="image.medium">Imagen Media</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    type="text" 
-                    id="image.medium" 
-                    name="image.medium" />
-                    
-                    <ErrorMessage name= "image.medium" component={()=>(
-                        <div className={styles.formError}>{errors.image.medium}</div>
-                    )}></ErrorMessage>
-                    </div>
-                    : null
-                }
-                {
-                    type==="serie" ?
-                    <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="image.original">Imagen Original</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    type="text" 
-                    id="image.original" 
-                    name="image.original" />
-                    
-                    <ErrorMessage name= "image.original" component={()=>(
-                        <div className={styles.formError}>{errors.image.original}</div>
-                    )}></ErrorMessage>
-                    </div>
-                    : null
-                }
+                
                 
                 
                 <div className="flex flex-col">
@@ -1156,7 +1154,7 @@ const FormCreate = () => {
                 }
                 
                 
-                {sentForm && <p className={styles.formSucces}>Formulario enviado con éxito!</p>}
+                {sentForm && <p className="text-lg text-morado font-poppins">Formulario enviado con éxito!</p>}
                 <div className="flex space-x-4 mb-20">
                 {type === "serie" ? 
                     <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila  py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
