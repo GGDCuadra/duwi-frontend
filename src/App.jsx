@@ -16,6 +16,7 @@ import FavoriteMovies from "./components/FavoriteMovies/FavoriteMovies";
 import FavoriteSeries from "./components/FavoritesSeries/FavoritesSeries";
 import Suggestion from "./components/Suggestion/Suggestion";
 import AboutUs from "./components/AboutUs/AboutUs";
+import DashboardAdmin from './components/Admin/DasboardAdmin'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -40,6 +41,7 @@ function App() {
         <Route path="/favoriteseries" element={<FavoriteSeries />} />
         <Route path="/suggestion" element={<Suggestion />} />
         <Route path="/AboutUs" element={<AboutUs />} />
+        <Route path='/admin/*' element={<DashboardAdmin/>}/>
       </Routes>
     </div>
   );
