@@ -2,37 +2,35 @@ import React, { useState } from 'react';
 import { Link, Route, Routes, Outlet } from 'react-router-dom';
 import Donaciones from './AllDonations';
 import UserList from './UserList';
+import Peliculas from './MoviesAdmin'; // Importa el componente Peliculas
 
 const DashboardAdmin = () => {
   const [showUserList, setShowUserList] = useState(false);
   const [showDonations, setShowDonations] = useState(false);
+  const [showPeliculas, setShowPeliculas] = useState(false);
 
   const toggleDonations = () => {
     setShowDonations(!showDonations);
-    setShowUserList(false); // Cerrar la lista de usuarios si se abre donaciones
+    setShowUserList(false);
+    setShowPeliculas(false);
   };
 
   const toggleUserList = () => {
     setShowUserList(!showUserList);
-    setShowDonations(false); // Cerrar donaciones si se abre la lista de usuarios
+    setShowDonations(false);
+    setShowPeliculas(false);
+  };
+
+  const togglePeliculas = () => {
+    setShowPeliculas(!showPeliculas);
+    setShowDonations(false);
+    setShowUserList(false);
   };
 
   return (
     <div className="min-h-screen flex">
       <nav className="bg-morado w-64 py-6 px-2">
         <ul>
-          <li className="mb-5">
-            <Link to="/admin/crear-pelicula"
-              className="text-clarito hover:bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300">
-              Crear Película/Serie
-            </Link>
-          </li>
-          <li className="mb-5">
-            <Link to="/admin/editar-pelicula"
-              className="text-clarito hover:bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300">
-              Editar Película/Serie
-            </Link>
-          </li>
           <li className="mb-5">
             <button
               onClick={toggleDonations}
@@ -50,21 +48,29 @@ const DashboardAdmin = () => {
             </button>
           </li>
           <li className="mb-5">
+            <button
+              onClick={togglePeliculas}
+              className="text-clarito hover:bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300"
+            >
+              Lista de Películas
+            </button>
+          </li>
+          <li>
             <Link to="/admin/lista-usuarios"
               className="text-clarito hover-bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300">
-              Buzón de sugerencias
+              Lista de Series
+            </Link>
+          </li>
+          <li className="mb-5">
+            <Link to="/admin/crear-pelicula"
+              className="text-clarito hover:bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300">
+              Crear Película/Serie
             </Link>
           </li>
           <li className="mb-5">
             <Link to="/admin/lista-usuarios"
               className="text-clarito hover-bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300">
-              Películas
-            </Link>
-          </li>
-          <li>
-            <Link to="/admin/lista-usuarios"
-              className="text-clarito hover-bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300">
-              Series
+              Buzón de sugerencias
             </Link>
           </li>
         </ul>
@@ -75,6 +81,7 @@ const DashboardAdmin = () => {
         <Routes>
           <Route path="/admin/AllDonations" element={<Donaciones />} />
           <Route path="/admin/userlist" element={<UserList />} />
+          <Route path="/admin/MoviesAdmin" element={<Peliculas />} />
           {/* Agrega más rutas para otros componentes si es necesario */}
         </Routes>
 
@@ -82,6 +89,7 @@ const DashboardAdmin = () => {
         <div className="w-full p-3">
           {showUserList && <UserList />}
           {showDonations && <Donaciones />}
+          {showPeliculas && <Peliculas />}
           {/* Agrega otras secciones del panel de administración aquí */}
         </div>
       </div>
