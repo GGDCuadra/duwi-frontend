@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Donaciones = () => {
   const [donaciones, setDonaciones] = useState([]);
@@ -9,10 +10,13 @@ const Donaciones = () => {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:3001/alldonations')
-      .then(response => response.json())
-      .then(data => setDonaciones(data))
-      .catch(error => console.error('Error al obtener donaciones:', error));
+    axios.get('http://localhost:3001/alldonations')
+      .then(response => {
+        setDonaciones(response.data);
+      })
+      .catch(error => {
+        console.error('Error al obtener donaciones:', error);
+      });
   }, []);
 
   const handleSort = property => {
@@ -38,7 +42,7 @@ const Donaciones = () => {
     if (newPage >= 0 && newPage <= Math.ceil(sortedDonaciones.length / rowsPerPage) - 1) {
       setPage(newPage);
     }
-  };  
+  };
 
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -46,56 +50,84 @@ const Donaciones = () => {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center flex-col items-center">
       <div className="w-4/5 p-5">
         <h1 className="text-2xl font-bold text-center mb-8">Donaciones</h1>
-        <input type="text"
+        <input
+          type="text"
           placeholder="Buscar"
           className="w-full border border-gray-300 p-2 rounded-md mb-4"
           onChange={handleSearch}
         />
-        <table className="w-full border border-gray-400">
-          <thead className="bg-gray-200">
-            <tr>
-              <th className="p-3 cursor-pointer" onClick={() => handleSort('name')}>
-                Nombre
-              </th>
-              <th className="p-3 cursor-pointer" onClick={() => handleSort('amount')}>
-                Monto
-              </th>
-              <th className="p-3 cursor-pointer" onClick={() => handleSort('createDate')}>
-                Fecha de Creación
-              </th>
-              <th className="p-3 cursor-pointer" onClick={() => handleSort('email')}>
-                Email
-              </th>
-              <th className="p-3 cursor-pointer" onClick={() => handleSort('status')}>
-                Estado
-              </th>
-              <th className="p-3 cursor-pointer" onClick={() => handleSort('address')}>
-                Dirección
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table className="w-full border border-gray-400 table-auto">
+            <thead className="bg-gray-200">
+              <tr>
+                <th
+                  className="px-6 py-3 cursor-pointer hover:underline"
+                  onClick={() => handleSort('name')}
+                >
+                  Nombre
+                </th>
+                <th
+                  className="px-6 py-3 cursor-pointer hover:underline"
+                  onClick={() => handleSort('amount')}
+                >
+                  Monto
+                </th>
+                <th
+                  className="px-6 py-3 cursor-pointer hover:underline"
+                  onClick={() => handleSort('createDate')}
+                >
+                  Fecha de Creación
+                </th>
+                <th
+                  className="px-6 py-3 cursor-pointer hover:underline"
+                  onClick={() => handleSort('email')}
+                >
+                  Email
+                </th>
+                <th
+                  className="px-6 py-3 cursor-pointer hover:underline"
+                  onClick={() => handleSort('status')}
+                >
+                  Estado
+                </th>
+                <th
+                  className="px-6 py-3 cursor-pointer hover:underline"
+                  onClick={() => handleSort('address')}
+                >
+                  Dirección
+                </th>
+              </tr>
+            </thead>
+            
+            <tbody>
+              {sortedDonaciones
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map(donacion => (
+                  <tr
+                    key={donacion._id}
+                    className={`${
+                      sortedDonaciones.indexOf(donacion) % 2 === 0 ? 'bg-gray-100' : 'bg-white'
+                    } hover:bg-gray-200 hover:dark:bg-gray-400`}
+                  >
+                    <td className="whitespace-nowrap px-6 py-4 font-medium">{donacion.name}</td>
+                    <td className="whitespace-nowrap px-6 py-4">${donacion.amount}</td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {new Date(donacion.createDate).toLocaleString()}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">{donacion.email}</td>
+                    <td className="whitespace-nowrap px-6 py-4">{donacion.status}</td>
+                    <td className="whitespace-nowrap px-6 py-4">{donacion.address}</td>
+                  </tr>
+                ))}
+            </tbody>
 
-            {sortedDonaciones
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map(donacion => (
-                <tr key={donacion._id} className="bg-gray-100">
-                  <td className="p-2 text-center">{donacion.name}</td>
-                  <td className="p-2 text-center">${donacion.amount}</td>
-                  <td className="p-2 text-center">
-                    {new Date(donacion.createDate).toLocaleString()}
-                  </td>
-                  <td className="p-2 text-center">{donacion.email}</td>
-                  <td className="p-2 text-center">{donacion.status}</td>
-                  <td className="p-2 text-center">{donacion.address}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-        <div className="mt-6 flex justify-center items-center">
+          </table>
+        </div>
+
+        <div className="mt-6 flex justify-between items-center">
           <span className="mr-2">Filas por página</span>
           <select
             className="border border-gray-300 p-2 rounded-md"
@@ -109,14 +141,32 @@ const Donaciones = () => {
             Página {page + 1} de {Math.ceil(sortedDonaciones.length / rowsPerPage)}
           </span>
           <button
-            className="bg-blue-500 text-white p-2 rounded-md ml-4"
+            className={`flex items-center justify-center px-3 h-8 ml-2 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
             onClick={() => handleChangePage(page - 1)}
             disabled={page === 0}
           >
             Anterior
           </button>
+          <ul className="flex justify-center ml-2">
+            {Array.from({ length: Math.ceil(sortedDonaciones.length / rowsPerPage) }, (_, i) => i).map(
+              numPagina => (
+                <li key={numPagina}>
+                  <button
+                    onClick={() => handleChangePage(numPagina)}
+                    className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-700 dark:hover:text-white ${
+                      page === numPagina
+                        ? 'text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
+                        : ''
+                    }`}
+                  >
+                    {numPagina + 1}
+                  </button>
+                </li>
+              )
+            )}
+          </ul>
           <button
-            className="bg-blue-500 text-white p-2 rounded-md ml-2"
+            className={`flex items-center justify-center px-3 h-8 ml-2 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark.border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
             onClick={() => handleChangePage(page + 1)}
             disabled={page >= Math.ceil(sortedDonaciones.length / rowsPerPage) - 1}
           >

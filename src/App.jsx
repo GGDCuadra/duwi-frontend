@@ -19,8 +19,6 @@ import AboutUs from "./components/AboutUs/AboutUs";
 import DashboardAdmin from './components/Admin/DasboardAdmin'
 
 
-
-
 function App() {
   const [count, setCount] = useState(0);
 
@@ -45,9 +43,6 @@ function App() {
         <Route path="/suggestion" element={<Suggestion />} />
         <Route path="/AboutUs" element={<AboutUs />} />
         <Route path='/admin/*' element={<DashboardAdmin/>}/>
-   
-
-      
     </Routes>
     </div>
   );
