@@ -23,6 +23,7 @@ function MovieDetail() {
   const userData = localStorage.getItem('userData');
   const userInfo = JSON.parse(userData);
 
+
   const handleFavorite = async() => {
     if (!isFav) {
       setIsFav(true);
@@ -31,9 +32,11 @@ function MovieDetail() {
         userId: userInfo._id
       }
       console.log(dataSeries);
-      // Realizar una solicitud POST a http://localhost:3001/favorites para guardar el favorito
+    
       const { data } = await axios.post('http://localhost:3001/favorites/movies', dataSeries);
       console.log(data);
+      console.log( _id);
+      console.log(userInfo._id);
     }
   };
 
