@@ -16,12 +16,12 @@ function Footer() {
           </Link>
         </li>
         <li>
-          <Link to="/buzon-de-sugerencias" className="hover:text-moradito font-poppins">
+          <Link to="/suggestion" className="hover:text-moradito font-poppins">
             Buzón de sugerencias
           </Link>
         </li>
         <li>
-          <Link to="/acerca-de-nosotros" className="hover:text-moradito font-poppins">
+          <Link to="/AboutUs" className="hover:text-moradito font-poppins">
             Acerca de nosotros
           </Link>
         </li>
