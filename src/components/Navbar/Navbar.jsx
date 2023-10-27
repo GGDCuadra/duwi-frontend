@@ -1,6 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaMoon, FaSignInAlt } from 'react-icons/fa';
+import { FaMoon } from 'react-icons/fa';
 import logo from '../../assets/logoduwi.png';
 import SearchBar from '../SearchBar/SearchBar';
 import { useAuth0 } from "@auth0/auth0-react";
@@ -54,9 +53,9 @@ const Navbar = () => {
         <div className="ml-4 text-gray-800 hover:text-moradito">
           <FaMoon />
         </div>
-        <div className="ml-4 text-gray-800 hover:text-moradito" onClick={handleLoginOrLogout}>
+        <button className="ml-4 text-gray-800 hover:text-moradito" onClick={handleLoginOrLogout}>
           {isAuthenticated ? "Cerrar Sesión" : "Iniciar Sesión"}
-        </div>
+        </button>
       </div>
     </nav>
   );
