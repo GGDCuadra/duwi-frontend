@@ -1,39 +1,137 @@
+/* Estilos globales */
 .dashboard-container {
-    text-align: center;
-    margin: 20px;
-  }
-  
-  .user-avatar {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    display: block;
-    margin: 0 auto;
-  }
-  
-  .welcome-message {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  .user-info {
-    font-size: 16px;
-  }
-  
-  .user-details {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 20px;
-  }
-  .favorite-section {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-  }
-  
-  .favorite-box {
-    border: 1px solid #ccc;
-    padding: 10px;
-    width: 45%; 
-  }
-  
+  text-align: center;
+  margin: 20px;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #a29eda;
+}
+
+.user-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 0 15px rgba(68, 55, 253, 0.7);
+  font-size: 20px;
+  font-weight: normal;
+  color: #555;
+}
+
+.rol {
+  font-size: 17px;
+  font-weight: bold;
+  color: #615e84;
+}
+
+.user-details {
+  display: flex;
+  justify-content: space-between;
+}
+
+.favorite-box {
+  padding: 15px;
+  width: 100%;
+  margin: 0 10px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.orange-button {
+  background-color: #f38585;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  height: 45px;
+}
+
+.favorite-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.favorite-box li {
+  display: inline-block;
+}
+
+.Userinfo {
+  margin-top: 30px;
+  padding: 15px;
+  font-size: 26px;
+  font-weight: bold;
+  color: #41405a;
+}
+
+.movie-card {
+  position: relative;
+  text-align: left;
+  padding: 10px;
+  border-radius: 10px;
+  width: 200px;
+  height: 280px;
+  transition: transform 0.2s;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+
+.movie-card .movie-poster-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+
+.movie-poster {
+  width: 150px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #8f8cc1;
+  color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.sidebar button {
+  margin: 0 10px;
+}
+
+.admin-button {
+  background-color: #8f8cc1;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  height: 45px;
+}
+
+.divrolpanel {
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-end; 
+}
