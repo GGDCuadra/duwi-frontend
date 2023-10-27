@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Link, Route, Routes, Outlet } from 'react-router-dom';
 import Donaciones from './AllDonations';
 import UserList from './UserList';
+import SeriesList from './SeriesList';
 
 const DashboardAdmin = () => {
   const [showUserList, setShowUserList] = useState(false);
   const [showDonations, setShowDonations] = useState(false);
+  const [showSeriesList, setShowSeriesList] = useState(false)
 
   const toggleDonations = () => {
     setShowDonations(!showDonations);
@@ -16,6 +18,10 @@ const DashboardAdmin = () => {
     setShowUserList(!showUserList);
     setShowDonations(false); // Cerrar donaciones si se abre la lista de usuarios
   };
+
+  const toggleSeriesList = () => {
+    setShowSeriesList(!showSeriesList);
+  }
 
   return (
     <div className="min-h-screen flex">
@@ -61,11 +67,13 @@ const DashboardAdmin = () => {
               Películas
             </Link>
           </li>
-          <li>
-            <Link to="/admin/lista-usuarios"
-              className="text-clarito hover-bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300">
-              Series
-            </Link>
+          <li className="mb-5">
+            <button
+              onClick={toggleSeriesList}
+              className="text-clarito hover:bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300"
+            >
+              Lista de Series
+            </button>
           </li>
         </ul>
       </nav>
@@ -75,6 +83,8 @@ const DashboardAdmin = () => {
         <Routes>
           <Route path="/admin/AllDonations" element={<Donaciones />} />
           <Route path="/admin/userlist" element={<UserList />} />
+          <Route path="/admin/serieslist" element={<SeriesList />} />
+
           {/* Agrega más rutas para otros componentes si es necesario */}
         </Routes>
 
@@ -82,6 +92,8 @@ const DashboardAdmin = () => {
         <div className="w-full p-3">
           {showUserList && <UserList />}
           {showDonations && <Donaciones />}
+          {showSeriesList && <SeriesList />}
+
           {/* Agrega otras secciones del panel de administración aquí */}
         </div>
       </div>
