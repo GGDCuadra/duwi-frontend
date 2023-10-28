@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 function FavoriteSeries({ userId }) {
   const [favoriteSeries, setFavoriteSeries] = useState([]);
+  const allSeries = useSelector((state) => state.allSeries)
+
+  const seriesFavoritas = allSeries.filter((serie) => {
+    // Verifica si algún objeto en seriesIdArray tiene un _id que coincida con el _id de la serie.
+    return favoriteSeries.some((favSerie) => favSerie.seriesId === serie._id);
+  });
+  console.log(allSeries);
 
   useEffect(() => {
     const fetchFavoriteSeries = async () => {
       try {
-        const response = await axios.get(`/api/favorites/series/${userId}`);
+        const response = await axios.get(`http://localhost:3001/favorites/ID_DEL_USUARIO`);
         setFavoriteSeries(response.data);
       } catch (error) {
         console.error(error);
@@ -27,7 +35,7 @@ function FavoriteSeries({ userId }) {
       console.error(error);
     }
   };
-
+  console.log(favoriteSeries);
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Mis series favoritas</h2>
@@ -38,6 +46,7 @@ function FavoriteSeries({ userId }) {
           {favoriteSeries.map((serie) => (
             <li key={serie._id}>
               <p>{serie.serieId}</p>
+              <p>{serie.name}</p>
               <button onClick={() => handleDeleteSerie(serie.serieId)}>
                 Eliminar de favoritos
               </button>
