@@ -25,6 +25,11 @@ const DashboardAdmin = () => {
   const toggleSeriesList = () => {
     setShowSeriesList(!showSeriesList);
   }
+  const togglePeliculas = () => {
+    setShowPeliculas(!showPeliculas);
+    setShowDonations(false);
+    setShowUserList(false);
+  };
 
   return (
     <div className="min-h-screen flex">
@@ -54,11 +59,13 @@ const DashboardAdmin = () => {
               Lista de Películas
             </button>
           </li>
-          <li>
-            <Link to="/admin/lista-usuarios"
-              className="text-clarito hover-bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300">
+          <li className="mb-5">
+            <button
+              onClick={toggleSeriesList}
+              className="text-clarito hover:bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300"
+            >
               Lista de Series
-            </Link>
+            </button>
           </li>
           <li className="mb-5">
             <Link to="/admin/crear-pelicula"
