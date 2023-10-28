@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import styles from "./dashboard.css"; 
+import "./dashboard.css"; 
 import MovieDetailsDashboard from './MovieDetailsDashboard';
 import SeriesDetailsDashboard from './SeriesDetailsDashboard.jsx';
+import { Link } from 'react-router-dom';
 
 function Dashboard() {
   const { user, isAuthenticated } = useAuth0();
@@ -219,7 +220,9 @@ function Dashboard() {
 <div className="divrolpanel" >
      
            {userInfoByEmail && userInfoByEmail.rol === 'Admin' && (
-        <button className="admin-button">Panel Administrador</button>
+            <Link to="/admin"> {/* Utiliza Link para redirigir a /admin */}
+            <button className="admin-button">Panel Administrador</button>
+          </Link>
       )}
 
 </div>
