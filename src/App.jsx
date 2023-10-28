@@ -43,7 +43,7 @@ function App() {
         <Route path="/suggestion" element={<Suggestion />} />
         <Route path="/AboutUs" element={<AboutUs />} />
         <Route path='/admin/*' element={<DashboardAdmin/>}/>
-    </Routes>
+      </Routes>
     </div>
   );
 }

@@ -215,12 +215,13 @@ function Dashboard() {
 <div className="dashboard-container">
       {isAuthenticated ? (
         <div>
-          <div className="divrolpanel">
-            {userInfoByEmail && userInfoByEmail.rol === 'Admin' && (
-              <Link to="/admin"> {/* Utiliza Link para redirigir a /admin */}
-                <button className="admin-button">Panel Administrador</button>
-              </Link>
-            )}
+<div className="divrolpanel" >
+     
+           {userInfoByEmail && userInfoByEmail.rol === 'Admin' && (
+            <Link to="/admin"> {/* Utiliza Link para redirigir a /admin */}
+            <button className="admin-button">Panel Administrador</button>
+          </Link>
+      )}
 
 </div>
 
