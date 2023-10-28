@@ -6,7 +6,7 @@ const Peliculas = () => {
   const [peliculas, setPeliculas] = useState([]);
   const [pagina, setPagina] = useState(0);
   const [filasPorPagina, setFilasPorPagina] = useState(10);
-  const [ordenarPor, setOrdenarPor] = useState('Series_Title');
+  const [ordenarPor, setOrdenarPor] = useState('Released_Year');
   const [orden, setOrden] = useState('asc');
   const [busqueda, setBusqueda] = useState('');
 
@@ -82,7 +82,7 @@ const Peliculas = () => {
               Año{' '}
               {ordenarPor === 'Released_Year' ? (
                 orden === 'asc' ? (
-                  <FaSort className="inline" />
+                  <FaSort className="inline " />
                 ) : (
                   <FaSort className="inline transform rotate-180" />
                 )
