@@ -4,7 +4,8 @@ const initialState = {
     allMovies: [],
     allSeries: [],
     topMovies: [],
-    topSeries: []
+    topSeries: [],
+    allFavorites: []
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -39,9 +40,15 @@ const reducer = (state = initialState, { type, payload }) => {
                 ...state,
                 allSeries: payload
             }
-        default:
+
+        // case 'ADD_FAVORITE':
+        //     return [...state, payload];
+        // case 'REMOVE_FAVORITE':
+        //     return state.filter((item) => item._id !== payload._id);
+            default:
             return state;
     }
+    
 }
 
 export default reducer;

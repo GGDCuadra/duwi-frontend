@@ -1,20 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import Footer from '../Footer/Footer';
 import { Link } from 'react-router-dom';
+import { MdFavorite, MdFavoriteBorder } from 'react-icons/md';
 
 function MovieDetail() {
   const { _id } = useParams();
   const type = "movie";
   const allMovies = useSelector((state) => state.allMovies);
   const moviesDetail = allMovies.find((movie) => movie._id === _id);
+  const dispatch = useDispatch();
+
+  const [isFav, setIsFav] = useState(false);
 
   if (!moviesDetail) {
     return <div>Loading...</div>;
   }
 
   const { Series_Title, Released_Year, Genre, Poster_Link, Trailer, Director, Overview, Star1, Star2, Star3, Star4 } = moviesDetail;
+  const userData = localStorage.getItem('userData');
+  const userInfo = JSON.parse(userData);
+
+
+  const handleFavorite = async() => {
+    if (!isFav) {
+      setIsFav(true);
+      const dataSeries = {
+        movieId: _id,
+        userId: userInfo._id
+      }
+      console.log(dataSeries);
+    
+      const { data } = await axios.post('http://localhost:3001/favorites/movies', dataSeries);
+      console.log(data);
+      console.log( _id);
+      console.log(userInfo._id);
+    }
+  };
+
   return (
     <div>
       <div className="bg-white p-8 rounded-lg flex">
@@ -32,14 +57,18 @@ function MovieDetail() {
             src={Trailer}
             title="Trailer"
             frameBorder="0"
-            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture;autoplay"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture;"
             allowFullScreen
           ></iframe>
-        
       </div>
-      <Link to={`/formCreateEdit/${type}/${_id}`}>
-        <button className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 ml-[65px] ext-lg font-poppins">Editar</button>
-        </Link>
+      <div className='mt-11'>
+          <button onClick={handleFavorite} className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 mt-10 ext-lg font-poppins">
+            {isFav ? <MdFavorite size={24} /> : <MdFavoriteBorder size={24} />}
+          </button>
+          <Link className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 mt-10 ext-lg font-poppins ml-4" to={`/formCreateEdit/${type}/${_id}`}>
+            Editar
+          </Link>
+        </div>
       <div className="text-center mt-8">
         <h2 className="text-xl font-bold text-oscuro font-poppins">Director:</h2>
         <ul className="list-disc list-inside">
