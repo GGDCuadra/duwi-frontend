@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { FaSistrix } from "react-icons/fa";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 function SearchBar() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const allMovies = useSelector((state) => state.allMovies);
   const allSeries = useSelector((state) => state.allSeries);
 
@@ -13,11 +13,11 @@ function SearchBar() {
     setSearchTerm(value);
   };
 
-  const filteredMovies = allMovies.filter(movie =>
+  const filteredMovies = allMovies.filter((movie) =>
     movie.Series_Title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const filteredSeries = allSeries.filter(serie =>
+  const filteredSeries = allSeries.filter((serie) =>
     serie.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -30,7 +30,7 @@ function SearchBar() {
           value={searchTerm}
           onChange={handleSearch}
         />
-        <button className="absolute right-5 top-1/2 -translate-y-1/2">  
+        <button className="absolute right-5 top-1/2 -translate-y-1/2">
           <FaSistrix className="text-2xl"></FaSistrix>
         </button>
       </form>
@@ -41,28 +41,50 @@ function SearchBar() {
               No results found. Please try a different search.
             </div>
           ) : (
-         <div className="bg-clarito p-2 rounded shadow-md">
-            <ul className="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
-              {filteredMovies.map(movie => (
-                <li key={movie._id} className="mb-2 hover:bg-lila rounded p-1 cursor-pointer">
-                  <Link to={`movie/${movie._id}`}>
-                    <h3 className="mb-2 hover:bg-lila rounded p-1 cursor-pointer">{movie.Series_Title}</h3>
-                  </Link>
-                </li>
-              ))}
-              {filteredSeries.map(serie => (
-                <li key={serie._id} className="mb-2 hover:bg-lila rounded p-1 cursor-pointer">
-                  <Link to={`serie/${serie._id}`}>
-                    <h3 className="mb-2 hover:bg-lila rounded p-1 cursor-pointer" >{serie.name}</h3>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+            <div className="bg-clarito p-2 rounded shadow-md">
+              <ul className="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+                {filteredMovies.map((movie) => (
+                  <li
+                    key={movie._id}
+                    className="mb-2 hover:bg-lila rounded p-1 cursor-pointer"
+                  >
+                    <Link to={`movie/${movie._id}`}>
+                      <h3 className="mb-2 hover:bg-lila rounded p-1 cursor-pointer">
+                        {movie.Series_Title}
+                      </h3>
+                    </Link>
+                  </li>
+                ))}
+                {filteredSeries.map((serie) => (
+                  <li
+                    key={serie._id}
+                    className="mb-2 hover:bg-lila rounded p-1 cursor-pointer"
+                  >
+                    <Link to={`serie/${serie._id}`}>
+                      <h3 className="mb-2 hover:bg-lila rounded p-1 cursor-pointer">
+                        {serie.name}
+                      </h3>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              //
+              <div className="text-center mt-4">
+                <Link
+                  to="/NewReleases"
+                  className="hover:text-moradito font-poppins"
+                >
+                  Ver todos los estrenos
+                </Link>
+              </div>
+              //
+            </div>
           )}
         </div>
       )}
     </div>
   );
 }
+
 export default SearchBar;
+
