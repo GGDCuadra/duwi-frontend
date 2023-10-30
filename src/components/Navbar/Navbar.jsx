@@ -53,7 +53,7 @@ const Navbar = () => {
         <div className="ml-4 text-gray-800 hover:text-moradito">
           <FaMoon />
         </div>
-        <button className="ml-4 text-gray-800 hover:text-moradito" onClick={handleLoginOrLogout}>
+        <button className="ml-4 text-gray-800 hover:text-moradito font-poppins" onClick={handleLoginOrLogout}>
           {isAuthenticated ? "Cerrar Sesión" : "Iniciar Sesión"}
         </button>
       </div>
