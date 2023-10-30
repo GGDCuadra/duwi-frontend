@@ -12,7 +12,7 @@ function SerieDetail() {
   const allSeries = useSelector((state) => state.allSeries);
   const seriesDetail = allSeries.find((serie) => serie._id === _id);
   const dispatch = useDispatch();
-
+  const [isWatching, setIsWatching] = useState(false);
   const [isFav, setIsFav] = useState(false);
 
   if (!seriesDetail) {
@@ -35,7 +35,32 @@ function SerieDetail() {
       console.log(data);
     }
   };
+  const handleWatching = async () => {
+    if (!isWatching) {
+      setIsWatching(true);
 
+      const dataSerie = {
+        userId: userInfo._id,
+        serieId: _id,
+        completada: null,
+      };
+
+      try {
+        // Realizar una solicitud POST a http://localhost:3001/seriesvistas para agregar a "series que estoy viendo"
+        const { data } = await axios.post(
+          "http://localhost:3001/seriesvistas",
+          dataSerie
+        );
+        console.log(data);
+      } catch (error) {
+        console.error("Error al agregar a series que estoy viendo:", error);
+      }
+    } else {
+      // Si ya está marcada como "series que estoy viendo", puedes implementar la lógica para quitarla si lo deseas.
+      // Puedes realizar una solicitud DELETE o similar para eliminarla de la lista.
+      // Esta parte dependerá de la lógica de tu aplicación.
+    }
+  };
   return (
     <>
       <div className="bg-white p-8 rounded-lg flex">
@@ -55,6 +80,12 @@ function SerieDetail() {
               ) : (
                 <MdFavoriteBorder size={24} />
               )}
+            </button>
+            <button
+              onClick={handleWatching}
+              className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-xs font-poppins"
+            >
+              {isWatching ? "Viendo" : "Ver más tarde"}
             </button>
             <Link
               to={`/formCreateEdit/${type}/${_id}`}

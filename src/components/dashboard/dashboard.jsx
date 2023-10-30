@@ -3,6 +3,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import MovieDetailsDashboard from "./MovieDetailsDashboard";
 import SeriesDetailsDashboard from "./SeriesDetailsDashboard.jsx";
 import { Link } from "react-router-dom";
+import MovieWatchingCard from '..//dashboard/MovieWatchingCard';
+import SeriesWatchingCard from '..//dashboard/SeriesWatchingCard'; 
 
 function Dashboard() {
   const { user, isAuthenticated } = useAuth0();
@@ -11,6 +13,9 @@ function Dashboard() {
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [favoriteSeries, setFavoriteSeries] = useState([]);
   const [selectedSection, setSelectedSection] = useState("favorites");
+  const [watchedMovieIds, setWatchedMovieIds] = useState([]);
+  const [moviesWatching, setMoviesWatching] = useState([]);
+  const [watchingSeries, setWatchingSeries] = useState([]);
 
   const [availableGenres, setAvailableGenres] = useState([
     "Crime",
@@ -194,7 +199,8 @@ function Dashboard() {
   useEffect(() => {
     if (userInfoByEmail && userInfoByEmail._id) {
       fetchFavoriteMovies(userInfoByEmail._id);
-      fetchFavoriteSeries(userInfoByEmail._id); // Llama a la función para obtener series favoritas
+      fetchFavoriteSeries(userInfoByEmail._id); 
+      fetchWatchingSeries(userInfoByEmail._id);
     }
   }, [userInfoByEmail]);
 
@@ -245,7 +251,35 @@ function Dashboard() {
   if (isAuthenticated) {
     localStorage.setItem("userData", JSON.stringify(userInfoByEmail));
   }
+  useEffect(() => {
+    if (userInfoByEmail && userInfoByEmail._id) {
+      fetch(`http://localhost:3001/moviesvistas/${userInfoByEmail._id}`)
+        .then(response => response.json())
+        .then(data => {
+          const movieIdsNullCompletada = data
+            .filter(item => item.completada === null)
+            .map(item => item.movieId);
+          setMoviesWatching(movieIdsNullCompletada);
+        })
+        .catch(error => {
+          console.error('Error al obtener los datos:', error);
+        });
+    }
+  }, [userInfoByEmail]);
 
+  
+  const fetchWatchingSeries = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/seriesvistas/${userId}`);
+      if (response.status === 200) {
+        const seriesData = await response.json();
+        const nullCompletedSeries = seriesData.filter((item) => item.completada === null);
+        setWatchingSeries(nullCompletedSeries);
+      }
+    } catch (error) {
+      console.error('Error al obtener las series en curso con completada en null:', error);
+    }
+  };
   return (
     <div className="text-center m-4 bg-fondito p-4 rounded-lg shadow-md">
       {isAuthenticated ? (
@@ -261,6 +295,8 @@ function Dashboard() {
               </Link>
             )}
           </div>
+
+         
 
           <img
             src={user.picture}
@@ -347,6 +383,50 @@ function Dashboard() {
                   )}
                 </div>
               )}
+
+
+
+
+{selectedSection === 'watchingSeries' && (
+  <div className="watching-section">
+    <div className="watching-container">
+      <div className="watching-box">
+        <h3 className="font-poppins text-xl font-bold text-moradito mb-3 text-center" >Películas que estás viendo</h3>
+        {moviesWatching.length === 0 ? (
+          <p>No estás viendo ninguna película</p>
+        ) : (
+          <ul div className="flex flex-wrap-10">
+            {moviesWatching.map((movieId) => (
+              <li key={movieId}>
+                <MovieWatchingCard movieId={movieId} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div className="watching-box">
+        <h3 className="font-poppins text-xl font-bold text-moradito mb-3 text-center">Series que estás viendo</h3>
+        {watchingSeries.length === 0 ? (
+          <p>No estás viendo ninguna serie</p>
+        ) : (
+          <ul div className="flex flex-wrap-10">
+            {watchingSeries.map((serie) => {
+              if (serie.serieId) {
+                return <SeriesWatchingCard key={serie._id} serieId={serie.serieId} />;
+              }
+              return null; // Otra opción es omitir elementos con serieId null
+            })}
+          </ul>
+        )}
+      </div>
+      {userInfoByEmail && userInfoByEmail._id !== 0 && userInfoByEmail.rol !== null && (
+        <Link to="/completadas">
+          <button>Ver Completadas</button>
+        </Link>
+      )}
+    </div>
+  </div>
+)}
               {selectedSection === "perfil" && (
                 <div>
                   <div>
@@ -462,6 +542,7 @@ function Dashboard() {
             </div>
           )}
         </div>
+        
       ) : (
         <p className="font-poppins">
           Debes iniciar sesión para ver el contenido del Dashboard.
