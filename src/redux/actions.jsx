@@ -136,4 +136,19 @@ export const getTopSeries = () => {
             console.log(error.message);
         }
     }
-};
+}
+
+export const addFavorite = (item) => {
+    const endpoint = ''
+    return {
+      type: 'ADD_FAVORITE',
+      payload: item,
+    };
+  };
+  
+  export const removeFavorite = (item) => {
+    return {
+      type: 'REMOVE_FAVORITE',
+      payload: item,
+    };
+  };
