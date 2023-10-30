@@ -1,23 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Footer from "../Footer/Footer";
 import { Link } from "react-router-dom";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+import { toast } from "react-toastify";
 
 function MovieDetail() {
   const { _id } = useParams();
   const type = "movie";
   const allMovies = useSelector((state) => state.allMovies);
   const moviesDetail = allMovies.find((movie) => movie._id === _id);
-  const dispatch = useDispatch();
+
+  const [movieFromDb, setMovieFromDb] = useState("");
 
   const [isFav, setIsFav] = useState(false);
 
-  if (!moviesDetail) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    if (!moviesDetail) {
+      getMovieByObjectId();
+    }
+  }, []);
 
   const {
     Series_Title,
@@ -31,9 +35,26 @@ function MovieDetail() {
     Star2,
     Star3,
     Star4,
-  } = moviesDetail;
+  } = moviesDetail ? moviesDetail : movieFromDb;
+
+  const getMovieByObjectId = async () => {
+    try {
+      const { data } = await axios.get(`http://localhost:3001/movies/byObjectId/${_id}`);
+      setMovieFromDb(data);
+    } catch (error) {
+      console.error('Error al obtener detalles de la película:', error);
+    }
+  };
+
   const userData = localStorage.getItem("userData");
   const userInfo = JSON.parse(userData);
+
+  const notify = () => {
+    toast("Default Notification !");
+    toast.success("Success Notification !", {
+      position: toast.POSITION.TOP_CENTER
+    });
+  };
 
   const handleFavorite = async () => {
     if (!isFav) {
@@ -64,7 +85,7 @@ function MovieDetail() {
           <div className="mt-3 flex space-x-4 ml-20">
             <button
               onClick={handleFavorite}
-              className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-xs font-poppins"
+              className="bg-moradito hover-bg-lila text-white rounded px-4 py-2 text-xs font-poppins"
             >
               {isFav ? (
                 <MdFavorite size={24} />
@@ -74,7 +95,7 @@ function MovieDetail() {
             </button>
             <Link
               to={`/formCreateEdit/${type}/${_id}`}
-              className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-l font-poppins"
+              className="bg-moradito hover-bg-lila text-white rounded px-4 py-2 text-l font-poppins"
             >
               Editar
             </Link>
@@ -92,23 +113,23 @@ function MovieDetail() {
           </p>
 
           <div className="mx-[300px]">
-          <iframe
-            title={Series_Title}
-            width="560"
-            height="315"
-            src={Trailer}
-            frameBorder="0"
-            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="rounded-xl drop-shadow-xl mx-auto"
-          ></iframe>
+            <iframe
+              title={Series_Title}
+              width="560"
+              height="315"
+              src={Trailer}
+              frameBorder="0"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="rounded-xl drop-shadow-xl mx-auto"
+            ></iframe>
           </div>
-          
+
           <div className="text-center mt-10">
             <h2 className="text-xl font-bold text-oscuro font-poppins mb-2">
               Sinopsis:
             </h2>
-            <div className="w-full max-w-md"> 
+            <div className="w-full max-w-md">
               <p className="text-lg text-moradito font-poppins text-justify mt-3">
                 {Overview}
               </p>
