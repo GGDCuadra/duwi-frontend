@@ -19,12 +19,6 @@ const Donaciones = () => {
       });
   }, []);
 
-  const handleSort = property => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
-
   const handleSearch = event => {
     setSearch(event.target.value);
   };
@@ -61,44 +55,14 @@ const Donaciones = () => {
         />
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full border border-gray-400 table-auto">
-            <thead className="bg-gray-200">
+            <thead className="bg-blue-200">
               <tr>
-                <th
-                  className="px-6 py-3 cursor-pointer hover:underline"
-                  onClick={() => handleSort('name')}
-                >
-                  Nombre
-                </th>
-                <th
-                  className="px-6 py-3 cursor-pointer hover:underline"
-                  onClick={() => handleSort('amount')}
-                >
-                  Monto
-                </th>
-                <th
-                  className="px-6 py-3 cursor-pointer hover:underline"
-                  onClick={() => handleSort('createDate')}
-                >
-                  Fecha de Creación
-                </th>
-                <th
-                  className="px-6 py-3 cursor-pointer hover:underline"
-                  onClick={() => handleSort('email')}
-                >
-                  Email
-                </th>
-                <th
-                  className="px-6 py-3 cursor-pointer hover:underline"
-                  onClick={() => handleSort('status')}
-                >
-                  Estado
-                </th>
-                <th
-                  className="px-6 py-3 cursor-pointer hover:underline"
-                  onClick={() => handleSort('address')}
-                >
-                  Dirección
-                </th>
+                <th className="px-6 py-3"> Nombre</th>
+                <th className="px-6 py-3">Monto</th>
+                <th className="px-6 py-3">Fecha de Creación</th>
+                <th className="px-6 py-3">Email</th>
+                <th className="px-6 py-3">Estado</th>
+                <th className="px-6 py-3">Dirección</th>
               </tr>
             </thead>
             
@@ -112,14 +76,14 @@ const Donaciones = () => {
                       sortedDonaciones.indexOf(donacion) % 2 === 0 ? 'bg-gray-100' : 'bg-white'
                     } hover:bg-gray-200 hover:dark:bg-gray-400`}
                   >
-                    <td className="whitespace-nowrap px-6 py-4 font-medium">{donacion.name}</td>
-                    <td className="whitespace-nowrap px-6 py-4">${donacion.amount}</td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-4 font-medium text-center">{donacion.name}</td>
+                    <td className="whitespace-nowrap px-6 py-4 text-center">${donacion.amount}</td>
+                    <td className="whitespace-nowrap px-6 py-4 text-center">
                       {new Date(donacion.createDate).toLocaleString()}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">{donacion.email}</td>
-                    <td className="whitespace-nowrap px-6 py-4">{donacion.status}</td>
-                    <td className="whitespace-nowrap px-6 py-4">{donacion.address}</td>
+                    <td className="whitespace-nowrap px-6 py-4 text-center">{donacion.email}</td>
+                    <td className="whitespace-nowrap px-6 py-4 text-center">{donacion.status}</td>
+                    <td className="whitespace-nowrap px-6 py-4 text-center">{donacion.address}</td>
                   </tr>
                 ))}
             </tbody>
@@ -128,6 +92,7 @@ const Donaciones = () => {
         </div>
 
         <div className="mt-6 flex justify-between items-center">
+          <div>
           <span className="mr-2">Filas por página</span>
           <select
             className="border border-gray-300 p-2 rounded-md"
@@ -137,9 +102,12 @@ const Donaciones = () => {
             <option value="25">25</option>
             <option value="50">50</option>
           </select>
-          <span className="ml-2">
+          <span className="whitespace-nowrap px-6">
             Página {page + 1} de {Math.ceil(sortedDonaciones.length / rowsPerPage)}
           </span>
+          </div>
+
+          <div className="inline-flex -space-x-px text-sm h-8">
           <button
             className={`flex items-center justify-center px-3 h-8 ml-2 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
             onClick={() => handleChangePage(page - 1)}
@@ -147,6 +115,7 @@ const Donaciones = () => {
           >
             Anterior
           </button>
+          
           <ul className="flex justify-center ml-2">
             {Array.from({ length: Math.ceil(sortedDonaciones.length / rowsPerPage) }, (_, i) => i).map(
               numPagina => (
@@ -165,6 +134,7 @@ const Donaciones = () => {
               )
             )}
           </ul>
+
           <button
             className={`flex items-center justify-center px-3 h-8 ml-2 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark.border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
             onClick={() => handleChangePage(page + 1)}
@@ -172,6 +142,7 @@ const Donaciones = () => {
           >
             Siguiente
           </button>
+        </div>
         </div>
       </div>
     </div>

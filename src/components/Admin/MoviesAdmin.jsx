@@ -26,7 +26,6 @@ const Peliculas = () => {
   }, []);
 
   const handleEditClick = (_id) => {
-    // Redirige a la página de edición con el ID de la película seleccionada
     navigate(`/formCreateEdit/${type}/${_id}`);
   };
 
@@ -42,7 +41,21 @@ const Peliculas = () => {
         return b[property] - a[property]; 
       }
     });
+    setPeliculas(peliculasOrdenadas);
+  };
+
+  const handleSortTitle = () => {
+    const esAsc = ordenarPor === "Series_Title" && orden === "asc";
+    setOrden(esAsc ? "desc" : "asc");
+    setOrdenarPor("Series_Title");
   
+    const peliculasOrdenadas = [...peliculas].sort((a, b) => {
+      if (esAsc) {
+        return a.Series_Title.localeCompare(b.Series_Title);
+      } else {
+        return b.Series_Title.localeCompare(a.Series_Title);
+      }
+    });
     setPeliculas(peliculasOrdenadas);
   };
 
@@ -80,7 +93,6 @@ const Peliculas = () => {
               ? { ...p, deshabilitar: null }
               : p
           );
-  
           setPeliculas(updatedPeliculas);
         })
         .catch(error => {
@@ -93,16 +105,13 @@ const Peliculas = () => {
     const confirmationMessage = `¿Está seguro de deshabilitar la película "${pelicula.Series_Title}"?`;
     
     if (window.confirm(confirmationMessage)) {
-      // Realiza una solicitud al back-end para deshabilitar la película
       axios.put(`http://localhost:3001/movies/disable/${pelicula._id}`)
         .then(response => {
-          // Si la solicitud se completa con éxito, actualiza el estado local
           const updatedPeliculas = peliculas.map(p =>
             p._id === pelicula._id
               ? { ...p, deshabilitar: 'Disabled' }
               : p
           );
-  
           setPeliculas(updatedPeliculas);
         })
         .catch(error => {
@@ -110,7 +119,6 @@ const Peliculas = () => {
         });
     }
   };
-  
   
   return (
     <div className="flex justify-center flex-col items-center">
@@ -127,10 +135,18 @@ const Peliculas = () => {
         <table className="w-full border border-gray-400 table-auto">
         <thead className="bg-blue-200">
           <tr>
-            <th onClick={() => handleSort('Series_Title')} className="px-2 py-2 cursor-pointer">
-              Título
+            <th onClick={handleSortTitle} className="px-2 py-2 cursor-pointer">
+              Título{" "}
+              {ordenarPor === "Series_Title" ? (
+                orden === "asc" ? (
+                  <FaSort className="inline" />
+                ) : (
+                  <FaSort className="inline transform rotate-180" />
+                )
+              ) : null}
             </th>
-            <th className="px-2 py-2 cursor-pointer">Poster</th>
+
+            <th className="px-2 py-2">Poster</th>
             <th onClick={() => handleSort('Released_Year')} className="px-2 py-2 cursor-pointer">
               Año{' '}
               {ordenarPor === 'Released_Year' ? (
@@ -140,19 +156,16 @@ const Peliculas = () => {
                   <FaSort className="inline transform rotate-180" />
                 )
               ) : null}
-            </th>
-            <th onClick={() => handleSort('Runtime')} className="px-2 py-2 cursor-pointer">
-              Duración
-            </th>
-            <th className="px-2 py-2 cursor-pointer">Género</th>
-            <th className="px-2 py-2 cursor-pointer">Reparto</th>
-            <th className="px-2 py-2 cursor-pointer">Trailer</th>
-            <th onClick={() => handleSort('deshabilitar')} className="px-2 py-2 cursor-pointer">
-              Deshabilitar
-            </th>
-            <th className="px-2 py-2">Editar</th>
+              </th>
+              <th className="px-2 py-2">Duración</th>
+              <th className="px-2 py-2">Género</th>
+              <th className="px-2 py-2">Reparto</th>
+              <th className="px-2 py-2">Trailer</th>
+              <th className="px-2 py-2">Deshabilitar</th>
+              <th className="px-2 py-2">Editar</th>
           </tr>
         </thead>
+
         <tbody>
           {peliculasFiltradas
             .slice(pagina * filasPorPagina, pagina * filasPorPagina + filasPorPagina)
@@ -206,7 +219,7 @@ const Peliculas = () => {
                       onClick={() => handleToggleDeshabilitar(pelicula)}
                       className={`${
                         pelicula.deshabilitar === 'Disabled' ? 'bg-gray-300' : 'bg-red-500'
-                      } text-white px-1 py-1 rounded-md text-sm`}
+                      } text-white rounded-md text-sm`}
                       disabled={pelicula.deshabilitar === 'Disabled'}
                     >
                       Deshabilitar
@@ -216,7 +229,7 @@ const Peliculas = () => {
                       style={{
                         backgroundColor: pelicula.deshabilitar === 'Disabled' ? 'green' : '#cccccc',
                       }}
-                      className="text-white px-1 py-1 rounded-md text-sm mt-2"
+                      className="text-white rounded-md text-sm mt-2"
                       disabled={pelicula.deshabilitar !== 'Disabled'}
                     >
                       Habilitar
@@ -268,6 +281,7 @@ const Peliculas = () => {
           >
             Anterior
           </button>
+
           <ul className="flex justify-center">
             {paginas.map((numPagina) => (
               <li key={numPagina}>
@@ -280,6 +294,7 @@ const Peliculas = () => {
               </li>
             ))}
           </ul>
+          
           <button
             className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
             onClick={() => handleChangePage(pagina + 1)}
