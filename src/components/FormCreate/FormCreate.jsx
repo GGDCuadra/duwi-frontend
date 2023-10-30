@@ -243,10 +243,11 @@ const FormCreate = () => {
   return (
     <>  
    <div className="flex justify-center items-center mt-10">
-  <div className="bg-white p-4 rounded-md shadow-md text-dark font-poppins">
-    <label className="text-xl mb-2 text-moradito">Elija una opción:</label>
+  <div className="bg-white p-6 rounded-md shadow-md text-dark font-poppins text-xl text-center">
     
-    <div className="flex items-center mb-2">
+    
+    
+    <div className="flex items-center mb-3">
       <input
         type="radio"
         id="movie"
@@ -254,12 +255,12 @@ const FormCreate = () => {
         value="movie"
         checked={contentType === "movie"}
         onChange={() => handleContentType("movie")}
-        className="mr-2"
+        className="mr-2 h-6 w-6 text-moradito cursor-pointer"
       />
-      <label htmlFor="movie" className="text-lg font-poppins text-moradito">Película</label>
+      <label htmlFor="movie" className="text-lg font-poppins text-moradito cursor-pointer">Película</label>
     </div>
 
-    <div className="flex items-center">
+    <div className="flex items-center mb-3">
       <input
         type="radio"
         id="serie"
@@ -267,9 +268,9 @@ const FormCreate = () => {
         value="serie"
         checked={contentType === "serie"}
         onChange={() => handleContentType("serie")}
-        className="mr-2"
+        className="mr-2 h-6 w-6 text-moradito cursor-pointer"
       />
-      <label htmlFor="serie" className="text-lg font-poppins text-moradito">Serie</label>
+      <label htmlFor="serie" className="text-lg font-poppins text-moradito cursor-pointer">Serie</label>
     </div>
   </div>
 </div>
@@ -344,7 +345,8 @@ const FormCreate = () => {
             }}
         >
             {({errors, values, setFieldValue}) => (
-                <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10">
+                <div class="py-8 px-6">
+                    <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10 ">
                     {console.log(errors)}
                     {console.log(values)}
                 
@@ -353,8 +355,8 @@ const FormCreate = () => {
                     
                     <div className="flex flex-col space-y-2">
                     <label className="text-lg" htmlFor="Poster_Link">Imagen</label>
-                    <button onClick={() =>{setFieldValue('Poster_Link', '')}}>X</button>
-                    <img src={values.Poster_Link} style={{width: "300px"}}></img>
+                    <button className= "border"onClick={() =>{setFieldValue('Poster_Link', '')}}>Cambiar</button>
+                    <img src={values.Poster_Link} style={{width: "250px"}}></img>
                     
                     </div>
                     : 
@@ -684,6 +686,8 @@ const FormCreate = () => {
                     }
                 </div>           
             </Form>
+                </div>
+                
             )}
 
         </Formik>
@@ -748,8 +752,8 @@ const FormCreate = () => {
             }}
         >
             {({errors, values, setFieldValue}) => (
-                
-                <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10">
+                <div class="py-8 px-6 color-black">
+                <Form className="text-moradito font-poppins grid grid-cols-3 gap-4 flex flex-col  space-y- mt-10">
                     
                     {
                     values.image.original ?
@@ -1155,7 +1159,7 @@ const FormCreate = () => {
                 
                 
                 {sentForm && <p className="text-lg text-morado font-poppins">Formulario enviado con éxito!</p>}
-                <div className="flex space-x-4 mb-20">
+                <div className="col-span-3 flex justify-center">
                 {type === "serie" ? 
                     <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila  py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
                     :
@@ -1163,6 +1167,7 @@ const FormCreate = () => {
                     }
                 </div>
             </Form>
+                </div>
             )}
 
         </Formik>
