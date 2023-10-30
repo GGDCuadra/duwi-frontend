@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import styles from "./dashboard.css"; 
+import "./dashboard.css"; 
 import MovieDetailsDashboard from './MovieDetailsDashboard';
 import SeriesDetailsDashboard from './SeriesDetailsDashboard.jsx';
+import { Link } from 'react-router-dom';
 
 function Dashboard() {
   const { user, isAuthenticated } = useAuth0();
@@ -12,15 +13,48 @@ function Dashboard() {
   const [favoriteSeries, setFavoriteSeries] = useState([]); 
   const [selectedSection, setSelectedSection] = useState('favorites');
 
+
+
   const [availableGenres, setAvailableGenres] = useState([
+
     "Crime", "Drama", "Action", "Adventure", "Sci-Fi", "Biography", "History", "Fantasy", "Horror", "Mystery", "Thriller", "Western", "Comedy", "Romance", "Animation", "Family", "War", "Music", "Nature", "Science-Fiction", "Supernatural", "Medical", "Anime", "Food", "Travel"
   ]);
 
   const [editedUserInfo, setEditedUserInfo] = useState({
-    apodo: '', // Cambia "nickname" a "apodo"
+    apodo: '', 
     edad: '',
     genres: '',
   });
+
+  useEffect(() => {
+    if (isAuthenticated && user && user.email) {
+      // Check email existence and set a default role for users with email and password
+      const checkEmailAndSetDefaultRole = async (email) => {
+        try {
+          const response = await fetch(`http://localhost:3001/users?email=${email}`);
+          if (response.status === 200) {
+            setIsEmailExists(true);
+          }
+
+          const userInfo = {
+            username: user.given_name,
+            email: user.email,
+            rol: 'Usuario', // Set a default role
+          };
+
+          if (!isEmailExists) {
+            await sendUserInfoToBackend(userInfo);
+          }
+
+          fetchUserInfoByEmail(user.email);
+        } catch (error) {
+          console.error('Error al verificar la existencia del correo:', error);
+        }
+      };
+
+      checkEmailAndSetDefaultRole(user.email);
+    }
+  }, [isAuthenticated, user]);
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -79,6 +113,23 @@ function Dashboard() {
       console.error('Error al enviar información del usuario al backend:', error);
     }
   };
+  useEffect(() => {
+    if (isAuthenticated && user && user.email) {
+      checkEmailExistence(user.email).then(() => {
+        const userInfo = {
+          username: user.given_name,
+          email: user.email,
+        };
+
+        if (!isEmailExists) {
+          userInfo.rol = 'Usuario'; 
+          sendUserInfoToBackend(userInfo);
+        }
+        fetchUserInfoByEmail(user.email);
+      });
+    }
+  }, [isAuthenticated, user]);
+
 
   const fetchFavoriteMovies = async (userId) => {
     try {
@@ -105,24 +156,7 @@ function Dashboard() {
     }
   };
 
-  useEffect(() => {
-    if (isAuthenticated && user && user.email) {
-      checkEmailExistence(user.email).then(() => {
-        const userInfo = {
-          username: user.given_name,
-          email: user.email,
-        };
   
-        // Envía la información del usuario si el correo no existe
-        if (!isEmailExists) {
-          sendUserInfoToBackend(userInfo);
-        }
-  
-        // Después de enviar la información del usuario, obtén más detalles del usuario
-        fetchUserInfoByEmail(user.email);
-      });
-    }
-  }, [isAuthenticated, user]);
   
   useEffect(() => {
     if (userInfoByEmail && userInfoByEmail._id) {
@@ -131,7 +165,9 @@ function Dashboard() {
     }
   }, [userInfoByEmail]);
 
-  // Función para habilitar la edición de campos de usuario
+
+
+
   const enableEdit = () => {
     setIsEditing(true);
     // Puedes inicializar los valores con la información actual del usuario
@@ -170,7 +206,11 @@ function Dashboard() {
     }
   };
   
+  if (isAuthenticated) {
+    localStorage.setItem('userData', JSON.stringify(userInfoByEmail));
+  }
 
+  
   return (
     <div className="dashboard-container">
   
@@ -180,7 +220,9 @@ function Dashboard() {
 <div className="divrolpanel" >
      
            {userInfoByEmail && userInfoByEmail.rol === 'Admin' && (
-        <button className="admin-button">Panel Administrador</button>
+            <Link to="/admin"> {/* Utiliza Link para redirigir a /admin */}
+            <button className="admin-button">Panel Administrador</button>
+          </Link>
       )}
 
 </div>
