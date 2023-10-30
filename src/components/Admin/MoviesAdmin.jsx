@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 import { FaEdit, FaSort } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Peliculas = () => {
+
+  const type = "movie";
   const [peliculas, setPeliculas] = useState([]);
   const [pagina, setPagina] = useState(0);
   const [filasPorPagina, setFilasPorPagina] = useState(10);
   const [ordenarPor, setOrdenarPor] = useState('Released_Year');
   const [orden, setOrden] = useState('asc');
   const [busqueda, setBusqueda] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('http://localhost:3001/movies')
@@ -20,6 +25,11 @@ const Peliculas = () => {
       });
   }, []);
 
+  const handleEditClick = (_id) => {
+    // Redirige a la página de edición con el ID de la película seleccionada
+    navigate(`/formCreateEdit/${type}/${_id}`);
+  };
+
   const handleSort = property => {
     const esAsc = ordenarPor === property && orden === 'asc';
     setOrden(esAsc ? 'desc' : 'asc');
@@ -27,9 +37,9 @@ const Peliculas = () => {
   
     const peliculasOrdenadas = [...peliculas].sort((a, b) => {
       if (esAsc) {
-        return a[property] - b[property]; // Orden ascendente
+        return a[property] - b[property]; 
       } else {
-        return b[property] - a[property]; // Orden descendente
+        return b[property] - a[property]; 
       }
     });
   
@@ -59,6 +69,49 @@ const Peliculas = () => {
   const totalPaginas = Math.ceil(peliculasFiltradas.length / filasPorPagina);
   const paginas = Array.from({ length: totalPaginas }, (_, i) => i);
 
+  const handleToggleHabilitar = (pelicula) => {
+    const confirmationMessage = `¿Está seguro de habilitar la película "${pelicula.Series_Title}"?`;
+    
+    if (window.confirm(confirmationMessage)) {
+      axios.put(`http://localhost:3001/movies/enable/${pelicula._id}`)
+        .then(response => {
+          const updatedPeliculas = peliculas.map(p =>
+            p._id === pelicula._id
+              ? { ...p, deshabilitar: null }
+              : p
+          );
+  
+          setPeliculas(updatedPeliculas);
+        })
+        .catch(error => {
+          console.error(`Error al habilitar película:`, error);
+        });
+    }
+  };
+  
+  const handleToggleDeshabilitar = (pelicula) => {
+    const confirmationMessage = `¿Está seguro de deshabilitar la película "${pelicula.Series_Title}"?`;
+    
+    if (window.confirm(confirmationMessage)) {
+      // Realiza una solicitud al back-end para deshabilitar la película
+      axios.put(`http://localhost:3001/movies/disable/${pelicula._id}`)
+        .then(response => {
+          // Si la solicitud se completa con éxito, actualiza el estado local
+          const updatedPeliculas = peliculas.map(p =>
+            p._id === pelicula._id
+              ? { ...p, deshabilitar: 'Disabled' }
+              : p
+          );
+  
+          setPeliculas(updatedPeliculas);
+        })
+        .catch(error => {
+          console.error(`Error al deshabilitar película:`, error);
+        });
+    }
+  };
+  
+  
   return (
     <div className="flex justify-center flex-col items-center">
       <div className="w-4/5 p-4">
@@ -146,11 +199,45 @@ const Peliculas = () => {
                     Ver Trailer
                   </a>
                 </td>
-                <td className="whitespace-nowrap px-2 py-2 text-center">{pelicula.deshabilitar}</td>
-                <td className="px-2 py-2 text-center" style={{ textAlign: 'center', height: '100%', verticalAlign: 'middle', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  
-                  <FaEdit className="edit-icon" />
+
+                <td className="whitespace-nowrap text-center">
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <button
+                      onClick={() => handleToggleDeshabilitar(pelicula)}
+                      className={`${
+                        pelicula.deshabilitar === 'Disabled' ? 'bg-gray-300' : 'bg-red-500'
+                      } text-white px-1 py-1 rounded-md text-sm`}
+                      disabled={pelicula.deshabilitar === 'Disabled'}
+                    >
+                      Deshabilitar
+                    </button>
+                    <button
+                      onClick={() => handleToggleHabilitar(pelicula)}
+                      style={{
+                        backgroundColor: pelicula.deshabilitar === 'Disabled' ? 'green' : '#cccccc',
+                      }}
+                      className="text-white px-1 py-1 rounded-md text-sm mt-2"
+                      disabled={pelicula.deshabilitar !== 'Disabled'}
+                    >
+                      Habilitar
+                    </button>
+                  </div>
                 </td>
+
+                <td className="whitespace-nowrap px-2 py-2 text-center" style={{ position: 'relative' }}>
+                  <FaEdit
+                    className="edit-icon"
+                    onClick={() => handleEditClick(pelicula._id)}
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      cursor: 'pointer', 
+                    }}
+                  />
+                </td>
+
               </tr>
             ))}
         </tbody>
@@ -206,6 +293,5 @@ const Peliculas = () => {
       </div>
     );
   };
-
 
 export default Peliculas;
