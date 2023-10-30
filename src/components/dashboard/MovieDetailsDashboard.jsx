@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-
 function MovieDetailsDashboard({ movieId }) {
   const [movieDetails, setMovieDetails] = useState(null);
 
@@ -21,17 +20,19 @@ function MovieDetailsDashboard({ movieId }) {
   }, [movieId]);
 
   return movieDetails ? (
-    <li>
-      <div className="movie-card">
-        <div className="movie-poster-container">
-          <img src={movieDetails.Poster_Link} alt={movieDetails.Series_Title} className="movie-poster" />
-          <div className="movie-title-overlay">
-            <h3 className="movie-title">{movieDetails.Series_Title}</h3>
-            <h3 className="movie-title">{movieDetails.Released_Year}</h3>
-          </div>
-        </div>
+    <div className="w-48 p-2 rounded-lg shadow-md mb-4 mr-5">
+      <div className="relative rounded-lg overflow-hidden border-t-0">
+        <img
+          src={movieDetails.Poster_Link}
+          alt={movieDetails.Series_Title}
+          className="w-48 h-49 object-cover"
+        />
       </div>
-    </li>
+      <div className="mt-2">
+        <h3 className="text-sm font-medium font-poppins">{movieDetails.Series_Title}</h3>
+        <p className="text-moradito font-poppins">{movieDetails.Released_Year}</p>
+      </div>
+    </div>
   ) : null;
 }
 

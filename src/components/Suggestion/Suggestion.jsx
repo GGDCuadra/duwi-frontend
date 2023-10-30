@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const Suggestion = () => {
   const [email, setEmail] = useState("");
@@ -16,12 +17,7 @@ const Suggestion = () => {
     const isSuggestionValid = suggestion.length >= 10;
     const isRatingValid = rating >= 0 && rating <= 10;
 
-    if (
-      isEmailValid &&
-      isEmailFormatValid &&
-      isSuggestionValid &&
-      isRatingValid
-    ) {
+    if (isEmailValid && isEmailFormatValid && isSuggestionValid && isRatingValid) {
       setIsFormValid(true);
     } else {
       setIsFormValid(false);
@@ -44,10 +40,20 @@ const Suggestion = () => {
       setRating(0);
       setError("");
       setIsSubmitted(true);
+      Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: '¡El formulario de sugerencias se ha enviado correctamente!',
+      });
     } catch (error) {
       setMessage("");
       setError("Error al enviar la sugerencia. Inténtelo de nuevo más tarde.");
       console.error("Error al enviar la sugerencia", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error al enviar la sugerencia. Inténtelo de nuevo más tarde.',
+      });
     }
   };
 
@@ -63,7 +69,22 @@ const Suggestion = () => {
           ¡El formulario de sugerencias se ha enviado correctamente!
         </p>
       ) : (
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            Swal.fire({
+              title: '¿Estás seguro de enviar la sugerencia?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Sí',
+              cancelButtonText: 'Cancelar',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                handleSubmit(e);
+              }
+            });
+          }}
+        >
           <div>
             <label>Email:</label>
             <input
