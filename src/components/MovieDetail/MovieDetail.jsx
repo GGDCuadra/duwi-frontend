@@ -41,38 +41,48 @@ function MovieDetail() {
     <div>
       <div className="bg-white p-8 rounded-lg flex">
         <div className="mr-4 ml-9">
-          <img src={Poster_Link} alt={Series_Title} className="w-64 h-96 object-cover rounded-lg shadow-lg" />
+          <img
+            src={Poster_Link}
+            alt={Series_Title}
+            className="w-64 h-96 object-cover rounded-3xl shadow-lg mt-20 ml-10"
+          />
+          <div className="mt-2 flex">
+            <button
+              onClick={handleFavorite}
+              className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-xs font-poppins ml-20 relative top-[-1px]"
+            >
+              {isFav ? <MdFavorite size={24} /> : <MdFavoriteBorder size={24} />}
+            </button>
+            <button
+              className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-l font-poppins ml-10 relative top-[-0px]"
+              to={`/formCreateEdit/${type}/${_id}`}
+            >
+              Editar
+            </button>
+          </div>
         </div>
-        <div className="text-center m-l">
+        <div className="flex flex-col items-center mt-15 ml-96">
           <h1 className="text-xl font-bold text-morado font-poppins">{Series_Title}</h1>
           <p className="text-lg font-bold text-moradito font-poppins">{Released_Year}</p>
-          <p className="text-lg font-bold text-moradito font-poppins">{Genre}</p>
-        </div>
-        <iframe
+          <p className="text-lg font-bold text-moradito font-poppins mb-4">{Genre}</p>
+          <iframe className='rounded-xl mt-5 drop-shadow-xl'
+            title={Series_Title}
             width="560"
             height="315"
             src={Trailer}
-            title="Trailer"
             frameBorder="0"
-            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture;"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
-      </div>
-      <div className='mt-11'>
-          <button onClick={handleFavorite} className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 mt-10 ext-lg font-poppins">
-            {isFav ? <MdFavorite size={24} /> : <MdFavoriteBorder size={24} />}
-          </button>
-          <Link className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 mt-10 ext-lg font-poppins ml-4" to={`/formCreateEdit/${type}/${_id}`}>
-            Editar
-          </Link>
         </div>
-      <div className="text-center mt-8">
+      </div>
+      <div className="ml-20 mt-8">
         <h2 className="text-xl font-bold text-oscuro font-poppins">Director:</h2>
         <ul className="list-disc list-inside">
           <li key={Director} className="font-poppins text-moradito">{Director}</li>
         </ul>
       </div>
-      <div className="text-center mt-8">
+      <div className="ml-20 mt-8">
         <h2 className="text-xl font-bold text-oscuro font-poppins">Reparto:</h2>
         <ul className="list-disc list-inside">
           <li key="Star1" className="font-poppins text-moradito">{Star1}</li>
@@ -81,14 +91,13 @@ function MovieDetail() {
           <li key="Star4" className="font-poppins text-moradito">{Star4}</li>
         </ul>
       </div>
-      <div className="text-center mt-8 mb-8">
+      <div className="text-center mt-[-0px] mb-8 ml-[-96px]">
         <h2 className="text-xl font-bold text-oscuro font-poppins">Sinopsis:</h2>
         <p className="text-lg text-moradito font-poppins">{Overview}</p>
       </div>
       <div>
-        
+        <Footer />
       </div>
-      <Footer/>
     </div>
   );
 }
