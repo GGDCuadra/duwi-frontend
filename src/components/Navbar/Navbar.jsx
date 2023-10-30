@@ -41,7 +41,7 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
-        <div className="ml-4 overflow-hidden">
+        <div className="ml-4">
           <SearchBar />
         </div>
         {isAuthenticated && (

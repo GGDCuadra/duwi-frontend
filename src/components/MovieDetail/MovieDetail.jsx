@@ -5,7 +5,7 @@ import axios from 'axios';
 import Footer from '../Footer/Footer';
 import { Link } from 'react-router-dom';
 import { MdFavorite, MdFavoriteBorder } from 'react-icons/md';
-
+import { toast, ToastContainer } from 'react-toastify';
 function MovieDetail() {
   const { _id } = useParams();
   const type = "movie";
@@ -22,7 +22,13 @@ function MovieDetail() {
   const { Series_Title, Released_Year, Genre, Poster_Link, Trailer, Director, Overview, Star1, Star2, Star3, Star4 } = moviesDetail;
   const userData = localStorage.getItem('userData');
   const userInfo = JSON.parse(userData);
+const notify = () => {
+    toast("Default Notification !");
 
+    toast.success("Success Notification !", {
+      position: toast.POSITION.TOP_CENTER
+    });
+  }
 
   const handleFavorite = async() => {
     if (!isFav) {
@@ -31,15 +37,10 @@ function MovieDetail() {
         movieId: _id,
         userId: userInfo._id
       }
-      console.log(dataSeries);
-    
-      const { data } = await axios.post('http://localhost:3001/favorites/movies', dataSeries);
-      console.log(data);
-      console.log( _id);
-      console.log(userInfo._id);
+      const { data } = await axios.post('http://localhost:3001/favorites/movies', dataSeries)
     }
   };
-
+  
   return (
     <div>
       <div className="bg-white p-8 rounded-lg flex">
@@ -57,7 +58,7 @@ function MovieDetail() {
             src={Trailer}
             title="Trailer"
             frameBorder="0"
-            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture;"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
       </div>
