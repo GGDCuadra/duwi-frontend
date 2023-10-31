@@ -46,7 +46,7 @@ function MovieDetail() {
       console.log(dataSeries);
       // Realizar una solicitud POST a http://localhost:3001/favorites para guardar el favorito
       const { data } = await axios.post(
-        "http://localhost:3001/favorites/movies",
+        "/favorites/movies",
         dataSeries
       );
       console.log(data);
@@ -66,7 +66,7 @@ function MovieDetail() {
       try {
         // Realizar una solicitud POST a http://localhost:3001/moviesvistas para agregar a "películas que estoy viendo"
         const { data } = await axios.post(
-          "http://localhost:3001/moviesvistas",
+          "/moviesvistas",
           dataMovie
         );
         console.log(data);

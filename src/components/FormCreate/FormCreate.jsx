@@ -95,7 +95,7 @@ const FormCreate = () => {
 
             async function getMovieById() {
                 try {
-                    const {data} = await (axios.get(`http://localhost:3001/movies/byObjectId/${id}`))
+                    const {data} = await (axios.get(`/movies/byObjectId/${id}`))
                     console.log(data)
                     
                     data.Genre = data.Genre.split(',').map(genre => genre.trim());
@@ -115,7 +115,7 @@ const FormCreate = () => {
             
             async function getSerieById() {
                 try {
-                    const {data} = await (axios.get(`http://localhost:3001/series/${id}`))
+                    const {data} = await (axios.get(`/series/${id}`))
                     setInitialValuesSeries(data)
                 } catch (error) {
                     console.log(error)
@@ -315,7 +315,7 @@ const FormCreate = () => {
                      
                     async function postMovie() {
                         try {
-                            await axios.post(`http://localhost:3001/movies`, dataToSend)
+                            await axios.post(`/movies`, dataToSend)
                             
                         } catch (error) {
                             console.log(error)
@@ -332,7 +332,7 @@ const FormCreate = () => {
                     delete dataToSend.actorName;
                     async function putMovie() {
                         try {
-                            await axios.put(`http://localhost:3001/movies/byObjectId/${id}`, dataToSend)
+                            await axios.put(`/movies/byObjectId/${id}`, dataToSend)
                             
                         } catch (error) {
                             console.log(error)
@@ -700,7 +700,7 @@ const FormCreate = () => {
                     
                     async function postSerie() {
                         try {
-                            await axios.post(`http://localhost:3001/postSeries`, dataToSend)
+                            await axios.post(`/postSeries`, dataToSend)
                             
                         } catch (error) {
                             console.log(error)
@@ -713,7 +713,7 @@ const FormCreate = () => {
                     console.log(values)
                     async function putSerie() {
                         try {
-                            await axios.put(`http://localhost:3001/series/${id}`, values)
+                            await axios.put(`/series/${id}`, values)
                             
                         } catch (error) {
                             console.log(error)

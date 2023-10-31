@@ -30,7 +30,7 @@ const Suggestion = () => {
     if (!isFormValid) return;
 
     try {
-      const response = await axios.post("http://localhost:3001/suggestion", {
+      const response = await axios.post("/suggestion", {
         email,
         suggestion,
         rating,

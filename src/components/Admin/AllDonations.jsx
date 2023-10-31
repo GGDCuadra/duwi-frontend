@@ -10,7 +10,7 @@ const Donaciones = () => {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/alldonations')
+    axios.get('/alldonations')
       .then(response => {
         setDonaciones(response.data);
       })

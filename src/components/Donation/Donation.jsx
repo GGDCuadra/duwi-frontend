@@ -7,7 +7,7 @@ import Footer from '../Footer/Footer';
 
 function Donation() {
   const clientId = 'ASzWyoXmir_pj5IJspk5BfAbJvyIxvS13jjy_irfX3TUuqFMOAFra8bI0RrbU06SVpGHiFbOB1R3Jvmb';
-  const backendUrl = 'http://localhost:3001/donate';
+  const backendUrl = '/donate';
 
   const [donationAmount, setDonationAmount] = useState(0);
   const [showPayPalButton, setShowPayPalButton] = useState(false);

@@ -11,7 +11,7 @@ const SeriesList = () => {
   const [busqueda, setBusqueda] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/allseries')
+    axios.get('/allseries')
       .then(response => {
         setSeries(response.data);
       })
@@ -67,7 +67,7 @@ const SeriesList = () => {
     const confirmationMessage = `¿Está seguro de habilitar la serie "${serie.name}"?`;
   
     if (window.confirm(confirmationMessage)) {
-      axios.put(`http://localhost:3001/series/enable/${serie._id}`)
+      axios.put(`/series/enable/${serie._id}`)
         .then(response => {
           const updatedSeries = series.map(s =>
             s._id === serie._id
@@ -87,7 +87,7 @@ const SeriesList = () => {
     const confirmationMessage = `¿Está seguro de deshabilitar la serie "${serie.name}"?`;
   
     if (window.confirm(confirmationMessage)) {
-      axios.put(`http://localhost:3001/series/disable/${serie._id}`)
+      axios.put(`/series/disable/${serie._id}`)
         .then(response => {
           const updatedSeries = series.map(s =>
             s._id === serie._id
