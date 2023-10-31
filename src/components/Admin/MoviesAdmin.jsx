@@ -304,7 +304,7 @@ const Peliculas = () => {
 
                 <td className="whitespace-nowrap px-2 py-2 text-center" style={{ position: 'relative' }}>
                   <FaEdit
-                    className="edit-icon"
+                    className="edit-icon text-2xl "
                     onClick={() => handleEditClick(pelicula._id)}
                     style={{
                       position: 'absolute',
@@ -316,7 +316,7 @@ const Peliculas = () => {
                     title="Editar"
                   />
                   <FaEye
-                    className="detail-icon"
+                    className="detail-icon text-2xl"
                     onClick={() => handleDetailClick(pelicula._id)} 
                     style={{
                       position: 'absolute',
