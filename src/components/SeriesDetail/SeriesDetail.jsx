@@ -12,13 +12,9 @@ function SerieDetail() {
   const type = "serie";
   const allSeries = useSelector((state) => state.allSeries);
   const seriesDetail = allSeries.find((serie) => serie._id === _id);
-<<<<<<< .merge_file_ocqRVr
-  const dispatch = useDispatch();
-  const [isWatching, setIsWatching] = useState(false);
-=======
+const [isWatching, setIsWatching] = useState(false);
 
   const [seriesFromDb, setSeriesFromDb] = useState(null);
->>>>>>> .merge_file_uKaVt2
   const [isFav, setIsFav] = useState(false);
 
   useEffect(() => {
@@ -73,7 +69,6 @@ function SerieDetail() {
         completada: null,
       };
 
-<<<<<<< .merge_file_ocqRVr
       try {
         // Realizar una solicitud POST a http://localhost:3001/seriesvistas para agregar a "series que estoy viendo"
         const { data } = await axios.post(
@@ -90,12 +85,10 @@ function SerieDetail() {
       // Esta parte dependerá de la lógica de tu aplicación.
     }
   };
-=======
   if (!series) {
     return <div>Loading...</div>;
   }
 
->>>>>>> .merge_file_uKaVt2
   return (
     <>
       <div className="bg-white p-8 rounded-lg flex">
