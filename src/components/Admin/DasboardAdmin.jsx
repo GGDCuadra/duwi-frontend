@@ -26,6 +26,7 @@ const DashboardAdmin = () => {
   };
 
   const toggleSeriesList = () => {
+    setActiveComponent('series');
     setShowSeriesList(!showSeriesList);
     setShowUserList(false);
     setShowPeliculas(false);
@@ -66,7 +67,7 @@ const DashboardAdmin = () => {
             Lista de Películas
           </button>
         </li>
-        <li className={`mb-5 ${activeComponent === 'peliculas' ? 'bg-lila' : ''}`}>
+        <li className={`mb-5 ${activeComponent === 'series' ? 'bg-lila' : ''}`}>
           <button
             onClick={toggleSeriesList}
             className="text-clarito hover-bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300"

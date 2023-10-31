@@ -113,6 +113,7 @@ const Peliculas = () => {
   const handleAddClick = () => {
     navigate(`/formCreateEdit`); 
   };
+
   const handleToggleDeshabilitar = (pelicula) => {
     const confirmationMessage = `¿Está seguro de deshabilitar la película "${pelicula.Series_Title}"?`;
     
@@ -169,7 +170,8 @@ const Peliculas = () => {
         <table className="w-full border border-gray-400 table-auto">
         <thead className="bg-blue-200">
           <tr>
-            <th onClick={handleSortTitle} className="px-2 py-2 cursor-pointer">
+            <th onClick={handleSortTitle} 
+            className="px-2 py-2 cursor-pointer">
               Título{" "}
               {ordenarPor === "Series_Title" ? (
                 orden === "asc" ? (
@@ -210,7 +212,7 @@ const Peliculas = () => {
                   index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
                 } hover:bg-gray-200 hover:dark:bg-gray-400`}
               >
-                <td className="py-1 text-center">{pelicula.Series_Title}</td>
+                <td className="whitespace-nowrap py-1 text-center">{pelicula.Series_Title}</td>
                 <td className="whitespace-nowrap px-2 py-2 text-center">
                   <a href={pelicula.Poster_Link} target="_blank" rel="noopener noreferrer">
                     <img src={pelicula.Poster_Link} alt="Poster" className="w-10 h-auto" />
