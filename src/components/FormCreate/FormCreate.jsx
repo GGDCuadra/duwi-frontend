@@ -9,7 +9,7 @@ import axios from 'axios';
 const FormCreate = () => {
     const genresMovie =["Crime", "Drama", "Action", "Adventure", "Sci-Fi", "Biography", "History", "Fantasy", "Horror", "Mystery", "Thriller", "Western", "Comedy", "Romance", "Animation", "Family", "War", "Biography", "Music"];
     const genresSerie=["Drama", "Action", "War", "Crime", "Thriller", "Nature", "Adventure", "Science-Fiction", "Western", "Mystery", "Supernatural", "Family", "Romance", "Comedy", "Fantasy", "Medical", "Anime", "Food", "Travel", "History"];
-    const week=["Lunes", "Martes","Miércles","Jueves", "Sábado", "Domingo"];
+    const week=["Lunes", "Martes","Miércoles","Jueves", "Sábado", "Domingo"];
     const initialValuesMoviesCreate = {
         id: '',
         actors: [],
@@ -83,40 +83,42 @@ const FormCreate = () => {
         deshabilitar: 'null' 
         }
     const [sentForm, setSentForm] = useState(false);
-    const [contentType, setContentType] = useState('');
     const [buttonPressed, setButtonPressed] = useState(null);
     const [initialValuesMovies, setInitialValuesMovies] =useState(initialValuesMoviesCreate);
     const [initialValuesSeries, setInitialValuesSeries] =useState(initialValuesSeriesCreate);
     const [file, setFile] = useState({});
+    const [loading, setLoading] = useState(false);
     const {type, id} = useParams();
 
     useEffect(()=>{
-        if (id && type == "movie"){
+        if (id !== "id" && type === "movie"){
 
             async function getMovieById() {
                 try {
+                    setLoading(true)
                     const {data} = await (axios.get(`http://localhost:3001/movies/byObjectId/${id}`))
-                    console.log(data)
                     
                     data.Genre = data.Genre.split(',').map(genre => genre.trim());
                     const results = {...data,
                     actors: []}
-                    
-                    console.log(results)
+
                     setInitialValuesMovies(results)
-                    
+
+                    setTimeout(()=> setLoading(false), 4000)
                 } catch (error) {
                     console.log(error)
                 }
             }
          getMovieById();
-            
-        } else if (id && type == "serie"){
+         
+        } else if (id !== "id" && type === "serie"){
             
             async function getSerieById() {
                 try {
+                    setLoading(true)
                     const {data} = await (axios.get(`http://localhost:3001/series/${id}`))
                     setInitialValuesSeries(data)
+                    setTimeout(()=> setLoading(false), 4000)
                 } catch (error) {
                     console.log(error)
                 }
@@ -124,15 +126,9 @@ const FormCreate = () => {
             getSerieById();
             
         }
+       
     }, [id, type])
    
-
-    const handleContentType = (type) =>{
-        setContentType(type);
-    }
-    
-    
-
 
     const FormSchemaMovies = yup.object().shape({
         // id: yup.number()
@@ -242,44 +238,13 @@ const FormCreate = () => {
     
   return (
     <>  
-   <div className="flex justify-center items-center mt-10">
-  <div className="bg-white p-6 rounded-md shadow-md text-dark font-poppins text-xl text-center">
-    
-    
-    
-    <div className="flex items-center mb-3">
-      <input
-        type="radio"
-        id="movie"
-        name="content-type"
-        value="movie"
-        checked={contentType === "movie"}
-        onChange={() => handleContentType("movie")}
-        className="mr-2 h-6 w-6 text-moradito cursor-pointer"
-      />
-      <label htmlFor="movie" className="text-lg font-poppins text-moradito cursor-pointer">Película</label>
-    </div>
+           
+        {type === "movie" && (
+            <div>
+                {
+                    loading === false ?
+                    <Formik
 
-    <div className="flex items-center mb-3">
-      <input
-        type="radio"
-        id="serie"
-        name="content-type"
-        value="serie"
-        checked={contentType === "serie"}
-        onChange={() => handleContentType("serie")}
-        className="mr-2 h-6 w-6 text-moradito cursor-pointer"
-      />
-      <label htmlFor="serie" className="text-lg font-poppins text-moradito cursor-pointer">Serie</label>
-    </div>
-  </div>
-</div>
-
-
-        
-        {contentType === "movie" && (
-            
-            <Formik
             initialValues={initialValuesMovies}
             
             validationSchema={FormSchemaMovies}
@@ -344,11 +309,13 @@ const FormCreate = () => {
                 setTimeout(()=> setSentForm(false), 4000)
             }}
         >
-            {({errors, values, setFieldValue}) => (
-                <div class="py-8 px-6">
-                    <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10 ">
-                    {console.log(errors)}
-                    {console.log(values)}
+            {({errors, values, setFieldValue, initialValues}) => (
+                
+                <div className="py-8 px-6">
+                    {console.log(initialValues)}
+                    
+                        <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10 ">
+                    
                 
                 {
                     values.Poster_Link ?
@@ -390,8 +357,8 @@ const FormCreate = () => {
                     </div>
                 }
                 
-                
-                <div className="flex flex-col">
+                <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+                <div className="flex flex-col ">
                     <label className="text-lg" htmlFor="Series_Title">Título de la película</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2"
@@ -416,7 +383,7 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Certificate">Certificado</label>
@@ -466,7 +433,7 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="IMDB_Rating">Rating de IMDB</label>
@@ -482,22 +449,8 @@ const FormCreate = () => {
                     </div>
                     : null
                 }
-                
-
-                <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="Overview">Descripción de IMDB</label>
-                    <Field 
-                    className="p-4 border border-lila rounded-md ml-3 mb-4"
-                    name="Overview"
-                    as="textarea"
-                    />
-                    
-                    <ErrorMessage name= "Overview" component={()=>(
-                        <div className={styles.formError}>{errors.Overview}</div>
-                    )}></ErrorMessage>
-                </div>
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Meta_score">Puntuación promedio</label>
                         <Field 
@@ -512,8 +465,22 @@ const FormCreate = () => {
                     </div>
                     : null
                 }
-                
 
+                </div>
+                <div className=" flex flex-col grid grid-cols-1 gap-6 mt-4 sm:grid-cols-1">
+                    <label className="text-lg" htmlFor="Overview">Descripción de IMDB</label>
+                    <Field 
+                    className=" p-4 border border-lila rounded-md ml-3 mb-4"
+                    name="Overview"
+                    as="textarea"
+                    />
+                    
+                    <ErrorMessage name= "Overview" component={()=>(
+                        <div className={styles.formError}>{errors.Overview}</div>
+                    )}></ErrorMessage>
+                </div>
+                <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">                
+                        
                 <div className="flex flex-col">
                 <label className="text-lg" htmlFor="Director">Director</label>
                     <Field 
@@ -527,7 +494,7 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Star1">Estrella 1</label>
                         <Field 
@@ -544,7 +511,7 @@ const FormCreate = () => {
                 }
                 
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Star2">Estrella 2</label>
                         <Field 
@@ -561,7 +528,7 @@ const FormCreate = () => {
                 }
                 
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Star3">Estrella 3</label>
                         <Field 
@@ -578,7 +545,7 @@ const FormCreate = () => {
                 }
                 
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Star4">Esterlla 4</label>
                         <Field 
@@ -657,7 +624,7 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.Gross}</div>
                     )}></ErrorMessage>
                 </div>
-                {
+                {/* {
                     type==="movie" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="deshabilitar">Vista</label>
@@ -674,29 +641,39 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                     </div>
                     : null
-                }
+                } */}
                 
+                </div>
 
                 {sentForm && <p className="text-lg text-morado font-poppins">Formulario enviado con éxito!</p>}
                 <div className="flex space-x-4 mb-20">
-                    {type === "movie" ? 
+                    {id!=="id" ? 
                     <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila  py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
                     :
                     <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('create')}>Crear</button>
                     }
                 </div>           
-            </Form>
+                        </Form>
+                        
                 </div>
                 
             )}
 
-        </Formik>
+                </Formik>
+                    :
+                    <div>Loading...</div>
+                }
+            </div>
+            
+        
         )}
 
 
-        {contentType === "serie" && (
-           
-            <Formik
+        {type === "serie" && (
+           <div>
+            {
+                loading === false ?
+                <Formik
             initialValues={initialValuesSeries}
             
             validationSchema={FormSchemaSeries}
@@ -752,16 +729,16 @@ const FormCreate = () => {
             }}
         >
             {({errors, values, setFieldValue}) => (
-                <div class="py-8 px-6 color-black">
-                <Form className="text-moradito font-poppins grid grid-cols-3 gap-4 flex flex-col  space-y- mt-10">
-                    
+                <div className="py-8 px-6 color-black">
+                <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10 ">
+                
                     {
                     values.image.original ?
                     
                     <div className="flex flex-col space-y-2">
                     <label className="text-lg" htmlFor="image.original">Imagen</label>
-                    <button onClick={() =>{setFieldValue('image.original', '')}}>X</button>
-                    <img src={values.image.original} style={{width: "300px"}}></img>
+                    <button className= "border" onClick={() =>{setFieldValue('image.original', '')}}>Cambiar</button>
+                    <img src={values.image.original} style={{width: "200px"}}></img>
                     
                     </div>
                     : 
@@ -795,6 +772,7 @@ const FormCreate = () => {
                     </div>
                 }
                 
+                <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-3"> 
                    
                 <div className="flex flex-col">
                     <label className="text-lg" htmlFor="name">Título de la serie</label>
@@ -830,24 +808,7 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.language}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className="flex flex-col">
-                <label className="text-lg" htmlFor="genres">Géneros</label>
-                    <Field
-                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    as="select" 
-                    id="genres" 
-                    name="genres" 
-                    multiple={true} >
-                        {
-                        genresSerie.map(a=>  <option key={a} value={a}>{a}</option>)
-                        }
-                    </Field> 
-                                              
-
-                    <ErrorMessage name= "genres" component={()=>(
-                        <div className={styles.formError}>{errors.genres}</div>
-                    )}></ErrorMessage>
-                </div>
+                
 
                 <div className="flex flex-col">
                     <label className="text-lg" htmlFor="status">Estado</label>
@@ -885,29 +846,24 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.premiered}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="officialSite">Sitio oficial</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    type="text" 
-                    id="officialSite" 
-                    name="officialSite" />
-                    
-                    <ErrorMessage name= "officialSite" component={()=>(
-                        <div className={styles.formError}>{errors.officialSite}</div>
-                    )}></ErrorMessage>
                 </div>
-
+                <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
                 <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="schedule.time">Hora de transmisión</label>
-                    <Field 
+                <label className="text-lg" htmlFor="genres">Géneros</label>
+                    <Field
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    type="text" 
-                    id="schedule.time" 
-                    name="schedule.time" />
-                    
-                    <ErrorMessage name= "schedule.time" component={()=>(
-                        <div className={styles.formError}>{errors.schedule.time}</div>
+                    as="select" 
+                    id="genres" 
+                    name="genres" 
+                    multiple={true} >
+                        {
+                        genresSerie.map(a=>  <option key={a} value={a}>{a}</option>)
+                        }
+                    </Field> 
+                                              
+
+                    <ErrorMessage name= "genres" component={()=>(
+                        <div className={styles.formError}>{errors.genres}</div>
                     )}></ErrorMessage>
                 </div>
                 <div className="flex flex-col">
@@ -926,6 +882,35 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.schedule.days}</div>
                     )}></ErrorMessage>
                 </div>
+
+
+                </div>
+                <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-3">
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="schedule.time">Hora de transmisión</label>
+                    <Field 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
+                    type="text" 
+                    id="schedule.time" 
+                    name="schedule.time" />
+                    
+                    <ErrorMessage name= "schedule.time" component={()=>(
+                        <div className={styles.formError}>{errors.schedule.time}</div>
+                    )}></ErrorMessage>
+                </div>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="officialSite">Sitio oficial de transmisión</label>
+                    <Field 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
+                    type="text" 
+                    id="officialSite" 
+                    name="officialSite" />
+                    
+                    <ErrorMessage name= "officialSite" component={()=>(
+                        <div className={styles.formError}>{errors.officialSite}</div>
+                    )}></ErrorMessage>
+                </div>
+                
                 <div className="flex flex-col">
                     <label className="text-lg" htmlFor="rating.average">Promedio de calificación</label>
                     <Field 
@@ -1028,7 +1013,7 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
                 {
-                    type==="serie" ?
+                    id!=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="externals.tvrage">TVRage</label>
                     <Field 
@@ -1044,7 +1029,7 @@ const FormCreate = () => {
                     : null
                 }
                 {
-                    type==="serie" ?
+                    id!=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="externals.thetvdb">TheTVDB</label>
                     <Field 
@@ -1060,7 +1045,7 @@ const FormCreate = () => {
                     : null
                 }
                 {
-                    type==="serie" ?
+                    id!=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="externals.imdb">IMDb</label>
                     <Field 
@@ -1078,19 +1063,7 @@ const FormCreate = () => {
                 
                 
                 
-                <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="summary">Descripción de IMDB</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    name="summary"
-                    as="textarea" 
-                    placeholder="Resumen..." 
-                     />
-                    
-                    <ErrorMessage name= "summary" component={()=>(
-                        <div className={styles.formError}>{errors.summary}</div>
-                    )}></ErrorMessage>
-                </div>
+                
                 <div className="flex flex-col">
                     <label className="text-lg" htmlFor="updated">Valor de actualización</label>
                     <Field 
@@ -1105,7 +1078,7 @@ const FormCreate = () => {
                 </div>
                 
                 {
-                    type==="serie" ?
+                    id!=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="_links.self.href">Enlace self</label>
                     <Field 
@@ -1121,7 +1094,7 @@ const FormCreate = () => {
                     : null
                 }
                 {
-                    type==="serie" ?
+                    id!=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="_links.previousepisode.href">Enlace episodio previo</label>
                     <Field 
@@ -1138,7 +1111,7 @@ const FormCreate = () => {
                 }
                 
                 {
-                    type==="serie" ?
+                    id!=="id" ?
                     
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="deshabilitar">Vista</label>
@@ -1157,10 +1130,23 @@ const FormCreate = () => {
                     : null
                 }
                 
-                
+                </div>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="summary">Descripción de IMDB</label>
+                    <Field 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
+                    name="summary"
+                    as="textarea" 
+                    placeholder="Resumen..." 
+                     />
+                    
+                    <ErrorMessage name= "summary" component={()=>(
+                        <div className={styles.formError}>{errors.summary}</div>
+                    )}></ErrorMessage>
+                </div>
                 {sentForm && <p className="text-lg text-morado font-poppins">Formulario enviado con éxito!</p>}
                 <div className="col-span-3 flex justify-center">
-                {type === "serie" ? 
+                {id!=="id" ? 
                     <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila  py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
                     :
                     <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('create')}>Crear</button>
@@ -1170,7 +1156,12 @@ const FormCreate = () => {
                 </div>
             )}
 
-        </Formik>
+             </Formik>
+                :
+                <div>Loading...</div>
+            }
+           </div>
+            
         )}
         
     </>
