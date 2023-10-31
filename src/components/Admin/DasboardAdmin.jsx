@@ -17,27 +17,32 @@ const DashboardAdmin = () => {
     setShowDonations(!showDonations);
     setShowUserList(false);
     setShowPeliculas(false);
+    setShowSeriesList(false);
   };
 
   const toggleUserList = () => {
     setActiveComponent('userList');
     setShowUserList(!showUserList);
-    setShowDonations(false); // Cerrar donaciones si se abre la lista de usuarios
+    setShowDonations(false); 
+    setShowPeliculas(false);
+    setShowSeriesList(false);
   };
 
   const toggleSeriesList = () => {
+    setActiveComponent('series');
     setShowSeriesList(!showSeriesList);
     setShowUserList(false);
     setShowPeliculas(false);
+    setShowDonations(false); 
   }
   const togglePeliculas = () => {
     setActiveComponent('peliculas');
     setShowPeliculas(!showPeliculas);
     setShowDonations(false);
     setShowUserList(false);
+    setShowSeriesList(false);
   };
 
-  
   return (
     <div className="min-h-screen flex">
       <nav className="bg-morado w-64 py-8 px-4">
@@ -66,7 +71,7 @@ const DashboardAdmin = () => {
             Lista de Películas
           </button>
         </li>
-        <li className={`mb-5 ${activeComponent === 'peliculas' ? 'bg-lila' : ''}`}>
+        <li className={`mb-5 ${activeComponent === 'series' ? 'bg-lila' : ''}`}>
           <button
             onClick={toggleSeriesList}
             className="text-clarito hover-bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300"
