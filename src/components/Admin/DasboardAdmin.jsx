@@ -22,7 +22,8 @@ const DashboardAdmin = () => {
   const toggleUserList = () => {
     setActiveComponent('userList');
     setShowUserList(!showUserList);
-    setShowDonations(false); // Cerrar donaciones si se abre la lista de usuarios
+    setShowDonations(false); 
+    setShowPeliculas(false);
   };
 
   const toggleSeriesList = () => {
