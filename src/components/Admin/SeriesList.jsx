@@ -11,7 +11,7 @@ const SeriesList = () => {
   const [busqueda, setBusqueda] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/series')
+    axios.get('http://localhost:3001/allseries')
       .then(response => {
         setSeries(response.data);
       })
@@ -20,45 +20,7 @@ const SeriesList = () => {
       });
   }, []);
 
-  const handleToggleHabilitar = (serie) => {
-    const confirmationMessage = `¿Está seguro de habilitar la serie "${serie.name}"?`;
-  
-    if (window.confirm(confirmationMessage)) {
-      axios.put(`http://localhost:3001/series/enable/${serie._id}`)
-        .then(response => {
-          const updatedSeries = series.map(s =>
-            s._id === serie._id
-              ? { ...s, deshabilitar: null }
-              : s
-          );
-  
-          setSeries(updatedSeries);
-        })
-        .catch(error => {
-          console.error('Error al habilitar serie:', error);
-        });
-    }
-  };
-  
-  const handleToggleDeshabilitar = (serie) => {
-    const confirmationMessage = `¿Está seguro de deshabilitar la serie "${serie.name}"?`;
-  
-    if (window.confirm(confirmationMessage)) {
-      axios.put(`http://localhost:3001/series/disable/${serie._id}`)
-        .then(response => {
-          const updatedSeries = series.map(s =>
-            s._id === serie._id
-              ? { ...s, deshabilitar: 'Disabled' }
-              : s
-          );
-  
-          setSeries(updatedSeries);
-        })
-        .catch(error => {
-          console.error('Error al deshabilitar serie:', error);
-        });
-    }
-  };
+
   const handleSort = property => {
     const esAsc = ordenarPor === property && orden === 'asc';
     setOrden(esAsc ? 'desc' : 'asc');
@@ -100,6 +62,46 @@ const SeriesList = () => {
   const totalPaginas = Math.ceil(seriesFiltradas.length / filasPorPagina);
   const paginas = Array.from({ length: totalPaginas }, (_, i) => i);
 
+
+  const handleToggleHabilitar = (serie) => {
+    const confirmationMessage = `¿Está seguro de habilitar la serie "${serie.name}"?`;
+  
+    if (window.confirm(confirmationMessage)) {
+      axios.put(`http://localhost:3001/series/enable/${serie._id}`)
+        .then(response => {
+          const updatedSeries = series.map(s =>
+            s._id === serie._id
+              ? { ...s, deshabilitar: null }
+              : s
+          );
+  
+          setSeries(updatedSeries);
+        })
+        .catch(error => {
+          console.error('Error al habilitar serie:', error);
+        });
+    }
+  };
+  
+  const handleToggleDeshabilitar = (serie) => {
+    const confirmationMessage = `¿Está seguro de deshabilitar la serie "${serie.name}"?`;
+  
+    if (window.confirm(confirmationMessage)) {
+      axios.put(`http://localhost:3001/series/disable/${serie._id}`)
+        .then(response => {
+          const updatedSeries = series.map(s =>
+            s._id === serie._id
+              ? { ...s, deshabilitar: 'Disabled' }
+              : s
+          );
+  
+          setSeries(updatedSeries);
+        })
+        .catch(error => {
+          console.error('Error al deshabilitar serie:', error);
+        });
+    }
+  };
   return (
     <div className="flex justify-center flex-col items-center">
       <div className="w-4/5 p-4">

@@ -19,7 +19,50 @@ function UserList() {
         console.error('Error al obtener la lista de usuarios:', error);
       });
   }, []);
-
+  const handleToggleHabilitar = (user) => {
+    const confirmationMessage = `¿Está seguro de habilitar al usuario "${user.username}"?`;
+  
+    if (window.confirm(confirmationMessage)) {
+      // Realiza una solicitud al backend para habilitar al usuario
+      axios.put(`http://localhost:3001/users/enable/${user._id}`)
+        .then(response => {
+          // Si la solicitud se completa con éxito, actualiza el estado local
+          const updatedUsers = users.map(u =>
+            u._id === user._id
+              ? { ...u, disabled: null }
+              : u
+          );
+  
+          setUsers(updatedUsers);
+        })
+        .catch(error => {
+          console.error(`Error al habilitar al usuario:`, error);
+        });
+    }
+  };
+  
+  const handleToggleDeshabilitar = (user) => {
+    const confirmationMessage = `¿Está seguro de deshabilitar al usuario "${user.username}"?`;
+  
+    if (window.confirm(confirmationMessage)) {
+      // Realiza una solicitud al backend para deshabilitar al usuario
+      axios.put(`http://localhost:3001/users/disable/${user._id}`)
+        .then(response => {
+          // Si la solicitud se completa con éxito, actualiza el estado local
+          const updatedUsers = users.map(u =>
+            u._id === user._id
+              ? { ...u, disabled: 'Disabled' }
+              : u
+          );
+  
+          setUsers(updatedUsers);
+        })
+        .catch(error => {
+          console.error(`Error al deshabilitar al usuario:`, error);
+        });
+    }
+  };
+  
   const handleSort = (property) => {
     if (property === sortBy) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -105,21 +148,7 @@ function UserList() {
                     )
                   ) : null}
                 </th>
-                <th
-                  onClick={() => handleSort('deshabilitar')}
-                  className={`px-2 py-2 cursor-pointer text-center ${
-                    sortBy === 'deshabilitar' ? 'text-blue-600' : ''
-                  }`}
-                >
-                  Deshabilitar{' '}
-                  {sortBy === 'deshabilitar' ? (
-                    sortOrder === 'asc' ? (
-                      <FaSort className="inline" />
-                    ) : (
-                      <FaSort className="inline transform rotate-180" />
-                    )
-                  ) : null}
-                </th>
+                <th className="px-2 py-2 cursor-pointer text-center">Deshabilitar</th>
                 <th className="px-2 py-2 text-center">Editar</th>
               </tr>
             </thead>
@@ -128,17 +157,30 @@ function UserList() {
                 <tr key={user._id} className={user.disabled ? 'bg-gray-300' : 'bg-red-200'}>
                   <td className="whitespace-nowrap px-2 py-2 text-center">{user.username}</td>
                   <td className="whitespace-nowrap px-2 py-2 text-center">{user.email}</td>
-                  <td className="whitespace-nowrap px-2 py-2 text-center">
-                    {user.disabled ? (
-                      <button className="text-green-600 hover:text-green-900">
-                        <FaCheckCircle className="inline" /> Habilitar
-                      </button>
-                    ) : (
-                      <button className="text-red-600 hover:text-red-900">
-                        <FaBan className="inline" /> Deshabilitar
-                      </button>
-                    )}
-                  </td>
+                  <td className="whitespace-nowrap text-center">
+  <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <button
+      onClick={() => handleToggleDeshabilitar(user)}
+      className={`${
+        user.disabled ? 'bg-gray-300' : 'bg-red-500'
+      } text-white px-1 py-1 rounded-md text-sm`}
+      disabled={user.disabled}
+    >
+      Deshabilitar
+    </button>
+    <button
+      onClick={() => handleToggleHabilitar(user)}
+      style={{
+        backgroundColor: user.disabled ? 'green' : '#cccccc',
+      }}
+      className="text-white px-1 py-1 rounded-md text-sm mt-2"
+      disabled={!user.disabled}
+    >
+      Habilitar
+    </button>
+  </div>
+</td>
+
                   <td className="whitespace-nowrap px-2 py-2 text-center">
                     <FaEdit className="edit-icon" />
                   </td>
