@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import LandingPage from "./components/LandingPage/LandingPage";
 import Login from "./components/Login/Login";
-import About from "./components/AboutUs/AboutUs";
 import Register from "./components/Register/Register";
 import { Navbar } from "./components/Navbar/Navbar";
 import "./index.css";
@@ -16,7 +15,10 @@ import FavoriteMovies from "./components/FavoriteMovies/FavoriteMovies";
 import FavoriteSeries from "./components/FavoritesSeries/FavoritesSeries";
 import Suggestion from "./components/Suggestion/Suggestion";
 import AboutUs from "./components/AboutUs/AboutUs";
+import NewReleases from "./components/NewReleases/NewReleases";
 import DashboardAdmin from './components/Admin/DasboardAdmin'
+import Completadas from './components/dashboard/Completadas';
+
 
 
 function App() {
@@ -42,7 +44,9 @@ function App() {
         <Route path="/favoriteseries" element={<FavoriteSeries />} />
         <Route path="/suggestion" element={<Suggestion />} />
         <Route path="/AboutUs" element={<AboutUs />} />
+        <Route path="/estrenos" element={<NewReleases/>} />
         <Route path='/admin/*' element={<DashboardAdmin/>}/>
+        <Route path="/completadas" element={<Completadas />} />
       </Routes>
     </div>
   );

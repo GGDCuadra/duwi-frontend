@@ -1,9 +1,9 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaMoon, FaSignInAlt } from 'react-icons/fa';
+import { FaMoon } from 'react-icons/fa';
 import logo from '../../assets/logoduwi.png';
 import SearchBar from '../SearchBar/SearchBar';
 import { useAuth0 } from "@auth0/auth0-react";
+import Swal from 'sweetalert2';
 
 const NAVIGATION_LINKS = [
   { path: '/Home', label: 'Inicio' },
@@ -11,17 +11,26 @@ const NAVIGATION_LINKS = [
   { path: '/series', label: 'Series' },
   { path: '/estrenos', label: 'Estrenos' },
   { path: '/formCreateEdit', label: 'Crear / Editar' },
-]; 
+];
 
 const Navbar = () => {
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
-  const handleLoginOrLogout = () => {
+  const handleLogout = async () => {
     if (isAuthenticated) {
-      // Si el usuario está autenticado, realizar logout
-      logout({ returnTo: window.location.origin });
+      const result = await Swal.fire({
+        title: 'Cerrar Sesión',
+        text: '¿Está seguro de que desea cerrar la sesión?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, cerrar sesión',
+        cancelButtonText: 'Cancelar',
+      });
+
+      if (result.isConfirmed) {
+        logout({ returnTo: window.location.origin });
+      }
     } else {
-      // Si el usuario no está autenticado, realizar login
       loginWithRedirect();
     }
   };
@@ -41,7 +50,7 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
-        <div className="ml-4 overflow-hidden">
+        <div className="ml-4">
           <SearchBar />
         </div>
         {isAuthenticated && (
@@ -54,9 +63,9 @@ const Navbar = () => {
         <div className="ml-4 text-gray-800 hover:text-moradito">
           <FaMoon />
         </div>
-        <div className="ml-4 text-gray-800 hover:text-moradito" onClick={handleLoginOrLogout}>
+        <button className="ml-4 text-gray-800 hover:text-moradito font-poppins" onClick={handleLogout}>
           {isAuthenticated ? "Cerrar Sesión" : "Iniciar Sesión"}
-        </div>
+        </button>
       </div>
     </nav>
   );

@@ -31,7 +31,7 @@ const Filters = ({type, onFilterChange, currentFilters, currentMoviesPage, curre
             <form className='flex justify-center' onSubmit={handleSubmit}>
                 <div className='mr-4'>
                     <select name="genre" className="border border-gray-300 rounded px-3 py-2 font-poppins" onChange={handleChange}>
-                    <option value="">Selecciona un genero</option>
+                    <option value="">Selecciona un género</option>
                         {type === 'movies' && (
                             <>
                                 <option value="Action">Acción</option>
@@ -42,10 +42,10 @@ const Filters = ({type, onFilterChange, currentFilters, currentMoviesPage, curre
                                 <option value="Thriller">Thriller</option>
                                 <option value="Sci-Fi">Ciencia ficción</option>
                                 <option value="History">Historia</option>
-                                <option value="Biography">Biografia</option>
-                                <option value="Fantasy">Fantacia</option>
+                                <option value="Biography">Biografía</option>
+                                <option value="Fantasy">Fantasía</option>
                                 <option value="Animation">Animación</option>
-                                <option value="Music">Musica</option>
+                                <option value="Music">Música</option>
                                 <option value="Romance">Romance</option>
                                 <option value="Mystery">Misterio</option>
                             </>
@@ -77,8 +77,8 @@ const Filters = ({type, onFilterChange, currentFilters, currentMoviesPage, curre
                     </select>
                 </div>
                 <div className='mr-'>
-                    <select name="sortByTitle" className="border border-gray-300 rounded px-3 py-2 font-poppins" onChange={handleChange}>
-                        <option value="">Ordenar por titulo</option>
+                    <select name="sortByTitle" className="border border-gray-300 rounded px-3 py-2 font-poppins mr-5" onChange={handleChange}>
+                        <option value="">Ordenar por título</option>
                         <option value="asc">A-Z</option>
                         <option value="desc">Z-A</option>
                     </select>
