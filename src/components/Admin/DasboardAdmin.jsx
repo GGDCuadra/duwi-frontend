@@ -17,6 +17,7 @@ const DashboardAdmin = () => {
     setShowDonations(!showDonations);
     setShowUserList(false);
     setShowPeliculas(false);
+    setShowSeriesList(false);
   };
 
   const toggleUserList = () => {
@@ -24,6 +25,7 @@ const DashboardAdmin = () => {
     setShowUserList(!showUserList);
     setShowDonations(false); 
     setShowPeliculas(false);
+    setShowSeriesList(false);
   };
 
   const toggleSeriesList = () => {
@@ -31,15 +33,16 @@ const DashboardAdmin = () => {
     setShowSeriesList(!showSeriesList);
     setShowUserList(false);
     setShowPeliculas(false);
+    setShowDonations(false); 
   }
   const togglePeliculas = () => {
     setActiveComponent('peliculas');
     setShowPeliculas(!showPeliculas);
     setShowDonations(false);
     setShowUserList(false);
+    setShowSeriesList(false);
   };
 
-  
   return (
     <div className="min-h-screen flex">
       <nav className="bg-morado w-64 py-8 px-4">

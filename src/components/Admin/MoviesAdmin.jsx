@@ -13,18 +13,32 @@ const Peliculas = () => {
   const [ordenarPor, setOrdenarPor] = useState('Released_Year');
   const [orden, setOrden] = useState('asc');
   const [busqueda, setBusqueda] = useState('');
+  const [filtro, setFiltro] = useState('allmovies'); 
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios.get('http://localhost:3001/movies')
+  const obtenerPeliculasPorFiltro = (filtro) => {
+    let endpoint = 'http://localhost:3001/movies'; 
+  
+    if (filtro === 'habilitadas') {
+      endpoint = 'http://localhost:3001/enabledMovies'; 
+    } else if (filtro === 'deshabilitadas') {
+      endpoint = 'http://localhost:3001/disableMovies';
+    }
+  
+    axios.get(endpoint)
       .then(response => {
         setPeliculas(response.data);
       })
       .catch(error => {
         console.error('Error al obtener películas:', error);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    obtenerPeliculasPorFiltro(filtro);
+  }, [filtro]);
+  
 
   const handleEditClick = (_id) => {
     navigate(`/formCreateEdit/${type}/${_id}`);
@@ -144,7 +158,7 @@ const Peliculas = () => {
   const handleDetailClick = (_id) => {
     navigate(`/movie/${_id}`); 
   };
-  
+
   
   return (
     <div className="flex justify-center flex-col items-center">
@@ -155,9 +169,24 @@ const Peliculas = () => {
           <input
             type="text"
             placeholder="Buscar por título de película"
-            className="w-2/3 md:w-2/2 border border-gray-300 p-2 rounded-md "
+            className="w-1/3 md:w-2/2 border border-gray-300 p-2 rounded-md "
             onChange={handleSearch}
           />
+          
+          <div className="flex items-center">
+            <label className="mr-2">Filtro</label>
+            <select
+              value={filtro}
+              onChange={(e) => setFiltro(e.target.value)}
+              className="border border-gray-300 p-2 rounded-md"
+            >
+              <option disabled>Selecciona una opción</option>
+              <option value="allmovies">Todas</option>
+              <option value="habilitadas">Habilitadas</option>
+              <option value="deshabilitadas">Deshabilitadas</option>
+            </select>
+          </div>
+          
           <button
             className=" bg-blue-200 font-bold border border-gray-400 rounded-md p-2 rounded-md  hover:bg-gray-400"
             onClick={handleAddClick}
