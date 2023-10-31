@@ -1,27 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Footer from "../Footer/Footer";
 import { Link } from "react-router-dom";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
-import { toast } from "react-toastify";
 
 function MovieDetail() {
   const { _id } = useParams();
   const type = "movie";
   const allMovies = useSelector((state) => state.allMovies);
   const moviesDetail = allMovies.find((movie) => movie._id === _id);
-
-  const [movieFromDb, setMovieFromDb] = useState("");
+  const dispatch = useDispatch();
+  const [isWatching, setIsWatching] = useState(false); 
 
   const [isFav, setIsFav] = useState(false);
 
-  useEffect(() => {
-    if (!moviesDetail) {
-      getMovieByObjectId();
-    }
-  }, []);
+  if (!moviesDetail) {
+    return <div>Loading...</div>;
+  }
 
   const {
     Series_Title,
@@ -35,26 +32,9 @@ function MovieDetail() {
     Star2,
     Star3,
     Star4,
-  } = moviesDetail ? moviesDetail : movieFromDb;
-
-  const getMovieByObjectId = async () => {
-    try {
-      const { data } = await axios.get(`http://localhost:3001/movies/byObjectId/${_id}`);
-      setMovieFromDb(data);
-    } catch (error) {
-      console.error('Error al obtener detalles de la película:', error);
-    }
-  };
-
+  } = moviesDetail;
   const userData = localStorage.getItem("userData");
   const userInfo = JSON.parse(userData);
-
-  const notify = () => {
-    toast("Default Notification !");
-    toast.success("Success Notification !", {
-      position: toast.POSITION.TOP_CENTER
-    });
-  };
 
   const handleFavorite = async () => {
     if (!isFav) {
@@ -73,6 +53,33 @@ function MovieDetail() {
     }
   };
 
+  const handleWatching = async () => {
+    if (!isWatching) {
+      setIsWatching(true);
+
+      const dataMovie = {
+        userId: userInfo._id,
+        movieId: _id,
+        completada: null,
+      };
+
+      try {
+        // Realizar una solicitud POST a http://localhost:3001/moviesvistas para agregar a "películas que estoy viendo"
+        const { data } = await axios.post(
+          "http://localhost:3001/moviesvistas",
+          dataMovie
+        );
+        console.log(data);
+      } catch (error) {
+        console.error("Error al agregar a películas que estoy viendo:", error);
+      }
+    } else {
+      // Si ya está marcada como "películas que estoy viendo", puedes implementar la lógica para quitarla si lo deseas.
+      // Puedes realizar una solicitud DELETE o similar para eliminarla de la lista.
+      // Esta parte dependerá de la lógica de tu aplicación.
+    }
+  };
+
   return (
     <>
       <div className="bg-white p-8 rounded-lg flex">
@@ -85,7 +92,7 @@ function MovieDetail() {
           <div className="mt-3 flex space-x-4 ml-20">
             <button
               onClick={handleFavorite}
-              className="bg-moradito hover-bg-lila text-white rounded px-4 py-2 text-xs font-poppins"
+              className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-xs font-poppins"
             >
               {isFav ? (
                 <MdFavorite size={24} />
@@ -93,9 +100,15 @@ function MovieDetail() {
                 <MdFavoriteBorder size={24} />
               )}
             </button>
+            <button
+              onClick={handleWatching}
+              className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-xs font-poppins"
+            >
+              {isWatching ? "Viendo" : "Ver más tarde"}
+            </button>
             <Link
               to={`/formCreateEdit/${type}/${_id}`}
-              className="bg-moradito hover-bg-lila text-white rounded px-4 py-2 text-l font-poppins"
+              className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-l font-poppins"
             >
               Editar
             </Link>
@@ -113,23 +126,23 @@ function MovieDetail() {
           </p>
 
           <div className="mx-[300px]">
-            <iframe
-              title={Series_Title}
-              width="560"
-              height="315"
-              src={Trailer}
-              frameBorder="0"
-              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="rounded-xl drop-shadow-xl mx-auto"
-            ></iframe>
+          <iframe
+            title={Series_Title}
+            width="560"
+            height="315"
+            src={Trailer}
+            frameBorder="0"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="rounded-xl drop-shadow-xl mx-auto"
+          ></iframe>
           </div>
-
+          
           <div className="text-center mt-10">
             <h2 className="text-xl font-bold text-oscuro font-poppins mb-2">
               Sinopsis:
             </h2>
-            <div className="w-full max-w-md">
+            <div className="w-full max-w-md"> 
               <p className="text-lg text-moradito font-poppins text-justify mt-3">
                 {Overview}
               </p>
