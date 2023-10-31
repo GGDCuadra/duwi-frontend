@@ -26,7 +26,7 @@ const [isWatching, setIsWatching] = useState(false);
   const getSeriesByObjectId = async () => {
     try {
       const id = _id
-      const { data } = await axios.get(`http://localhost:3001/series/${id}`);
+      const { data } = await axios.get(`/series/${id}`);
       setSeriesFromDb(data);
     } catch (error) {
       console.error('Error al obtener detalles de la serie:', error);
@@ -55,7 +55,7 @@ const [isWatching, setIsWatching] = useState(false);
       };
 
       // Realizar una solicitud POST al servidor para guardar la serie como favorita
-      const { data } = await axios.post('http://localhost:3001/favorites/series', dataSeries);
+      const { data } = await axios.post('/favorites/series', dataSeries);
       console.log(data);
     }
   };
@@ -70,7 +70,7 @@ const [isWatching, setIsWatching] = useState(false);
       };
 
       try {
-        // Realizar una solicitud POST a http://localhost:3001/seriesvistas para agregar a "series que estoy viendo"
+        // Realizar una solicitud POST a /seriesvistas para agregar a "series que estoy viendo"
         const { data } = await axios.post(
           "http://localhost:3001/seriesvistas",
           dataSerie

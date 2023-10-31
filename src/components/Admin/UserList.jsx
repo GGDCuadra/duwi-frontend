@@ -11,7 +11,7 @@ function UserList() {
   const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/users')
+    axios.get('/users')
       .then(response => {
         setUsers(response.data);
       })
@@ -24,7 +24,7 @@ function UserList() {
   
     if (window.confirm(confirmationMessage)) {
       // Realiza una solicitud al backend para habilitar al usuario
-      axios.put(`http://localhost:3001/users/enable/${user._id}`)
+      axios.put(`/users/enable/${user._id}`)
         .then(response => {
           // Si la solicitud se completa con éxito, actualiza el estado local
           const updatedUsers = users.map(u =>
@@ -46,7 +46,7 @@ function UserList() {
   
     if (window.confirm(confirmationMessage)) {
       // Realiza una solicitud al backend para deshabilitar al usuario
-      axios.put(`http://localhost:3001/users/disable/${user._id}`)
+      axios.put(`/users/disable/${user._id}`)
         .then(response => {
           // Si la solicitud se completa con éxito, actualiza el estado local
           const updatedUsers = users.map(u =>

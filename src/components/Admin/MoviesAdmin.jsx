@@ -17,7 +17,7 @@ const Peliculas = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:3001/movies')
+    axios.get('/movies')
       .then(response => {
         setPeliculas(response.data);
       })
@@ -94,7 +94,7 @@ const Peliculas = () => {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-      axios.put(`http://localhost:3001/movies/enable/${pelicula._id}`)
+      axios.put(`/movies/enable/${pelicula._id}`)
         .then(response => {
           const updatedPeliculas = peliculas.map(p =>
             p._id === pelicula._id
@@ -124,7 +124,7 @@ const Peliculas = () => {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-      axios.put(`http://localhost:3001/movies/disable/${pelicula._id}`)
+      axios.put(`/movies/disable/${pelicula._id}`)
         .then(response => {
           const updatedPeliculas = peliculas.map(p =>
             p._id === pelicula._id
