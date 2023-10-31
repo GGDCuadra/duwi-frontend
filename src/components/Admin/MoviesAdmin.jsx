@@ -1,7 +1,8 @@
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
-import { FaEdit, FaSort } from 'react-icons/fa';
+import { FaEdit, FaSort, FaEye } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import Swal from "sweetalert2";
 
 const Peliculas = () => {
 
@@ -85,7 +86,14 @@ const Peliculas = () => {
   const handleToggleHabilitar = (pelicula) => {
     const confirmationMessage = `¿Está seguro de habilitar la película "${pelicula.Series_Title}"?`;
     
-    if (window.confirm(confirmationMessage)) {
+    Swal.fire({
+      title: confirmationMessage,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
       axios.put(`http://localhost:3001/movies/enable/${pelicula._id}`)
         .then(response => {
           const updatedPeliculas = peliculas.map(p =>
@@ -99,12 +107,23 @@ const Peliculas = () => {
           console.error(`Error al habilitar película:`, error);
         });
     }
+  });
   };
   
+  const handleAddClick = () => {
+    navigate(`/formCreateEdit`); 
+  };
   const handleToggleDeshabilitar = (pelicula) => {
     const confirmationMessage = `¿Está seguro de deshabilitar la película "${pelicula.Series_Title}"?`;
     
-    if (window.confirm(confirmationMessage)) {
+    Swal.fire({
+      title: confirmationMessage,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
       axios.put(`http://localhost:3001/movies/disable/${pelicula._id}`)
         .then(response => {
           const updatedPeliculas = peliculas.map(p =>
@@ -118,18 +137,33 @@ const Peliculas = () => {
           console.error(`Error al deshabilitar película:`, error);
         });
     }
+  });
   };
+
+  const handleDetailClick = (_id) => {
+    navigate(`/movie/${_id}`); 
+  };
+  
   
   return (
     <div className="flex justify-center flex-col items-center">
       <div className="w-4/5 p-4">
-      <h1 className="text-2xl font-bold text-center mb-8">Películas</h1>
-      <input
-        type="text"
-        placeholder="Buscar por titulo de pelicula"
-        className="w-full border border-gray-300 p-2 rounded-md mb-4"
-        onChange={handleSearch}
-      />
+        <h1 className="text-3xl font-bold text-center mb-8">Películas</h1>
+     
+        <div className="flex justify-between items-center mb-6">
+          <input
+            type="text"
+            placeholder="Buscar por título de película"
+            className="w-2/3 md:w-2/2 border border-gray-300 p-2 rounded-md "
+            onChange={handleSearch}
+          />
+          <button
+            className=" bg-blue-200 font-bold border border-gray-400 rounded-md p-2 rounded-md  hover:bg-gray-400"
+            onClick={handleAddClick}
+          >
+            Agregar película
+          </button>
+        </div>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full border border-gray-400 table-auto">
@@ -162,7 +196,7 @@ const Peliculas = () => {
               <th className="px-2 py-2">Reparto</th>
               <th className="px-2 py-2">Trailer</th>
               <th className="px-2 py-2">Deshabilitar</th>
-              <th className="px-2 py-2">Editar</th>
+              <th className="px-2 py-2">Acción</th>
           </tr>
         </thead>
 
@@ -243,14 +277,26 @@ const Peliculas = () => {
                     onClick={() => handleEditClick(pelicula._id)}
                     style={{
                       position: 'absolute',
-                      top: '50%',
+                      top: '60%',
                       left: '50%',
                       transform: 'translate(-50%, -50%)',
                       cursor: 'pointer', 
                     }}
+                    title="Editar"
+                  />
+                  <FaEye
+                    className="detail-icon"
+                    onClick={() => handleDetailClick(pelicula._id)} 
+                    style={{
+                      position: 'absolute',
+                      top: '40%',
+                      left: '50%', 
+                      transform: 'translate(-50%, -50%)',
+                      cursor: 'pointer', 
+                    }}
+                    title="Ver detalle"
                   />
                 </td>
-
               </tr>
             ))}
         </tbody>
