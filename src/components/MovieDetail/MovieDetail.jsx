@@ -12,6 +12,7 @@ function MovieDetail() {
   const allMovies = useSelector((state) => state.allMovies);
   const moviesDetail = allMovies.find((movie) => movie._id === _id);
   const dispatch = useDispatch();
+  const [isWatching, setIsWatching] = useState(false); 
 
   const [isFav, setIsFav] = useState(false);
 
@@ -52,6 +53,33 @@ function MovieDetail() {
     }
   };
 
+  const handleWatching = async () => {
+    if (!isWatching) {
+      setIsWatching(true);
+
+      const dataMovie = {
+        userId: userInfo._id,
+        movieId: _id,
+        completada: null,
+      };
+
+      try {
+        // Realizar una solicitud POST a http://localhost:3001/moviesvistas para agregar a "películas que estoy viendo"
+        const { data } = await axios.post(
+          "http://localhost:3001/moviesvistas",
+          dataMovie
+        );
+        console.log(data);
+      } catch (error) {
+        console.error("Error al agregar a películas que estoy viendo:", error);
+      }
+    } else {
+      // Si ya está marcada como "películas que estoy viendo", puedes implementar la lógica para quitarla si lo deseas.
+      // Puedes realizar una solicitud DELETE o similar para eliminarla de la lista.
+      // Esta parte dependerá de la lógica de tu aplicación.
+    }
+  };
+
   return (
     <>
       <div className="bg-white p-8 rounded-lg flex">
@@ -71,6 +99,12 @@ function MovieDetail() {
               ) : (
                 <MdFavoriteBorder size={24} />
               )}
+            </button>
+            <button
+              onClick={handleWatching}
+              className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-xs font-poppins"
+            >
+              {isWatching ? "Viendo" : "Ver más tarde"}
             </button>
             <Link
               to={`/formCreateEdit/${type}/${_id}`}

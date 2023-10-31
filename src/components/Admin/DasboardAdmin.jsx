@@ -3,12 +3,14 @@ import { Outlet } from 'react-router-dom';
 import Donaciones from './AllDonations';
 import UserList from './UserList';
 import Peliculas from './MoviesAdmin'; 
+import SeriesList from './SeriesList';
 
 const DashboardAdmin = () => {
   const [showUserList, setShowUserList] = useState(false);
   const [showDonations, setShowDonations] = useState(false);
   const [showPeliculas, setShowPeliculas] = useState(false);
   const [activeComponent, setActiveComponent] = useState(null);
+  const [showSeriesList, setShowSeriesList] = useState(false)
 
   const toggleDonations = () => {
     setActiveComponent('donations');
@@ -20,10 +22,14 @@ const DashboardAdmin = () => {
   const toggleUserList = () => {
     setActiveComponent('userList');
     setShowUserList(!showUserList);
-    setShowDonations(false);
-    setShowPeliculas(false);
+    setShowDonations(false); // Cerrar donaciones si se abre la lista de usuarios
   };
 
+  const toggleSeriesList = () => {
+    setShowSeriesList(!showSeriesList);
+    setShowUserList(false);
+    setShowPeliculas(false);
+  }
   const togglePeliculas = () => {
     setActiveComponent('peliculas');
     setShowPeliculas(!showPeliculas);
@@ -60,7 +66,14 @@ const DashboardAdmin = () => {
             Lista de Películas
           </button>
         </li>
-          
+        <li className={`mb-5 ${activeComponent === 'peliculas' ? 'bg-lila' : ''}`}>
+          <button
+            onClick={toggleSeriesList}
+            className="text-clarito hover-bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300"
+          >
+            Lista de Series
+          </button>
+        </li>
         </ul>
       </nav>
 
@@ -72,6 +85,8 @@ const DashboardAdmin = () => {
           {showUserList && <UserList />}
           {showDonations && <Donaciones />}
           {showPeliculas && <Peliculas />}
+          {showSeriesList && <SeriesList />}
+
           
         </div>
       </div>
