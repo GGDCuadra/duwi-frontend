@@ -17,6 +17,8 @@ import Suggestion from "./components/Suggestion/Suggestion";
 import AboutUs from "./components/AboutUs/AboutUs";
 import NewReleases from "./components/NewReleases/NewReleases";
 import DashboardAdmin from './components/Admin/DasboardAdmin'
+import Completadas from './components/dashboard/Completadas';
+
 
 
 function App() {
@@ -44,6 +46,7 @@ function App() {
         <Route path="/AboutUs" element={<AboutUs />} />
         <Route path="/estrenos" element={<NewReleases/>} />
         <Route path='/admin/*' element={<DashboardAdmin/>}/>
+        <Route path="/completadas" element={<Completadas />} />
       </Routes>
     </div>
   );
