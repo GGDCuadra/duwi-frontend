@@ -13,22 +13,30 @@ function LoginPage() {
   const [userInformation, setUserInformation] = useState(null);
   const { loginWithRedirect } = useAuth0();
   const [show, setShow] = useState('login')
-
   const handleLogin = async () => {
     setError(null);
-
+  
     if (!loginEmail || !loginPassword) {
       setError('Por favor, ingresa tanto el correo electrónico como la contraseña.');
       return;
     }
+  
     try {
       const response = await fetch('http://localhost:3001/users');
       const users = await response.json();
       const user = users.find((user) => user.email === loginEmail);
+  
       if (!user) {
         setError('El correo electrónico no existe.');
         return;
       }
+  
+      if (!user.activo) {
+        setError('Tu cuenta está deshabilitada. Comunícate con el soporte.');
+        // Cerrar la sesión y redirigir al usuario, si es aplicable
+        return;
+      }
+  
       if (user.password === loginPassword) {
         // Realiza una solicitud para obtener información adicional del usuario
         const userInfoResponse = await fetch(`http://localhost:3001/users/${user._id}`);
@@ -40,8 +48,8 @@ function LoginPage() {
           rol: user.rol,
           fecha_de_nacimiento: user.fecha_de_nacimiento,
         });
-
-        console.log('userInformation:', userInformation);
+  
+        // Continúa con la lógica de inicio de sesión, por ejemplo, redirigiendo al usuario a su panel, etc.
       } else {
         setError('La contraseña es incorrecta.');
       }
@@ -50,6 +58,7 @@ function LoginPage() {
       setError('Se produjo un error al iniciar sesión. Por favor, inténtalo de nuevo.');
     }
   };
+  
 
   const handleRegister = async () => {
     setError(null);
