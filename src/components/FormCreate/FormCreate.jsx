@@ -1,3 +1,4 @@
+
 import React, {useEffect, useState} from 'react'
 import { useParams } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FieldArray} from 'formik'
@@ -8,7 +9,7 @@ import axios from 'axios';
 const FormCreate = () => {
     const genresMovie =["Crime", "Drama", "Action", "Adventure", "Sci-Fi", "Biography", "History", "Fantasy", "Horror", "Mystery", "Thriller", "Western", "Comedy", "Romance", "Animation", "Family", "War", "Biography", "Music"];
     const genresSerie=["Drama", "Action", "War", "Crime", "Thriller", "Nature", "Adventure", "Science-Fiction", "Western", "Mystery", "Supernatural", "Family", "Romance", "Comedy", "Fantasy", "Medical", "Anime", "Food", "Travel", "History"];
-    const week=["Lunes", "Martes","Miércles","Jueves", "Sábado", "Domingo"];
+    const week=["Lunes", "Martes","Miércoles","Jueves", "Sábado", "Domingo"];
     const initialValuesMoviesCreate = {
         id: '',
         actors: [],
@@ -82,41 +83,42 @@ const FormCreate = () => {
         deshabilitar: 'null' 
         }
     const [sentForm, setSentForm] = useState(false);
-    const [contentType, setContentType] = useState('');
     const [buttonPressed, setButtonPressed] = useState(null);
     const [initialValuesMovies, setInitialValuesMovies] =useState(initialValuesMoviesCreate);
     const [initialValuesSeries, setInitialValuesSeries] =useState(initialValuesSeriesCreate);
-    const [image, setImage] = useState('');
-    const [loading, setLoading] = useState(false)
+    const [file, setFile] = useState({});
+    const [loading, setLoading] = useState(false);
     const {type, id} = useParams();
 
     useEffect(()=>{
-        if (id && type == "movie"){
+        if (id !== "id" && type === "movie"){
 
             async function getMovieById() {
                 try {
+                    setLoading(true)
                     const {data} = await (axios.get(`http://localhost:3001/movies/byObjectId/${id}`))
-                    console.log(data)
                     
                     data.Genre = data.Genre.split(',').map(genre => genre.trim());
                     const results = {...data,
                     actors: []}
-                    
-                    console.log(results)
+
                     setInitialValuesMovies(results)
-                    
+
+                    setTimeout(()=> setLoading(false), 4000)
                 } catch (error) {
                     console.log(error)
                 }
             }
          getMovieById();
-            
-        } else if (id && type == "serie"){
+         
+        } else if (id !== "id" && type === "serie"){
             
             async function getSerieById() {
                 try {
+                    setLoading(true)
                     const {data} = await (axios.get(`http://localhost:3001/series/${id}`))
                     setInitialValuesSeries(data)
+                    setTimeout(()=> setLoading(false), 4000)
                 } catch (error) {
                     console.log(error)
                 }
@@ -124,32 +126,9 @@ const FormCreate = () => {
             getSerieById();
             
         }
+       
     }, [id, type])
    
-
-    const handleContentType = (type) =>{
-        setContentType(type);
-    }
-    async function handleFileUpload(event) {
-        const files = event.target.files;
-        const formData = new FormData();
-        formData.append('file', files[0]);
-        formData.append('upload_preset', 'imagesPF');
-        setLoading(true)
-        try {
-            const response = await axios.post(`https://api.cloudinary.com/v1_1/dzrp4xd2g/image/upload`, formData);
-            //AGREGAR EL USER DE CLOUD COMO VARIABLE DE ENTORNO
-            console.log(response)
-            const imageURL = response.data.secure_url;
-            console.log(imageURL)
-            setImage(imageURL)
-            setLoading(false)
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-    
-
 
     const FormSchemaMovies = yup.object().shape({
         // id: yup.number()
@@ -233,7 +212,7 @@ const FormCreate = () => {
             timezone: yup.string().required('Debe completar este campo'),
             }),
         }),
-        webChannel: yup.string().nullable(),
+        //webChannel: yup.string().nullable(),
         // externals: yup.object().shape({
         //     tvrage: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
         //     thetvdb: yup.number().typeError("Debe ingresar un número").required('Debes completar este campo'),
@@ -259,60 +238,43 @@ const FormCreate = () => {
     
   return (
     <>  
-   <div className="flex justify-center items-center mt-10">
-  <div className="bg-white p-4 rounded-md shadow-md text-dark font-poppins">
-    <label className="text-xl mb-2 text-moradito">Elija una opción:</label>
-    
-    <div className="flex items-center mb-2">
-      <input
-        type="radio"
-        id="movie"
-        name="content-type"
-        value="movie"
-        checked={contentType === "movie"}
-        onChange={() => handleContentType("movie")}
-        className="mr-2"
-      />
-      <label htmlFor="movie" className="text-lg font-poppins text-moradito">Película</label>
-    </div>
+           
+        {type === "movie" && (
+            <div>
+                {
+                    loading === false ?
+                    <Formik
 
-    <div className="flex items-center">
-      <input
-        type="radio"
-        id="serie"
-        name="content-type"
-        value="serie"
-        checked={contentType === "serie"}
-        onChange={() => handleContentType("serie")}
-        className="mr-2"
-      />
-      <label htmlFor="serie" className="text-lg font-poppins text-moradito">Serie</label>
-    </div>
-  </div>
-</div>
-
-
-        
-        {contentType === "movie" && (
-            
-            <Formik
             initialValues={initialValuesMovies}
             
             validationSchema={FormSchemaMovies}
 
-            onSubmit={(values, {resetForm}) =>{
-                                
+            onSubmit={async (values, {resetForm}) =>{
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', 'imagesPF');
+                
+                try {
+                    const response = await axios.post(`https://api.cloudinary.com/v1_1/dzrp4xd2g/image/upload`, formData);
+                    //AGREGAR EL USER DE CLOUD COMO VARIABLE DE ENTORNO
+                    
+                    const imageURL = response.data.secure_url;
+                    
+                    values.Poster_Link = imageURL
+                    
+                    
+                } catch (error) {
+                    console.log(error.message)
+                }
                   
                 if (buttonPressed === 'create') {
-                    console.log(image)
+                    
                     const genresAsString = values.Genre.join(', ');
                     const dataToSend = {
                         ...values,
                         Genre: genresAsString,
-                        Poster_Link: image
                       };
                     delete dataToSend.actorName;
-                     
                     async function postMovie() {
                         try {
                             await axios.post(`http://localhost:3001/movies`, dataToSend)
@@ -322,6 +284,7 @@ const FormCreate = () => {
                         }
                     }
                     postMovie();
+                    console.log(dataToSend)
 
                   } else if (buttonPressed === 'edit') {
                     const genresAsString = values.Genre.join(', ');
@@ -346,23 +309,22 @@ const FormCreate = () => {
                 setTimeout(()=> setSentForm(false), 4000)
             }}
         >
-            {({errors, values, setFieldValue}) => (
-                <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10">
-                    {console.log(errors)}
+            {({errors, values, setFieldValue, initialValues}) => (
+                
+                <div className="py-8 px-6">
+                    {console.log(initialValues)}
+                    
+                        <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10 ">
+                    
                 
                 {
-                    type==="movie" ?
+                    values.Poster_Link ?
                     
                     <div className="flex flex-col space-y-2">
-                    <label className="text-lg" htmlFor="Poster_Link">URL imagen</label>
-                    <Field
-                    className="p-2 border border-lila rounded-md"
-                    type="string" 
-                    id="Poster_Link" 
-                    name="Poster_Link" />
-                    <ErrorMessage name= "Poster_Link" component={()=>(
-                        <div className={styles.formError}>{errors.Poster_Link}</div>
-                    )}></ErrorMessage>
+                    <label className="text-lg" htmlFor="Poster_Link">Imagen</label>
+                    <button className= "border"onClick={() =>{setFieldValue('Poster_Link', '')}}>Cambiar</button>
+                    <img src={values.Poster_Link} style={{width: "250px"}}></img>
+                    
                     </div>
                     : 
                     <div className="flex flex-col">
@@ -371,9 +333,23 @@ const FormCreate = () => {
                     className="p-2  rounded-md ml-3 mb-2"
                     type="file" 
                     id="Poster_Link" 
+                    accept="image/*"
                     name="Poster_Link" 
-                    onChange={handleFileUpload}/>
-                    {loading? (<h3>Cargando imagen...</h3>) : (<img src={image} style={{width: "300px"}}></img>)}
+                    onChange={(event) => {
+                        const selectedFile = event.currentTarget.files[0];
+                  
+                        if (selectedFile) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            const urlImage = event.target.result;
+                            setFieldValue('Poster_Link', urlImage);
+                            setFile(selectedFile)
+                          };
+                          reader.readAsDataURL(selectedFile);
+                        } else {
+                          setFieldValue('Poster_Link', ''); // Si no se selecciona ningún archivo, establece el campo en vacío
+                        }
+                      }}/>
                     
                     <ErrorMessage name= "Poster_Link" component={()=>(
                         <div className={styles.formError}>{errors.Poster_Link}</div>
@@ -381,8 +357,8 @@ const FormCreate = () => {
                     </div>
                 }
                 
-                
-                <div className="flex flex-col">
+                <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+                <div className="flex flex-col ">
                     <label className="text-lg" htmlFor="Series_Title">Título de la película</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2"
@@ -407,7 +383,7 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Certificate">Certificado</label>
@@ -457,7 +433,7 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="IMDB_Rating">Rating de IMDB</label>
@@ -473,22 +449,8 @@ const FormCreate = () => {
                     </div>
                     : null
                 }
-                
-
-                <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="Overview">Descripción de IMDB</label>
-                    <Field 
-                    className="p-4 border border-lila rounded-md ml-3 mb-4"
-                    name="Overview"
-                    as="textarea"
-                    />
-                    
-                    <ErrorMessage name= "Overview" component={()=>(
-                        <div className={styles.formError}>{errors.Overview}</div>
-                    )}></ErrorMessage>
-                </div>
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Meta_score">Puntuación promedio</label>
                         <Field 
@@ -503,8 +465,22 @@ const FormCreate = () => {
                     </div>
                     : null
                 }
-                
 
+                </div>
+                <div className=" flex flex-col grid grid-cols-1 gap-6 mt-4 sm:grid-cols-1">
+                    <label className="text-lg" htmlFor="Overview">Descripción de IMDB</label>
+                    <Field 
+                    className=" p-4 border border-lila rounded-md ml-3 mb-4"
+                    name="Overview"
+                    as="textarea"
+                    />
+                    
+                    <ErrorMessage name= "Overview" component={()=>(
+                        <div className={styles.formError}>{errors.Overview}</div>
+                    )}></ErrorMessage>
+                </div>
+                <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">                
+                        
                 <div className="flex flex-col">
                 <label className="text-lg" htmlFor="Director">Director</label>
                     <Field 
@@ -518,7 +494,7 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Star1">Estrella 1</label>
                         <Field 
@@ -535,7 +511,7 @@ const FormCreate = () => {
                 }
                 
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Star2">Estrella 2</label>
                         <Field 
@@ -552,7 +528,7 @@ const FormCreate = () => {
                 }
                 
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Star3">Estrella 3</label>
                         <Field 
@@ -569,7 +545,7 @@ const FormCreate = () => {
                 }
                 
                 {
-                    type==="movie" ?
+                    id !=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="Star4">Esterlla 4</label>
                         <Field 
@@ -601,7 +577,7 @@ const FormCreate = () => {
                                 type="button"
                                 onClick={() => {
                                 arrayHelpers.push(values.actorName);
-                                actions.setFieldValue('actorName', ''); // Limpiar el campo actorName
+                                setFieldValue('actorName', ''); // Limpiar el campo actorName
                                 }}
                             >
                                 Agregar Actor
@@ -648,7 +624,7 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.Gross}</div>
                     )}></ErrorMessage>
                 </div>
-                {
+                {/* {
                     type==="movie" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="deshabilitar">Vista</label>
@@ -665,38 +641,62 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                     </div>
                     : null
-                }
+                } */}
                 
+                </div>
 
                 {sentForm && <p className="text-lg text-morado font-poppins">Formulario enviado con éxito!</p>}
                 <div className="flex space-x-4 mb-20">
-                    {type === "movie" ? 
+                    {id!=="id" ? 
                     <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila  py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
                     :
                     <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('create')}>Crear</button>
                     }
                 </div>           
-            </Form>
+                        </Form>
+                        
+                </div>
+                
             )}
 
-        </Formik>
+                </Formik>
+                    :
+                    <div>Loading...</div>
+                }
+            </div>
+            
+        
         )}
 
 
-        {contentType === "serie" && (
-           
-            <Formik
+        {type === "serie" && (
+           <div>
+            {
+                loading === false ?
+                <Formik
             initialValues={initialValuesSeries}
             
             validationSchema={FormSchemaSeries}
 
-            onSubmit={(values, {resetForm}) =>{
+            onSubmit={async (values, {resetForm}) =>{
                 
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', 'imagesPF');
+                
+                try {
+                    const response = await axios.post(`https://api.cloudinary.com/v1_1/dzrp4xd2g/image/upload`, formData);
+                    //AGREGAR EL USER DE CLOUD COMO VARIABLE DE ENTORNO
+                    
+                    const imageURL = response.data.secure_url;
+                    
+                    values.image.original = imageURL
+                    
+                    
+                } catch (error) {
+                    console.log(error.message)
+                }
                 if (buttonPressed === 'create') {
-                    const dataToSend = {
-                        ...values,
-                        url: image
-                      };
                     
                     async function postSerie() {
                         try {
@@ -710,7 +710,7 @@ const FormCreate = () => {
                     
                     
                   } else if (buttonPressed === 'edit') {
-                    console.log(values)
+                   
                     async function putSerie() {
                         try {
                             await axios.put(`http://localhost:3001/series/${id}`, values)
@@ -728,40 +728,51 @@ const FormCreate = () => {
                 setTimeout(()=> setSentForm(false), 4000)
             }}
         >
-            {({errors}) => (
-                <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10">
-                    {console.log(errors)}
-
+            {({errors, values, setFieldValue}) => (
+                <div className="py-8 px-6 color-black">
+                <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10 ">
                 
-                {
-                    type === 'serie' ?
-                    <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="url">URL imagen</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2"
-                    type="text" 
-                    id="url" 
-                    name="url" />
-                    <ErrorMessage name= "url" component={()=>(
-                        <div className={styles.formError}>{errors.url}</div>
-                    )}></ErrorMessage>
+                    {
+                    values.image.original ?
+                    
+                    <div className="flex flex-col space-y-2">
+                    <label className="text-lg" htmlFor="image.original">Imagen</label>
+                    <button className= "border" onClick={() =>{setFieldValue('image.original', '')}}>Cambiar</button>
+                    <img src={values.image.original} style={{width: "200px"}}></img>
+                    
                     </div>
                     : 
                     <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="url">Carga una imagen</label>
+                    <label className="text-lg" htmlFor="image.original">Carga una imagen</label>
                     <Field 
                     className="p-2  rounded-md ml-3 mb-2"
                     type="file" 
-                    id="url" 
-                    name="url" 
-                    onChange={handleFileUpload}/>
-                    {loading? (<h3>Cargando imagen...</h3>) : (<img src={image} style={{width: "300px"}}></img>)}
+                    id="image.original" 
+                    accept="image/*"
+                    name="image.original" 
+                    onChange={(event) => {
+                        const selectedFile = event.currentTarget.files[0];
+                  
+                        if (selectedFile) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            const urlImage = event.target.result;
+                            setFieldValue('image.original', urlImage);
+                            setFile(selectedFile)
+                          };
+                          reader.readAsDataURL(selectedFile);
+                        } else {
+                          setFieldValue('image.original', ''); 
+                        }
+                      }}/>
                     
-                    <ErrorMessage name= "url" component={()=>(
-                        <div className={styles.formError}>{errors.url}</div>
+                    <ErrorMessage name= "image.original" component={()=>(
+                        <div className={styles.formError}>{errors.image.original}</div>
                     )}></ErrorMessage>
                     </div>
                 }
+                
+                <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-3"> 
                    
                 <div className="flex flex-col">
                     <label className="text-lg" htmlFor="name">Título de la serie</label>
@@ -797,24 +808,7 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.language}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className="flex flex-col">
-                <label className="text-lg" htmlFor="genres">Géneros</label>
-                    <Field
-                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    as="select" 
-                    id="genres" 
-                    name="genres" 
-                    multiple={true} >
-                        {
-                        genresSerie.map(a=>  <option key={a} value={a}>{a}</option>)
-                        }
-                    </Field> 
-                                              
-
-                    <ErrorMessage name= "genres" component={()=>(
-                        <div className={styles.formError}>{errors.genres}</div>
-                    )}></ErrorMessage>
-                </div>
+                
 
                 <div className="flex flex-col">
                     <label className="text-lg" htmlFor="status">Estado</label>
@@ -852,29 +846,24 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.premiered}</div>
                     )}></ErrorMessage>
                 </div>
-                <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="officialSite">Sitio oficial</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    type="text" 
-                    id="officialSite" 
-                    name="officialSite" />
-                    
-                    <ErrorMessage name= "officialSite" component={()=>(
-                        <div className={styles.formError}>{errors.officialSite}</div>
-                    )}></ErrorMessage>
                 </div>
-
+                <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
                 <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="schedule.time">Hora de transmisión</label>
-                    <Field 
+                <label className="text-lg" htmlFor="genres">Géneros</label>
+                    <Field
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    type="text" 
-                    id="schedule.time" 
-                    name="schedule.time" />
-                    
-                    <ErrorMessage name= "schedule.time" component={()=>(
-                        <div className={styles.formError}>{errors.schedule.time}</div>
+                    as="select" 
+                    id="genres" 
+                    name="genres" 
+                    multiple={true} >
+                        {
+                        genresSerie.map(a=>  <option key={a} value={a}>{a}</option>)
+                        }
+                    </Field> 
+                                              
+
+                    <ErrorMessage name= "genres" component={()=>(
+                        <div className={styles.formError}>{errors.genres}</div>
                     )}></ErrorMessage>
                 </div>
                 <div className="flex flex-col">
@@ -893,6 +882,35 @@ const FormCreate = () => {
                         <div className={styles.formError}>{errors.schedule.days}</div>
                     )}></ErrorMessage>
                 </div>
+
+
+                </div>
+                <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-3">
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="schedule.time">Hora de transmisión</label>
+                    <Field 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
+                    type="text" 
+                    id="schedule.time" 
+                    name="schedule.time" />
+                    
+                    <ErrorMessage name= "schedule.time" component={()=>(
+                        <div className={styles.formError}>{errors.schedule.time}</div>
+                    )}></ErrorMessage>
+                </div>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="officialSite">Sitio oficial de transmisión</label>
+                    <Field 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
+                    type="text" 
+                    id="officialSite" 
+                    name="officialSite" />
+                    
+                    <ErrorMessage name= "officialSite" component={()=>(
+                        <div className={styles.formError}>{errors.officialSite}</div>
+                    )}></ErrorMessage>
+                </div>
+                
                 <div className="flex flex-col">
                     <label className="text-lg" htmlFor="rating.average">Promedio de calificación</label>
                     <Field 
@@ -983,19 +1001,19 @@ const FormCreate = () => {
                     )}></ErrorMessage>
                 </div>
                 <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="webChannel">Canal web</label>
+                    <label className="text-lg" htmlFor="webChannel.name">Canal web</label>
                     <Field 
                     className="p-2 border border-lila rounded-md ml-3 mb-2" 
                     type="text" 
-                    id="webChannel" 
-                    name="webChannel" />
+                    id="webChannel.name" 
+                    name="webChannel.name" />
                     
-                    <ErrorMessage name= "webChannel" component={()=>(
-                        <div className={styles.formError}>{errors.webChannel}</div>
+                    <ErrorMessage name= "webChannel.name" component={()=>(
+                        <div className={styles.formError}>{errors.webChannel.name}</div>
                     )}></ErrorMessage>
                 </div>
                 {
-                    type==="serie" ?
+                    id!=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="externals.tvrage">TVRage</label>
                     <Field 
@@ -1011,7 +1029,7 @@ const FormCreate = () => {
                     : null
                 }
                 {
-                    type==="serie" ?
+                    id!=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="externals.thetvdb">TheTVDB</label>
                     <Field 
@@ -1027,7 +1045,7 @@ const FormCreate = () => {
                     : null
                 }
                 {
-                    type==="serie" ?
+                    id!=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="externals.imdb">IMDb</label>
                     <Field 
@@ -1042,53 +1060,10 @@ const FormCreate = () => {
                     </div>
                     : null
                 }
-                {
-                    type==="serie" ?
-                    <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="image.medium">Imagen Media</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    type="text" 
-                    id="image.medium" 
-                    name="image.medium" />
-                    
-                    <ErrorMessage name= "image.medium" component={()=>(
-                        <div className={styles.formError}>{errors.image.medium}</div>
-                    )}></ErrorMessage>
-                    </div>
-                    : null
-                }
-                {
-                    type==="serie" ?
-                    <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="image.original">Imagen Original</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    type="text" 
-                    id="image.original" 
-                    name="image.original" />
-                    
-                    <ErrorMessage name= "image.original" component={()=>(
-                        <div className={styles.formError}>{errors.image.original}</div>
-                    )}></ErrorMessage>
-                    </div>
-                    : null
-                }
                 
                 
-                <div className="flex flex-col">
-                    <label className="text-lg" htmlFor="summary">Descripción de IMDB</label>
-                    <Field 
-                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
-                    name="summary"
-                    as="textarea" 
-                    placeholder="Resumen..." 
-                     />
-                    
-                    <ErrorMessage name= "summary" component={()=>(
-                        <div className={styles.formError}>{errors.summary}</div>
-                    )}></ErrorMessage>
-                </div>
+                
+                
                 <div className="flex flex-col">
                     <label className="text-lg" htmlFor="updated">Valor de actualización</label>
                     <Field 
@@ -1103,7 +1078,7 @@ const FormCreate = () => {
                 </div>
                 
                 {
-                    type==="serie" ?
+                    id!=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="_links.self.href">Enlace self</label>
                     <Field 
@@ -1119,7 +1094,7 @@ const FormCreate = () => {
                     : null
                 }
                 {
-                    type==="serie" ?
+                    id!=="id" ?
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="_links.previousepisode.href">Enlace episodio previo</label>
                     <Field 
@@ -1136,7 +1111,7 @@ const FormCreate = () => {
                 }
                 
                 {
-                    type==="serie" ?
+                    id!=="id" ?
                     
                     <div className="flex flex-col">
                     <label className="text-lg" htmlFor="deshabilitar">Vista</label>
@@ -1155,19 +1130,38 @@ const FormCreate = () => {
                     : null
                 }
                 
-                
-                {sentForm && <p className={styles.formSucces}>Formulario enviado con éxito!</p>}
-                <div className="flex space-x-4 mb-20">
-                {type === "serie" ? 
+                </div>
+                <div className="flex flex-col">
+                    <label className="text-lg" htmlFor="summary">Descripción de IMDB</label>
+                    <Field 
+                    className="p-2 border border-lila rounded-md ml-3 mb-2" 
+                    name="summary"
+                    as="textarea" 
+                    placeholder="Resumen..." 
+                     />
+                    
+                    <ErrorMessage name= "summary" component={()=>(
+                        <div className={styles.formError}>{errors.summary}</div>
+                    )}></ErrorMessage>
+                </div>
+                {sentForm && <p className="text-lg text-morado font-poppins">Formulario enviado con éxito!</p>}
+                <div className="col-span-3 flex justify-center">
+                {id!=="id" ? 
                     <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila  py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('edit')}>Editar</button>
                     :
                     <button className="text-lg font-poppins bg-moradito text-white hover:bg-lila py-2 px-4 rounded-xl" type='submit' onClick={() => setButtonPressed('create')}>Crear</button>
                     }
                 </div>
             </Form>
+                </div>
             )}
 
-        </Formik>
+             </Formik>
+                :
+                <div>Loading...</div>
+            }
+           </div>
+            
         )}
         
     </>
