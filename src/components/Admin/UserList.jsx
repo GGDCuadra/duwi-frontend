@@ -12,7 +12,7 @@ function UserList() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    axios.get('/users')
+    axios.get('http://localhost:3001/users')
       .then(response => {
         setUsers(response.data);
       })
@@ -20,50 +20,12 @@ function UserList() {
         console.error('Error al obtener la lista de usuarios:', error);
       });
   }, []);
-  const handleToggleHabilitar = (user) => {
-    const confirmationMessage = `¿Está seguro de habilitar al usuario "${user.username}"?`;
-  
-    if (window.confirm(confirmationMessage)) {
-      // Realiza una solicitud al backend para habilitar al usuario
-      axios.put(`/users/enable/${user._id}`)
-        .then(response => {
-          // Si la solicitud se completa con éxito, actualiza el estado local
-          const updatedUsers = users.map(u =>
-            u._id === user._id
-              ? { ...u, disabled: null }
-              : u
-          );
-  
-          setUsers(updatedUsers);
-        })
-        .catch(error => {
-          console.error(`Error al habilitar al usuario:`, error);
-        });
-    }
-  };
-  
-  const handleToggleDeshabilitar = (user) => {
-    const confirmationMessage = `¿Está seguro de deshabilitar al usuario "${user.username}"?`;
-  
-    if (window.confirm(confirmationMessage)) {
-      // Realiza una solicitud al backend para deshabilitar al usuario
-      axios.put(`/users/disable/${user._id}`)
-        .then(response => {
-          // Si la solicitud se completa con éxito, actualiza el estado local
-          const updatedUsers = users.map(u =>
-            u._id === user._id
-              ? { ...u, disabled: 'Disabled' }
-              : u
-          );
-  
-          setUsers(updatedUsers);
-        })
-        .catch(error => {
-          console.error(`Error al deshabilitar al usuario:`, error);
-        });
-    }
-  };
-  
+
+
+  const filteredUsers = users.filter(user => {
+    return user.username && user.username.toLowerCase().includes(search.toLowerCase());
+  });
+
   const handleSort = (property) => {
     if (property === sortBy) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -172,7 +134,7 @@ function UserList() {
             onChange={handleSearch}
           />
           <button
-            className="bg-blue-200 font-bold border border-gray-400 rounded-md p-2 rounded-md hover:bg-gray-400"
+            className="bg-blue-200 font-bold border border-gray-400 p-2 rounded-md hover:bg-gray-400"
             onClick={handleAddClick}
           >
             Agregar Usuario
