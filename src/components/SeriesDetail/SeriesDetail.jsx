@@ -115,12 +115,12 @@ const [isWatching, setIsWatching] = useState(false);
             >
               {isWatching ? "Viendo" : "Ver más tarde"}
             </button>
-            <Link
+            {/* <Link
               to={`/formCreateEdit/${type}/${_id}`}
               className="bg-moradito hover-bg-lila text-white rounded px-4 py-2 text-l font-poppins"
             >
               Editar
-            </Link>
+            </Link> */}
           </div>
         </div>
         <div className="text-center">
