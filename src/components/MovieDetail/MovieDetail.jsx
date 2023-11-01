@@ -30,7 +30,7 @@ function MovieDetail() {
   const getSeriesByObjectId = async () => {
     try {
       const id = _id
-      const { data } = await axios.get(`http://localhost:3001/movies/byObjectId/${_id}`);
+      const { data } = await axios.get(`/movies/byObjectId/${_id}`);
       setMovieFromDb(data);
     } catch (error) {
       console.error('Error al obtener detalles de la serie:', error);
@@ -68,7 +68,7 @@ function MovieDetail() {
       console.log(dataSeries);
       // Realizar una solicitud POST a http://localhost:3001/favorites para guardar el favorito
       const { data } = await axios.post(
-        "http://localhost:3001/favorites/movies",
+        "/favorites/movies",
         dataSeries
       );
       console.log(data);
@@ -88,7 +88,7 @@ function MovieDetail() {
       try {
         // Realizar una solicitud POST a http://localhost:3001/moviesvistas para agregar a "películas que estoy viendo"
         const { data } = await axios.post(
-          "http://localhost:3001/moviesvistas",
+          "/moviesvistas",
           dataMovie
         );
         console.log(data);
