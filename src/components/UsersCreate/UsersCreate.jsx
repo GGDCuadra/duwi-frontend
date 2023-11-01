@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-function UserRegistration() {
+
+
+
+function CrearUsuarioForm () {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+
 
   const handleRegister = async () => {
     if (!username || !email || !password) {
@@ -25,6 +31,8 @@ function UserRegistration() {
 
       if (response.status === 201) {
         setMessage('Usuario registrado con éxito');
+        navigate('/admin/userlist');
+   
       } else {
         setMessage('Error al registrar el usuario');
       }
@@ -70,4 +78,4 @@ function UserRegistration() {
   );
 }
 
-export default UserRegistration;
+export default CrearUsuarioForm ;
