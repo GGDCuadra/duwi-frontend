@@ -1,93 +1,63 @@
-import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { NavLink, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import Donaciones from './AllDonations';
 import UserList from './UserList';
-import Peliculas from './MoviesAdmin'; 
+import Peliculas from './MoviesAdmin';
 import SeriesList from './SeriesList';
 
+const NavItem = ({ to, label }) => {
+  const { pathname } = useLocation();
+  const isActive = pathname.includes(to);
+
+  return (
+    <li className="mb-5">
+      <NavLink
+        to={to}
+        className={`text-clarito hover:bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300 ${
+          isActive ? 'bg-lila' : ''
+        }`}
+      >
+        {label}
+      </NavLink>
+    </li>
+  );
+};
+
+const Sidebar = () => {
+  return (
+    <nav className="bg-morado w-64 py-8 px-4 flex flex-col font-poppins">
+      <div>
+        <ul>
+          <NavItem to="donaciones" label="Ver Donaciones" />
+          <NavItem to="userlist" label="Lista de Usuarios" />
+          <NavItem to="peliculas" label="Lista de Películas" />
+          <NavItem to="series" label="Lista de Series" />
+        </ul>
+      </div>
+    </nav>
+  );
+};
+
+const Header = () => {
+  return (
+    <div className="w-full bg-lila text-clarito py-8 text-2xl font-semibold text-center font-poppins dark:bg-morado">
+      Panel de Administrador
+    </div>
+  );
+};
+
 const DashboardAdmin = () => {
-  const [showUserList, setShowUserList] = useState(false);
-  const [showDonations, setShowDonations] = useState(false);
-  const [showPeliculas, setShowPeliculas] = useState(false);
-  const [activeComponent, setActiveComponent] = useState(null);
-  const [showSeriesList, setShowSeriesList] = useState(false)
-
-  const toggleDonations = () => {
-    setActiveComponent('donations');
-    setShowDonations(!showDonations);
-    setShowUserList(false);
-    setShowPeliculas(false);
-  };
-
-  const toggleUserList = () => {
-    setActiveComponent('userList');
-    setShowUserList(!showUserList);
-    setShowDonations(false); // Cerrar donaciones si se abre la lista de usuarios
-  };
-
-  const toggleSeriesList = () => {
-    setShowSeriesList(!showSeriesList);
-    setShowUserList(false);
-    setShowPeliculas(false);
-  }
-  const togglePeliculas = () => {
-    setActiveComponent('peliculas');
-    setShowPeliculas(!showPeliculas);
-    setShowDonations(false);
-    setShowUserList(false);
-  };
-
-  
   return (
     <div className="min-h-screen flex">
-      <nav className="bg-morado w-64 py-8 px-4">
-        <ul>
-        <li className={`mb-5 ${activeComponent === 'donations' ? 'bg-lila' : ''}`}>
-          <button
-            onClick={toggleDonations}
-            className="text-clarito hover:bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300"
-          >
-            Ver Donaciones
-          </button>
-        </li>
-        <li className={`mb-5 ${activeComponent === 'userList' ? 'bg-lila' : ''}`}>
-          <button
-            onClick={toggleUserList}
-            className="text-clarito hover:bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300"
-          >
-            Lista de Usuarios
-          </button>
-        </li>
-        <li className={`mb-5 ${activeComponent === 'peliculas' ? 'bg-lila' : ''}`}>
-          <button
-            onClick={togglePeliculas}
-            className="text-clarito hover-bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300"
-          >
-            Lista de Películas
-          </button>
-        </li>
-        <li className={`mb-5 ${activeComponent === 'peliculas' ? 'bg-lila' : ''}`}>
-          <button
-            onClick={toggleSeriesList}
-            className="text-clarito hover-bg-morado hover:text-white hover:font-bold block p-2 rounded transition duration-300"
-          >
-            Lista de Series
-          </button>
-        </li>
-        </ul>
-      </nav>
-
-      <div className="w-full  flex flex-col">
-        <div className="bg-lila text-black py-8 text-2xl font-bold text-center mb-1">Panel de Administrador</div>
-
-        <Outlet />
-        <div className="w-full p-3">
-          {showUserList && <UserList />}
-          {showDonations && <Donaciones />}
-          {showPeliculas && <Peliculas />}
-          {showSeriesList && <SeriesList />}
-
-          
+      <Sidebar />
+      <div className="w-full flex flex-col">
+        <Header />
+        <div className="flex-grow">
+          <Routes>
+            <Route path="donaciones" element={<Donaciones />} />
+            <Route path="userlist" element={<UserList />} />
+            <Route path="peliculas" element={<Peliculas />} />
+            <Route path="series" element={<SeriesList />} />
+          </Routes>
         </div>
       </div>
     </div>

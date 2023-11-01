@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Footer from '../Footer/Footer'
 
@@ -54,11 +54,11 @@ const NewReleases = () => {
   return (
     <div className="p-4">
       {selectedItem && (
-        <div className="p-2 border border-gray-300 rounded-lg shadow-lg font-poppins mb-3">
-          <h2 className="text-2xl font-bold text-center text-moradito mt-5">
+        <div className="p-2 border border-lila rounded-lg shadow-lg font-poppins mb-3">
+          <h2 className="text-2xl font-bold text-center text-moradito mt-5 dark:text-lila">
             {selectedItem.title || selectedItem.name}
           </h2>
-          <p className="text-gray-700 align-middle mt-10 text-center">{selectedItem.overview}</p>
+          <p className="text-moradito align-middle mt-10 text-center dark:text-clarito">{selectedItem.overview}</p>
           {selectedItem.video && (
             <div className="mt-4 font-poppins">
               <iframe
@@ -82,7 +82,7 @@ const NewReleases = () => {
         </div>
       )}
       <div className="mt-4">
-        <h2 className="text-2xl font-poppins font-semibold text-moradito mb-10">Películas de estreno:</h2>
+        <h2 className="text-2xl font-poppins font-semibold text-moradito mb-10 dark:text-lila">Películas de estreno:</h2>
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
           {films.map((movie, index) => (
             <li
@@ -96,13 +96,13 @@ const NewReleases = () => {
                 alt={movie.title}
                 className="w-full rounded-2xl"
               />
-              <h3 className="text-lg font-semibold p-2 font-poppins text-center text-moradito">{movie.title}</h3>
+              <h3 className="text-lg font-semibold p-2 font-poppins text-center text-moradito dark:text-lila">{movie.title}</h3>
             </li>
           ))}
         </ul>
       </div>
-      <div className="mt-4">
-        <h2 className="text-2xl font-poppins font-semibold text-moradito mb-10 mt-10">Series de estreno:</h2>
+      <div className="mt-4 mb-8">
+        <h2 className="text-2xl font-poppins font-semibold text-moradito mb-10 mt-10 dark:text-lila">Series de estreno:</h2>
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
           {series.map((serie, index) => (
             <li
@@ -115,7 +115,7 @@ const NewReleases = () => {
                 alt={serie.name}
                 className="w-full mb-2 rounded-xl"
               />
-              <h3 className="text-lg font-semibold font-poppins text-moradito p-2 text-center">{serie.name}</h3>
+              <h3 className="text-lg font-semibold font-poppins text-moradito p-2 text-center dark:text-lila">{serie.name}</h3>
             </li>
           ))}
         </ul>
