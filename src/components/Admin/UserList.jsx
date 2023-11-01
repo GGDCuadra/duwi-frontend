@@ -10,17 +10,30 @@ function UserList() {
   const [sortBy, setSortBy] = useState(null);
   const [sortOrder, setSortOrder] = useState('asc');
   const [search, setSearch] = useState('');
+  const [userRoles, setUserRoles] = useState({});
 
   useEffect(() => {
     axios.get('http://localhost:3001/users')
       .then(response => {
         setUsers(response.data);
+        const roles = {};
+      response.data.forEach(user => {
+        roles[user._id] = user.rol || 'Usuario';
+      });
+      setUserRoles(roles);
       })
       .catch(error => {
         console.error('Error al obtener la lista de usuarios:', error);
       });
-  }, []);
 
+      axios.get('http://localhost:3001/userRoles')
+      .then(response => {
+        setUserRoles(response.data);
+      })
+      .catch(error => {
+        console.error('Error al obtener los roles de usuario:', error);
+      });
+  }, []);
 
   const filteredUsers = users.filter(user => {
     return user.username && user.username.toLowerCase().includes(search.toLowerCase());
@@ -113,8 +126,63 @@ function UserList() {
       }
     });
   };
+
   const handleAddClick = () => {
     
+  };
+
+  // const handleUserRoleChange = (user, newRole) => {
+  //   const confirmationMessage = `¿Está seguro de cambiar el rol de "${user.username}" a "${newRole}"?`;
+  
+  //   Swal.fire({
+  //     title: confirmationMessage,
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonText: 'Sí',
+  //     cancelButtonText: 'Cancelar',
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       const roleToSend = newRole === 'Admin' ? 'Admin' : 'Usuario';
+  //       axios.put(`http://localhost:3001/updateRole/${user._id}`, { rol: roleToSend })
+  //         .then(response => {
+  //           setUserRoles(prevRoles => ({
+  //             ...prevRoles,
+  //             [user._id]: roleToSend
+  //           }));
+  //         })
+  //         .catch(error => {
+  //           console.error('Error al actualizar el rol del usuario:', error);
+  //         });
+  //     }
+  //   });
+  // };
+  const handleUserRoleChange = (user, newRole) => {
+    const confirmationMessage = `¿Está seguro de cambiar el rol de "${user.username}" a "${newRole}"?`;
+  
+    Swal.fire({
+      title: confirmationMessage,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Determine the role to send to the server
+        const roleToSend = newRole === 'Admin' ? 'Admin' : 'Usuario';
+  
+        axios.put(`http://localhost:3001/updateRole/${user._id}`, { rol: roleToSend })
+          .then(response => {
+            // Update the userRoles state
+            setUserRoles(prevRoles => ({
+              ...prevRoles,
+              [user._id]: roleToSend
+            }));
+          })
+          .catch(error => {
+            console.error('Error al actualizar el rol del usuario:', error);
+          });
+      }
+    });
   };
 
   const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
@@ -173,7 +241,8 @@ function UserList() {
                     )
                   ) : null}
                 </th>
-                <th className="px-2 py-2 font-poppins">Deshabilitar</th>
+                <th className="px-2 py-2">Deshabilitar</th>
+                <th className="px-2 py-2">Rol</th>
               </tr>
             </thead>
   
@@ -212,6 +281,24 @@ function UserList() {
                         Habilitar
                       </button>
                    </div>
+                  </td>
+                  <td className="text-center">
+                    
+                  <select
+                    value={userRoles[user._id]}
+                    onChange={(e) => handleUserRoleChange(user, e.target.value)}
+                    style={{
+                      width: '50%',
+                      padding: '5px',
+                      borderRadius: '5px',
+                      border: '2px solid #ccc',
+                      backgroundColor: '#f0f0f0',
+                    }}
+                  >
+                    <option value="Admin">Admin</option>
+                    <option value="Usuario">Usuario</option>
+                  </select>
+
                   </td>
                   </tr>
                 ))}
