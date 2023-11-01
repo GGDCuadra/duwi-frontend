@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
-import { FaMoon } from 'react-icons/fa';
+import { FaMoon, FaSun } from 'react-icons/fa';
 import logo from '../../assets/logoduwi.png';
 import SearchBar from '../SearchBar/SearchBar';
 import { useAuth0 } from "@auth0/auth0-react";
 import Swal from 'sweetalert2';
+import {useEffect, useState} from 'react';
 
 const NAVIGATION_LINKS = [
   { path: '/Home', label: 'Inicio' },
@@ -14,6 +15,7 @@ const NAVIGATION_LINKS = [
 ];
 
 const Navbar = () => {
+  const [darkMode, setDarkMode]= useState(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
   const handleLogout = async () => {
@@ -35,8 +37,16 @@ const Navbar = () => {
     }
   };
 
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  },[darkMode])
+
   return (
-    <nav className="bg-fondito p-4 pr-20 pl-10 flex justify-between items-center h-30">
+    <nav className="bg-fondito p-4 pr-20 pl-10 flex justify-between items-center h-30 dark:bg-slate-400">
       <div className="text-2xl font-bold text-oscuro">
         <img src={logo} alt="Logo" className="w-50 h-12 mt-2 ml-2" />
       </div>
@@ -60,9 +70,13 @@ const Navbar = () => {
             </Link>
           </div>
         )}
-        <div className="ml-4 text-gray-800 hover:text-moradito">
-          <FaMoon />
-        </div>
+        <button type="button" onClick={() => setDarkMode(!darkMode)} className='ml-4 text-gray-800 hover:text-moradito'>
+          {darkMode ? (
+            <FaMoon />
+          ):( 
+            <FaSun />
+          )}  
+        </button>
         <button className="ml-4 text-gray-800 hover:text-moradito font-poppins" onClick={handleLogout}>
           {isAuthenticated ? "Cerrar Sesión" : "Iniciar Sesión"}
         </button>
