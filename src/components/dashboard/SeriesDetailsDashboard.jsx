@@ -26,7 +26,7 @@ function SeriesDetailsDashboard({ seriesId }) {
     const userId = userInfo._id;
 
     try {
-     const response= await axios.delete(`http://localhost:3001/favorites/${userId}/${seriesId}`);
+     const response= await axios.delete(`/favorites/${userId}/${seriesId}`);
     } catch (error) {
       console.error('Error al eliminar película de favoritos:', error);
     }
@@ -41,8 +41,8 @@ function SeriesDetailsDashboard({ seriesId }) {
         />
       </div>
       <div className="mt-2">
-        <h3 className="text-lg font-medium font-poppins">{seriesDetails.name}</h3>
-        <button onClick={handleRemoveFromFavorites}>Eliminar de Favoritos</button>
+        <h3 className="text-lg font-medium font-poppins text-moradito dark:text-clarito">{seriesDetails.name}</h3>
+        <button className="text-lila hover:text-moradito" onClick={handleRemoveFromFavorites}>Eliminar de Favoritos</button>
       </div>
     </div>
   ) : null;

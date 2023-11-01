@@ -18,7 +18,8 @@ import AboutUs from "./components/AboutUs/AboutUs";
 import NewReleases from "./components/NewReleases/NewReleases";
 import DashboardAdmin from './components/Admin/DasboardAdmin'
 import Completadas from './components/dashboard/Completadas';
-
+import axios from 'axios'
+axios.defaults.baseURL= 'https://duwi.onrender.com'
 
 
 function App() {

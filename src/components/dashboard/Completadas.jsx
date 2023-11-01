@@ -52,9 +52,9 @@ function Completadas() {
   return (
     <div className="completadas">
       <div className="peliculas-vistas">
-        <h2 className="font-poppins text-xl font-bold text-moradito mb-3 text-center">Películas Completadas</h2>
-        <ul div className="flex flex-wrap-10">
-          {moviesVistas.length === 0 && <p>No tienes ninguna película completada</p>}
+        <h2 className="font-poppins text-xl font-bold text-moradito mb-3 text-center dark:text-lila">Películas Completadas</h2>
+        <div className="flex flex-wrap-10">
+          {moviesVistas.length === 0 && <p className="font-poppins text-moradito text-center mb-5 dark:text-clarito">No tienes ninguna película completada</p>}
           {moviesVistas.map((movie) => {
             if (movie.completada === true) {
               return (
@@ -63,12 +63,12 @@ function Completadas() {
             }
             return null; // Si no está completado, no se renderiza
           })}
-        </ul>
+        </div>
       </div>
       <div className="series-vistas">
-        <h2 className="font-poppins text-xl font-bold text-moradito mb-3 text-center">Series Completadas</h2>
-        <ul div className="flex flex-wrap-10">
-          {seriesVistas.length === 0 && <p>No tienes ninguna serie completada</p>}
+        <h2 className="font-poppins text-xl font-bold text-moradito mb-3 text-center dark:text-lila">Series Completadas</h2>
+        <div className="flex flex-wrap-10">
+          {seriesVistas.length === 0 && <p className="font-poppins text-moradito text-center mb-5 dark:text-clarito">No tienes ninguna serie completada</p>}
           {seriesVistas.map((serie) => {
             if (serie.completada === true) {
               return (
@@ -77,7 +77,7 @@ function Completadas() {
             }
             return null; // Si no está completado, no se renderiza
           })}
-        </ul>
+        </div>
       </div>
     </div>
   );

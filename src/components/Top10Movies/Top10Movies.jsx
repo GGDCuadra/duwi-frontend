@@ -15,7 +15,7 @@ function Top10Movies() {
   }, [dispatch]);
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 5,
@@ -27,7 +27,7 @@ function Top10Movies() {
           slidesToShow: 3,
           slidesToScroll: 3,
           infinite: true,
-          dots: true,
+          dots: false,
         },
       },
       {
@@ -50,7 +50,7 @@ function Top10Movies() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4 font-poppins text-moradito">Top 10 películas</h2>
+      <h2 className="text-2xl font-bold mb-4 font-poppins text-moradito dark:text-lila">Top 10 películas</h2>
       <Slider {...settings}>
         {topMovies.map((movie) => (
           <MovieCard

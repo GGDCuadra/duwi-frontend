@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: ["class"],
   debugScreens: {
     ignore: ["dark"]
   },
@@ -18,10 +19,9 @@ export default {
         lila: "#A29EDA",
         moradito: "#5F5985",
         morado: "#27243A",
-        oscuro: "#0A0712",
-        search: "#E5E4E4"
+        oscuro: "#0B0712",
+        search: "#E5E4E4" 
       }
     },
   },
-  plugins: [require("tailwindcss-debug-screens")],
-}
+}        
