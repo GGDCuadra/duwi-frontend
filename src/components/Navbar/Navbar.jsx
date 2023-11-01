@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import logo from '../../assets/logoduwi.png';
@@ -6,7 +6,6 @@ import SearchBar from '../SearchBar/SearchBar';
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import {useEffect, useState} from 'react';
 
 const NAVIGATION_LINKS = [
   { path: '/Home', label: 'Inicio' },
@@ -62,15 +61,15 @@ const Navbar = () => {
   },[darkMode])
 
   return (
-    <nav className="bg-fondito p-4 pr-20 pl-10 flex justify-between items-center h-30 dark:bg-slate-400">
-      <div className="text-2xl font-bold text-oscuro">
+    <nav className="bg-fondito p-4 pr-20 pl-10 flex justify-between items-center h-30 dark:bg-oscuro">
+      <div className="text-2xl font-bold text-oscuro dark:text-clarito">
         <img src={logo} alt="Logo" className="w-50 h-12 mt-2 ml-2" />
       </div>
       <div className="flex-1 flex justify-end mt-2 items-center">
         <ul className="flex space-x-10 pr-4 pl-4 justify-center mx-auto">
           {NAVIGATION_LINKS.map((link) => (
             <li key={link.path}>
-              <Link to={link.path} className="text-gray-800 hover:text-moradito font-poppins">
+              <Link to={link.path} className="text-oscuro hover:text-oscuro font-poppins dark:text-clarito">
                 {link.label}
               </Link>
             </li>
@@ -86,20 +85,20 @@ const Navbar = () => {
             </Link>
           </div>
         )}
-        <button type="button" onClick={() => setDarkMode(!darkMode)} className='ml-4 text-gray-800 hover:text-moradito'>
+        <button type="button" onClick={() => setDarkMode(!darkMode)} className='ml-4 text-oscuro hover:text-lila dark:text-clarito'>
           {darkMode ? (
             <FaMoon />
           ):( 
             <FaSun />
           )}  
         </button>
-        <button className="ml-4 text-gray-800 hover:text-moradito font-poppins" onClick={handleLogout}>
+        <button className="ml-4 text-oscuro hover:text-lila font-poppins dark:text-clarito" onClick={handleLogout}>
           {isAuthenticated ? "Cerrar Sesión" : "Iniciar Sesión"}
         </button>
         {
           isAuthenticated && userInfo && userInfo.rol === 'Admin' && (
               <Link to='/admin'>
-                <button className="ml-4 bg-lila py-2 px-6 text-white font-poppins rounded-md
+                <button className="ml-4 bg-lila py-2 px-6 text-fondito font-poppins rounded-md
                 tracking-wide uppercase border-none shadow-lg focus:outline-none hover:bg-morado hover:rounded-lg hover:
                 transform duration-200 ease-in-out cursor-pointer">Admin</button>
               </Link>
