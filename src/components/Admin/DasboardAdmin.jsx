@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import Donaciones from './AllDonations';
 import UserList from './UserList';
@@ -25,7 +24,7 @@ const NavItem = ({ to, label }) => {
 
 const Sidebar = () => {
   return (
-    <nav className="bg-morado w-64 py-8 px-4 flex flex-col">
+    <nav className="bg-morado w-64 py-8 px-4 flex flex-col font-poppins">
       <div>
         <ul>
           <NavItem to="donaciones" label="Ver Donaciones" />
@@ -40,7 +39,7 @@ const Sidebar = () => {
 
 const Header = () => {
   return (
-    <div className="w-full bg-lila text-black py-8 text-2xl font-bold text-center">
+    <div className="w-full bg-lila text-clarito py-8 text-2xl font-semibold text-center font-poppins dark:bg-morado">
       Panel de Administrador
     </div>
   );

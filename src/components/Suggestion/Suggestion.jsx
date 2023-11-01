@@ -30,7 +30,7 @@ const Suggestion = () => {
     if (!isFormValid) return;
 
     try {
-      const response = await axios.post("http://localhost:3001/suggestion", {
+      const response = await axios.post("/suggestion", {
         email,
         suggestion,
         rating,
@@ -64,8 +64,8 @@ const Suggestion = () => {
 
   return (
     <>
-    <div className="flex h-screen w-full justify-center place-items-center bg-fondito">
-      <div className="flex-col border-2 rounded-2xl h-fit p-9 border-morado">
+    <div className="flex h-screen w-full justify-center place-items-center">
+      <div className="flex-col border-2 rounded-2xl h-fit p-9 border-lila">
       <h2 className="text-lila text-3xl font-normal font-poppins mb-2 text-center">Enviar sugerencias</h2>
       {isSubmitted ? (
         <p style={{ color: "green" }}>
@@ -89,9 +89,9 @@ const Suggestion = () => {
           }}
         >
           <div className="mt-3 flex flex-col">
-            <label className="text-morado text-2xl font-normal font-poppins mb-2" htmlFor="email">Email:</label>
+            <label className="text-moradito text-2xl font-normal font-poppins mb-2 dark:text-lila" htmlFor="email">Email:</label>
             <input
-            className="mt-1 rounded border-2 border-morado p-2 text-2xl"
+            className="mt-1 rounded border-2 border-lila p-2 text-2xl"
               id="email"
               type="email"
               value={email}
@@ -118,9 +118,9 @@ const Suggestion = () => {
             )}
           </div>
           <div className="flex flex-col mt-3">
-            <label className="text-morado text-2xl font-normal font-poppins mb-2" htmlFor="suggestion">Sugerencias:</label>
+            <label className="text-moradito text-2xl font-normal font-poppins mb-2 dark:text-lila" htmlFor="suggestion">Sugerencias:</label>
             <textarea
-              className="mt-1 rounded border-2 border-morado p-2 text-2xl"
+              className="mt-1 rounded border-2 border-lila p-2 text-2xl"
               id="suggestion"
               value={suggestion}
               onChange={(e) => {
@@ -136,9 +136,9 @@ const Suggestion = () => {
             )}
           </div>
           <div className="flex flex-col mt-3">
-            <label className="text-morado text-2xl font-normal font-poppins mb-2">Calificación:</label>
+            <label className="text-moradito text-2xl font-normal font-poppins mb-2 dark:text-lila">Calificación:</label>
             <input
-             className="w-fit mt-1 rounded border-2 border-morado p-2 text-2xl"
+             className="w-fit mt-1 rounded border-2 border-lila p-2 text-2xl"
               type="number"
               value={rating}
               min="0"

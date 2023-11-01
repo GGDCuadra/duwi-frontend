@@ -15,7 +15,7 @@ function Top10Series() {
   }, [dispatch]);
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 5,
@@ -50,7 +50,7 @@ function Top10Series() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4 font-poppins text-moradito">Top 10 series</h2>
+      <h2 className="text-2xl font-bold mb-4 font-poppins text-moradito dark:text-lila">Top 10 series</h2>
       <Slider {...settings}>
         {topSeries.map((serie) => (
           <SeriesCard
