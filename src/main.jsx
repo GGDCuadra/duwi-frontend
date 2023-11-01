@@ -20,7 +20,7 @@ rootElement.render(
           <Auth0Provider
             domain="dev-yan4u8u82wxf2qfz.us.auth0.com"
             clientId="3tvQ9nFAkeQ6gs6UzoAN19PHHQTEl9N3"
-            redirectUri={"https://duwi-frontend.vercel.app + '/dashboard' "}
+            redirectUri={"https://duwi-frontend.vercel.app"}
           >
             <App />
           </Auth0Provider>
