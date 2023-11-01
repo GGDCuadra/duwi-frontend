@@ -159,7 +159,6 @@ const Peliculas = () => {
     navigate(`/movie/${_id}`); 
   };
 
-  
   return (
     <div className="flex justify-center flex-col items-center">
       <div className="w-4/5 p-4">
@@ -169,7 +168,9 @@ const Peliculas = () => {
           <input
             type="text"
             placeholder="Buscar por título de película"
+
             className="w-1/3 md:w-2/2 border border-lila p-2 rounded-md "
+
             onChange={handleSearch}
           />
           
@@ -241,8 +242,10 @@ const Peliculas = () => {
                   index % 2 === 0 ? 'bg-clarito' : 'bg-white'
                 } hover:bg-lila hover:dark:bg-lila`}
               >
+
                 <td className="whitespace-nowrap py-1 text-center font-poppins">{pelicula.Series_Title}</td>
                 <td className="whitespace-nowrap px-2 py-2 text-center font-poppins">
+
                   <a href={pelicula.Poster_Link} target="_blank" rel="noopener noreferrer">
                     <img src={pelicula.Poster_Link} alt="Poster" className="w-10 h-auto" />
                   </a>
@@ -320,7 +323,7 @@ const Peliculas = () => {
                     onClick={() => handleDetailClick(pelicula._id)} 
                     style={{
                       position: 'absolute',
-                      top: '40%',
+                      top: '35%',
                       left: '50%', 
                       transform: 'translate(-50%, -50%)',
                       cursor: 'pointer', 
