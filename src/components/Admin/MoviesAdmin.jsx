@@ -125,7 +125,7 @@ const Peliculas = () => {
   };
   
   const handleAddClick = () => {
-    navigate(`/formCreateEdit`); 
+    navigate(`/formCreateEdit/movie/id`); 
   };
 
   const handleToggleDeshabilitar = (pelicula) => {
