@@ -29,6 +29,7 @@ function MovieDetailsDashboard({ movieId}) {
 
     try {
       const response = await axios.delete(`http://localhost:3001/favorites/movies/${userId}/${movieId}`);
+      fetchMovieDetails()
     } catch (error) {
       console.error('Error al eliminar película de favoritos:', error);
     }
