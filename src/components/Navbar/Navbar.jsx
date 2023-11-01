@@ -1,8 +1,10 @@
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import logo from '../../assets/logoduwi.png';
 import SearchBar from '../SearchBar/SearchBar';
 import { useAuth0 } from "@auth0/auth0-react";
+import axios from 'axios';
 import Swal from 'sweetalert2';
 import {useEffect, useState} from 'react';
 
@@ -11,12 +13,26 @@ const NAVIGATION_LINKS = [
   { path: '/movies', label: 'Películas' },
   { path: '/series', label: 'Series' },
   { path: '/estrenos', label: 'Estrenos' },
-  { path: '/formCreateEdit', label: 'Crear / Editar' },
 ];
 
 const Navbar = () => {
   const [darkMode, setDarkMode]= useState(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const userData = async () => {
+      try {
+        const email = user?.email
+        const {data} = await axios.get(`http://localhost:3001/usersByEmail?email=${email}`)
+        setUserInfo(data)
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    userData()
+  }, [user]);
+  console.log(userInfo);
 
   const handleLogout = async () => {
     if (isAuthenticated) {
@@ -80,6 +96,15 @@ const Navbar = () => {
         <button className="ml-4 text-gray-800 hover:text-moradito font-poppins" onClick={handleLogout}>
           {isAuthenticated ? "Cerrar Sesión" : "Iniciar Sesión"}
         </button>
+        {
+          isAuthenticated && userInfo && userInfo.rol === 'Admin' && (
+              <Link to='/admin'>
+                <button className="ml-4 bg-lila py-2 px-6 text-white font-poppins rounded-md
+                tracking-wide uppercase border-none shadow-lg focus:outline-none hover:bg-morado hover:rounded-lg hover:
+                transform duration-200 ease-in-out cursor-pointer">Admin</button>
+              </Link>
+          )
+        }
       </div>
     </nav>
   );
