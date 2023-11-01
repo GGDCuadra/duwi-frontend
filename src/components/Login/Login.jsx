@@ -28,7 +28,7 @@ function LoginPage() {
   
       if (!user) {
         setError('El correo electrónico no existe.');
-        return;
+        return;z
       }
   
       if (!user.activo) {

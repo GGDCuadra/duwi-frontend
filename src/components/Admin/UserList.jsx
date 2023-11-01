@@ -60,8 +60,8 @@ function UserList() {
   };
 
   const handleToggleHabilitar = (user) => {
-    const confirmationMessage = `¿Está seguro de habilitar al usuario "${user.username}"?`;
-
+    const confirmationMessage = `¿Está seguro de habilitar al usuari "${user.username}"?`;
+  
     Swal.fire({
       title: confirmationMessage,
       icon: 'warning',
@@ -74,7 +74,7 @@ function UserList() {
           .then(response => {
             const updatedUsers = users.map(u =>
               u._id === user._id
-                ? { ...u, disabled: null }
+                ? { ...u, activo: null }
                 : u
             );
             setUsers(updatedUsers);
@@ -85,10 +85,10 @@ function UserList() {
       }
     });
   };
-
+  
   const handleToggleDeshabilitar = (user) => {
     const confirmationMessage = `¿Está seguro de deshabilitar al usuario "${user.username}"?`;
-
+  
     Swal.fire({
       title: confirmationMessage,
       icon: 'warning',
@@ -101,10 +101,10 @@ function UserList() {
           .then(response => {
             const updatedUsers = users.map(u =>
               u._id === user._id
-                ? { ...u, disabled: 'Disabled' }
+                ? { ...u, activo: false }
                 : u
             );
-
+  
             setUsers(updatedUsers);
           })
           .catch(error => {
@@ -113,9 +113,8 @@ function UserList() {
       }
     });
   };
-
   const handleAddClick = () => {
-    // Agrega tu lógica para agregar un usuario aquí
+    
   };
 
   const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
@@ -193,26 +192,26 @@ function UserList() {
 
                     <td className="whitespace-nowrap text-center mt-2" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', width: '130px' }}>
-                      <button
+                    <button
                         onClick={() => handleToggleDeshabilitar(user)}
                         className={`${
-                          user.disabled ? 'bg-gray-300' : 'bg-red-500'
+                          user.activo === false ? 'bg-gray-300' : 'bg-red-500'
                         } text-white rounded-md text-sm`}
-                        disabled={user.disabled}
+                        disabled={user.activo === false }
                       >
                         Deshabilitar
                       </button>
                       <button
                         onClick={() => handleToggleHabilitar(user)}
                         style={{
-                          backgroundColor: user.disabled ? 'green' : '#cccccc',
+                          backgroundColor: user.activo === false ? 'green' : '#cccccc',
                         }}
                         className="text-white rounded-md text-sm mt-1"
-                        disabled={!user.disabled}
+                        disabled={user.activo !== false}
                       >
                         Habilitar
                       </button>
-                    </div>
+                   </div>
                   </td>
                   </tr>
                 ))}
@@ -240,7 +239,7 @@ function UserList() {
             <button
               className={`flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-morado border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
               onClick={() => handleChangePage(page - 1)}
-              disabled={page === 0}
+              activo={page === 0}
             >
               Anterior
             </button>
@@ -261,7 +260,7 @@ function UserList() {
             <button
               className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
               onClick={() => handleChangePage(page + 1)}
-              disabled={page >= totalPages - 1}
+              activo={page >= totalPages - 1}
             >
               Siguiente
             </button>
@@ -272,4 +271,4 @@ function UserList() {
   );
 }  
 
-export default UserList;
+export default UserList;
