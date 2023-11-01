@@ -11,7 +11,10 @@ const root = document.getElementById('root');
 const rootElement = createRoot(root);
 
 const { VITE_PAYPAL_CLIENT_ID } = import.meta.env
-const {VITE_APP_AUTH0_DOMAIN, VITE_APP_AUTH0_CLIENT_ID}  = import.meta.env
+
+
+const Domain = import.meta.env.VITE_APP_AUTH0_DOMAIN
+const ClientId = import.meta.env.VITE_APP_AUTH0_CLIENT_ID
 
 
 rootElement.render(
@@ -20,8 +23,8 @@ rootElement.render(
       <Provider store={store}>
         <BrowserRouter>
         <Auth0Provider
-            domain={VITE_APP_AUTH0_DOMAIN}
-            clientId={VITE_APP_AUTH0_CLIENT_ID}
+            domain={Domain}
+            clientId={ClientId}
             redirectUri={window.location.origin + '/dashboard'}
           >
             <App />
