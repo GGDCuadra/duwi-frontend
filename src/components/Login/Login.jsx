@@ -22,7 +22,7 @@ function LoginPage() {
       return;
     }
     try {
-      const response = await fetch('http://localhost:3001/users');
+      const response = await fetch('https://duwi.onrender.com/users');
       const users = await response.json();
       const user = users.find((user) => user.email === loginEmail);
       if (!user) {
@@ -31,7 +31,7 @@ function LoginPage() {
       }
       if (user.password === loginPassword) {
         // Realiza una solicitud para obtener información adicional del usuario
-        const userInfoResponse = await fetch(`http://localhost:3001/users/${user._id}`);
+        const userInfoResponse = await fetch(`https://duwi.onrender.com/users/${user._id}`);
         const userInfo = await userInfoResponse.json();
         setUserInformation({
           _id: user._id,
@@ -57,7 +57,7 @@ function LoginPage() {
       setError('Por favor, ingresa todos los campos.');
       return;
     }
-    const response = await fetch('http://localhost:3001/users');
+    const response = await fetch('https://duwi.onrender.com/users');
     const users = await response.json();
     const existingUser = users.find((user) => user.email === registerEmail);
 
@@ -71,7 +71,7 @@ function LoginPage() {
         fecha_de_nacimiento: registerFechaDeNacimiento,
       };
       try {
-        const postResponse = await fetch('http://localhost:3001/users', {
+        const postResponse = await fetch('https://duwi.onrender.com/users', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

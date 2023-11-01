@@ -7,7 +7,7 @@ function MovieDetailsDashboard({ movieId}) {
 
   const fetchMovieDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/movies/byObjectId/${movieId}`);
+      const response = await fetch(`https://duwi.onrender.com/movies/byObjectId/${movieId}`);
       if (response.status === 200) {
         const movieDetailsData = await response.json();
         setMovieDetails(movieDetailsData);
@@ -28,7 +28,7 @@ function MovieDetailsDashboard({ movieId}) {
     const userId = userInfo._id;
 
     try {
-      const response = await axios.delete(`http://localhost:3001/favorites/movies/${userId}/${movieId}`);
+      const response = await axios.delete(`/favorites/movies/${userId}/${movieId}`);
       fetchMovieDetails()
     } catch (error) {
       console.error('Error al eliminar película de favoritos:', error);

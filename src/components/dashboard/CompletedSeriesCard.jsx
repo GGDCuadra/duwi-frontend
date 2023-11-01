@@ -10,7 +10,7 @@ function CompletedSeriesCard({ serieId }) {
     const userId = userInfo._id;
 
     try {
-      const response = await fetch(`http://localhost:3001/seriesvistas/${userId}`);
+      const response = await fetch(`https://duwi.onrender.com/seriesvistas/${userId}`);
       if (response.status === 200) {
         const data = await response.json();
         const entryToUpdate = data.find(entry => entry.serieId === serieId);
@@ -18,7 +18,7 @@ function CompletedSeriesCard({ serieId }) {
         if (entryToUpdate) {
           const entryId = entryToUpdate._id;
 
-          const updateUrl = `http://localhost:3001/seriesvistas/${entryId}`;
+          const updateUrl = `https://duwi.onrender.com/seriesvistas/${entryId}`;
           const updateResponse = await fetch(updateUrl, {
             method: 'PUT',
             headers: {
@@ -44,7 +44,7 @@ function CompletedSeriesCard({ serieId }) {
 
   const fetchCompletedSeriesDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/series/${serieId}`);
+      const response = await fetch(`https://duwi.onrender.com/series/${serieId}`);
       if (response.status === 200) {
         const seriesDetailsData = await response.json();
         setCompletedSeriesDetails(seriesDetailsData);

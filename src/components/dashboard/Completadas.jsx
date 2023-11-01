@@ -17,7 +17,7 @@ function Completadas() {
     // Realiza una solicitud para obtener películas completadas
     const fetchMoviesVistas = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/moviesvistas/${userId}`);
+        const response = await fetch(`https://duwi.onrender.com/moviesvistas/${userId}`);
         if (response.status === 200) {
           const moviesData = await response.json();
           setMoviesVistas(moviesData);
@@ -32,7 +32,7 @@ function Completadas() {
     // Realiza una solicitud para obtener series completadas
     const fetchSeriesVistas = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/seriesvistas/${userId}`);
+        const response = await fetch(`https://duwi.onrender.com/seriesvistas/${userId}`);
         if (response.status === 200) {
           const seriesData = await response.json();
           setSeriesVistas(seriesData);
