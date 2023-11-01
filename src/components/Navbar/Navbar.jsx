@@ -69,7 +69,7 @@ const Navbar = () => {
         <ul className="flex space-x-10 pr-4 pl-4 justify-center mx-auto">
           {NAVIGATION_LINKS.map((link) => (
             <li key={link.path}>
-              <Link to={link.path} className="text-oscuro hover:text-oscuro font-poppins dark:text-clarito">
+              <Link to={link.path} className="text-oscuro hover:text-lila font-poppins dark:hover:text-lila dark:text-clarito">
                 {link.label}
               </Link>
             </li>
@@ -85,21 +85,21 @@ const Navbar = () => {
             </Link>
           </div>
         )}
-        <button type="button" onClick={() => setDarkMode(!darkMode)} className='ml-4 text-oscuro hover:text-lila dark:text-clarito'>
+        <button type="button" onClick={() => setDarkMode(!darkMode)} className='ml-4 text-oscuro hover:text-lila font-poppins dark:hover:text-lila dark:text-clarito'>
           {darkMode ? (
             <FaMoon />
           ):( 
             <FaSun />
           )}  
         </button>
-        <button className="ml-4 text-oscuro hover:text-lila font-poppins dark:text-clarito" onClick={handleLogout}>
+        <button className="ml-4 text-oscuro hover:text-lila font-poppins dark:hover:text-lila dark:text-clarito" onClick={handleLogout}>
           {isAuthenticated ? "Cerrar Sesión" : "Iniciar Sesión"}
         </button>
         {
           isAuthenticated && userInfo && userInfo.rol === 'Admin' && (
               <Link to='/admin'>
-                <button className="ml-4 bg-lila py-2 px-6 text-fondito font-poppins rounded-md
-                tracking-wide uppercase border-none shadow-lg focus:outline-none hover:bg-morado hover:rounded-lg hover:
+                <button className="ml-4 bg-lila py-2 px-6 text-fondito font-poppins rounded-3xl
+                tracking-wide uppercase border-none shadow-lg focus:outline-none hover:bg-moradito hover:rounded-3xl hover:
                 transform duration-200 ease-in-out cursor-pointer">Admin</button>
               </Link>
           )

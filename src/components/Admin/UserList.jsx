@@ -124,17 +124,17 @@ function UserList() {
   return (
     <div className="flex justify-center flex-col items-center">
       <div className="w-4/5 p-4">
-        <h1 className="text-3xl font-bold text-center mb-8">Lista de usuarios</h1>
+        <h1 className="text-3xl font-bold font-poppins text-moradito text-center mb-8 dark:text-lila">Lista de usuarios</h1>
   
         <div className="flex justify-between items-center mb-6">
           <input
             type="text"
             placeholder="Buscar usuarios"
-            className="w-2/3 md:w-2/2 border border-gray-300 p-2 rounded-md"
+            className="w-2/3 md:w-2/2 border font-poppins border-lila p-2 rounded-md"
             onChange={handleSearch}
           />
           <button
-            className="bg-blue-200 font-bold border border-gray-400 p-2 rounded-md hover:bg-gray-400"
+            className="bg-lila font-poppins text-fondito border p-2 rounded-md hover:bg-moradito"
             onClick={handleAddClick}
           >
             Agregar Usuario
@@ -142,8 +142,8 @@ function UserList() {
         </div>
   
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full border border-gray-400 table-auto">
-            <thead className="bg-blue-200">
+          <table className="w-full border border-lila table-auto">
+            <thead className="bg-moradito text-fondito font-poppins">
               <tr>
                 <th
                   onClick={() => handleSort('username')}
@@ -162,7 +162,7 @@ function UserList() {
                 <th
                   onClick={() => handleSort('email')}
                   className={`px-2 py-2 cursor-pointer text-center ${
-                    sortBy === 'email' ? 'text-blue-600' : ''
+                    sortBy === 'email' ? 'text-moradito' : ''
                   }`}
                 >
                   Correo Electrónico{' '}
@@ -174,7 +174,7 @@ function UserList() {
                     )
                   ) : null}
                 </th>
-                <th className="px-2 py-2">Deshabilitar</th>
+                <th className="px-2 py-2 font-poppins">Deshabilitar</th>
               </tr>
             </thead>
   
@@ -184,12 +184,12 @@ function UserList() {
                 .map((user, index)=> (
                   <tr key={user._id} 
                   className={`${
-                    index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
-                  } hover:bg-gray-200 hover:dark:bg-gray-400`}
+                    index % 2 === 0 ? 'bg-clarito' : 'bg-white'
+                  } hover:bg-lila`}
                   >
 
-                    <td className="whitespace-nowrap py-1 text-center">{user.username}</td>
-                    <td className="whitespace-nowrap py-1 text-center">{user.email}</td>
+                    <td className="whitespace-nowrap py-1 text-center font-poppins">{user.username}</td>
+                    <td className="whitespace-nowrap py-1 text-center font-poppins">{user.email}</td>
 
                     <td className="whitespace-nowrap text-center mt-2" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', width: '130px' }}>
@@ -197,7 +197,7 @@ function UserList() {
                         onClick={() => handleToggleDeshabilitar(user)}
                         className={`${
                           user.disabled ? 'bg-gray-300' : 'bg-red-500'
-                        } text-white rounded-md text-sm`}
+                        } text-white rounded-md text-sm font-poppins`}
                         disabled={user.disabled}
                       >
                         Deshabilitar
@@ -207,7 +207,7 @@ function UserList() {
                         style={{
                           backgroundColor: user.disabled ? 'green' : '#cccccc',
                         }}
-                        className="text-white rounded-md text-sm mt-1"
+                        className="text-white rounded-md text-sm mt-1 font-poppins"
                         disabled={!user.disabled}
                       >
                         Habilitar
@@ -220,25 +220,25 @@ function UserList() {
           </table>
         </div>
   
-        <div className="mt-6 flex justify-between items-center">
+        <div className="mt-6 flex justify-between items-center font-poppins text-lila">
           <div>
-            <span className="mr-2">Filas por página</span>
+            <span className="mr-2 font-poppins text-lila">Filas por página</span>
             <select
-              className="border border-gray-300 p-2 rounded-md"
+              className="border border-lila p-2 rounded-md"
               onChange={handleChangeRowsPerPage}
             >
               <option value="10">10</option>
               <option value="25">25</option>
               <option value="50">50</option>
             </select>
-            <span className="whitespace-nowrap px-6 ">
+            <span className="whitespace-nowrap px-6 font-poppins text-lila">
               Página {page + 1} de {totalPages}
             </span>
           </div>
   
           <div className="inline-flex -space-x-px text-sm h-8">
             <button
-              className={`flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-morado border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
+              className={`flex font-poppins items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-morado border border-lila rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
               onClick={() => handleChangePage(page - 1)}
               disabled={page === 0}
             >
@@ -250,7 +250,7 @@ function UserList() {
                 <li key={numPagina}>
                   <button
                     onClick={() => handleChangePage(numPagina)}
-                    className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${page === numPagina ? 'text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white' : ''}`}
+                    className={`flex items-center justify-center px-3 h-8 leading-tight text-lila bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${page === numPagina ? 'text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white' : ''}`}
                   >
                     {numPagina + 1}
                   </button>
@@ -259,7 +259,7 @@ function UserList() {
             </ul>
   
             <button
-              className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
+              className={`font-poppins flex items-center justify-center px-3 h-8 leading-tight text-lila bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
               onClick={() => handleChangePage(page + 1)}
               disabled={page >= totalPages - 1}
             >

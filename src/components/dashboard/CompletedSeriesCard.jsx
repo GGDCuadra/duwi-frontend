@@ -61,13 +61,13 @@ function CompletedSeriesCard({ serieId }) {
   return completedSeriesDetails ? (
     <li>
       <div className="w-48 p-2 rounded-lg shadow-md mb-4 mr-5">
-        <button onClick={() => markSeriesAsUncompleted(serieId)}>Sacar de completados</button>
+        <button className="text-lila hover:text-moradito font-poppins text-sm" onClick={() => markSeriesAsUncompleted(serieId)}>Sacar de completados</button>
         <div className="movie-poster-container">
           {completedSeriesDetails.image && completedSeriesDetails.image.original && (
             <img src={completedSeriesDetails.image.original} alt={completedSeriesDetails.name} className="movie-poster" />
           )}
           <div className="movie-title-overlay">
-            <h3 className="movie-title">{completedSeriesDetails.name}</h3>
+            <h3 className="text-lg font-medium font-poppins text-moradito dark:text-clarito">{completedSeriesDetails.name}</h3>
           </div>
         </div>
       </div>

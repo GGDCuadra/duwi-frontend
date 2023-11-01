@@ -11,7 +11,7 @@ import {
 
 export const getAllEnabledMovies = (options) => {
     const{page, perPage} = options
-    const endpoint = `/enabledMovies?page=${page}&perPage=${perPage}`
+    const endpoint = `http://localhost:3001/enabledMovies?page=${page}&perPage=${perPage}`
     return async dispatch => {
         try {
             const {data} = await axios.get(endpoint)
@@ -27,7 +27,7 @@ export const getAllEnabledMovies = (options) => {
 };
 
 export const getMovieByTitle = (title) => {
-    const endpoint = `/movies/title?title=${title}`
+    const endpoint = `http://localhost:3001/movies/title?title=${title}`
     return async dispatch => {
         try {
             const {data} = await axios.get(endpoint)
@@ -43,7 +43,7 @@ export const getMovieByTitle = (title) => {
 };
 
 export const getTopMovies = () => {
-    const endpoint = '/top-movies'
+    const endpoint = 'http://localhost:3001/top-movies'
     return async dispatch => {
         try {
             const {data} = await axios.get(endpoint)
@@ -57,7 +57,7 @@ export const getTopMovies = () => {
     }
 };
 export const getFilteredMovies = (filters) => {
-    const endpoint = "/enabledMovies"
+    const endpoint = "http://localhost:3001/enabledMovies"
     return async dispatch => {
         try {
             const {data} = await axios.get(endpoint,{
@@ -75,7 +75,7 @@ export const getFilteredMovies = (filters) => {
     }
 }
 export const getAllSeries = () => {
-    const endpoint = '/series';
+    const endpoint = 'http://localhost:3001/series';
     return async dispatch => {
         try {
             const {data} = await axios.get(endpoint)
@@ -91,7 +91,7 @@ export const getAllSeries = () => {
 };
 
 export const getSerieByTitle = (title) => {
-    const endpoint = `/series/name?name=${title}`
+    const endpoint = `http://localhost:3001/series/name?name=${title}`
     return async dispatch => {
         try {
             const {data} = await axios.get(endpoint)
@@ -106,7 +106,7 @@ export const getSerieByTitle = (title) => {
     }
 };
 export const getFilteredSeries = (filters) => {
-    const endpoint = "/series"
+    const endpoint = "http://localhost:3001/series"
     return async dispatch => {
         try {
             const {data} = await axios.get(endpoint,{
@@ -124,7 +124,7 @@ export const getFilteredSeries = (filters) => {
     }
 }
 export const getTopSeries = () => {
-    const endpoint = '/top-series'
+    const endpoint = 'http://localhost:3001/top-series'
     return async dispatch => {
         try {
             const {data} = await axios.get(endpoint)

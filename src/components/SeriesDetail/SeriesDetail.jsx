@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { MdFavorite, MdFavoriteBorder } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import { useAuth0 } from "@auth0/auth0-react";
+import { FaEye, FaEyeSlash} from 'react-icons/fa'
 
 function SerieDetail() {
   const { _id } = useParams();
@@ -49,8 +50,7 @@ function SerieDetail() {
       };
 
       // Realizar una solicitud POST al servidor para guardar la serie como favorita
-      const { data } = await axios.post('/favorites/series', dataSeries);
-      console.log(data);
+      await axios.post('http://localhost:3001/favorites', dataSeries);
     }
   };
   const handleWatching = async () => {
@@ -65,11 +65,10 @@ function SerieDetail() {
 
       try {
         // Realizar una solicitud POST a /seriesvistas para agregar a "series que estoy viendo"
-        const { data } = await axios.post(
+        await axios.post(
           "http://localhost:3001/seriesvistas",
           dataSerie
         );
-        console.log(data);
       } catch (error) {
         console.error("Error al agregar a series que estoy viendo:", error);
       }
@@ -82,7 +81,7 @@ function SerieDetail() {
   if (!series) {
     return  <div className="flex w-screen h-screen justify-center items-center bg-gray-100">
     <div className="flex flex-col items-center">
-      <svg className="animate-spin h-12 w-12 text-moradito" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <svg className="animate-spin h-12 w-12 text-moradito dark:text-lila" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
       </svg>
@@ -93,8 +92,8 @@ function SerieDetail() {
 
   return (
     <>
-      <div className="bg-white p-8 rounded-lg flex">
-        <div className="mr-4 ml-9">
+      <div className= "p-8 rounded-lg flex">
+        <div className="mr-4 ml-20">
           <img
             src={series.image ? series.image.original : ''}
             alt={series.name}
@@ -118,7 +117,11 @@ function SerieDetail() {
               onClick={handleWatching}
               className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-xs font-poppins"
             >
-              {isWatching ? "Viendo" : "Ver más tarde"}
+              {isWatching ? (
+                <FaEyeSlash size={24} />
+              ) : (
+                <FaEye size={24} />
+              )}
             </button>
           
             </>) : null
@@ -126,9 +129,9 @@ function SerieDetail() {
           </div>
         </div>
         <div className="text-center">
-          <h1 className="text-xl font-bold text-morado font-poppins">{series.name}</h1>
-          <p className="text-l font-bold text-moradito font-poppins">{series.runtime}</p>
-          <p className="text-l font-bold text-moradito font-poppins mb-10">
+          <h1 className="text-xl font-bold text-morado font-poppins dark:text-clarito">{series.name}</h1>
+          <p className="text-l font-bold text-moradito font-poppins dark:text-clarito">{series.runtime}</p>
+          <p className="text-l font-bold text-moradito font-poppins mb-10 dark:text-clarito">
             {series.genres}
           </p>
           <div className="mx-[300px]">
@@ -146,13 +149,13 @@ function SerieDetail() {
         </div>
       </div>
       <div className="ml-20 mt-3">
-        <h2 className="text-xl font-bold text-oscuro font-poppins mb-3">Estado:</h2>
-        <p className="text-l font-bold text-moradito font-poppins">{series.status}</p>
+        <h2 className="text-xl font-bold text-oscuro font-poppins mb-3 dark:text-lila ml-20">Estado:</h2>
+        <p className="text-l font-medium text-moradito font-poppins ml-20 dark:text-clarito">{series.status}</p>
       </div>
       <div className="text-center mx-auto">
-        <h2 className="text-xl font-bold text-oscuro font-poppins mb-2 mt-[-150px]">Sinopsis:</h2>
+        <h2 className="text-xl font-bold text-oscuro font-poppins mb-2 mt-[-150px] dark:text-lila ml-20">Sinopsis:</h2>
         <div className="w-full max-w-4xl mx-auto text-justify">
-          <p className="text-lg text-moradito font-poppins mb-20">{series.summary}</p>
+          <p className="text-lg text-moradito font-poppins mb-20 dark:text-clarito ml-20">{series.summary}</p>
         </div>
       </div>
       <div>
