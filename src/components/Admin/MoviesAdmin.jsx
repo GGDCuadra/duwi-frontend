@@ -13,18 +13,32 @@ const Peliculas = () => {
   const [ordenarPor, setOrdenarPor] = useState('Released_Year');
   const [orden, setOrden] = useState('asc');
   const [busqueda, setBusqueda] = useState('');
+  const [filtro, setFiltro] = useState('allmovies'); 
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios.get('http://localhost:3001/movies')
+  const obtenerPeliculasPorFiltro = (filtro) => {
+    let endpoint = 'http://localhost:3001/movies'; 
+  
+    if (filtro === 'habilitadas') {
+      endpoint = 'http://localhost:3001/enabledMovies'; 
+    } else if (filtro === 'deshabilitadas') {
+      endpoint = 'http://localhost:3001/disableMovies';
+    }
+  
+    axios.get(endpoint)
       .then(response => {
         setPeliculas(response.data);
       })
       .catch(error => {
         console.error('Error al obtener películas:', error);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    obtenerPeliculasPorFiltro(filtro);
+  }, [filtro]);
+  
 
   const handleEditClick = (_id) => {
     navigate(`/formCreateEdit/${type}/${_id}`);
@@ -111,8 +125,9 @@ const Peliculas = () => {
   };
   
   const handleAddClick = () => {
-    navigate(`/formCreateEdit`); 
+    navigate(`/formCreateEdit/movie/id`); 
   };
+
   const handleToggleDeshabilitar = (pelicula) => {
     const confirmationMessage = `¿Está seguro de deshabilitar la película "${pelicula.Series_Title}"?`;
     
@@ -143,7 +158,7 @@ const Peliculas = () => {
   const handleDetailClick = (_id) => {
     navigate(`/movie/${_id}`); 
   };
-  
+
   
   return (
     <div className="flex justify-center flex-col items-center">
@@ -154,9 +169,24 @@ const Peliculas = () => {
           <input
             type="text"
             placeholder="Buscar por título de película"
-            className="w-2/3 md:w-2/2 border border-gray-300 p-2 rounded-md "
+            className="w-1/3 md:w-2/2 border border-gray-300 p-2 rounded-md "
             onChange={handleSearch}
           />
+          
+          <div className="flex items-center">
+            <label className="mr-2">Filtro</label>
+            <select
+              value={filtro}
+              onChange={(e) => setFiltro(e.target.value)}
+              className="border border-gray-300 p-2 rounded-md"
+            >
+              <option disabled>Selecciona una opción</option>
+              <option value="allmovies">Todas</option>
+              <option value="habilitadas">Habilitadas</option>
+              <option value="deshabilitadas">Deshabilitadas</option>
+            </select>
+          </div>
+          
           <button
             className=" bg-blue-200 font-bold border border-gray-400 rounded-md p-2 rounded-md  hover:bg-gray-400"
             onClick={handleAddClick}
@@ -169,7 +199,8 @@ const Peliculas = () => {
         <table className="w-full border border-gray-400 table-auto">
         <thead className="bg-blue-200">
           <tr>
-            <th onClick={handleSortTitle} className="px-2 py-2 cursor-pointer">
+            <th onClick={handleSortTitle} 
+            className="px-2 py-2 cursor-pointer">
               Título{" "}
               {ordenarPor === "Series_Title" ? (
                 orden === "asc" ? (
@@ -210,7 +241,7 @@ const Peliculas = () => {
                   index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
                 } hover:bg-gray-200 hover:dark:bg-gray-400`}
               >
-                <td className="py-1 text-center">{pelicula.Series_Title}</td>
+                <td className="whitespace-nowrap py-1 text-center">{pelicula.Series_Title}</td>
                 <td className="whitespace-nowrap px-2 py-2 text-center">
                   <a href={pelicula.Poster_Link} target="_blank" rel="noopener noreferrer">
                     <img src={pelicula.Poster_Link} alt="Poster" className="w-10 h-auto" />
@@ -273,7 +304,7 @@ const Peliculas = () => {
 
                 <td className="whitespace-nowrap px-2 py-2 text-center" style={{ position: 'relative' }}>
                   <FaEdit
-                    className="edit-icon"
+                    className="edit-icon text-2xl "
                     onClick={() => handleEditClick(pelicula._id)}
                     style={{
                       position: 'absolute',
@@ -285,7 +316,7 @@ const Peliculas = () => {
                     title="Editar"
                   />
                   <FaEye
-                    className="detail-icon"
+                    className="detail-icon text-2xl"
                     onClick={() => handleDetailClick(pelicula._id)} 
                     style={{
                       position: 'absolute',
