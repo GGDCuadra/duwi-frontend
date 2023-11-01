@@ -134,7 +134,7 @@ function UserList() {
             onChange={handleSearch}
           />
           <button
-            className="bg-blue-200 font-bold border border-gray-400 rounded-md p-2 rounded-md hover:bg-gray-400"
+            className="bg-blue-200 font-bold border border-gray-400 rounded-md p-2  hover:bg-gray-400"
             onClick={handleAddClick}
           >
             Agregar Usuario
