@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Footer from "../Footer/Footer";
 import { Link } from "react-router-dom";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAuth0 } from "@auth0/auth0-react";
 
 function MovieDetail() {
@@ -103,18 +104,18 @@ function MovieDetail() {
 if (!movieFromDb && !moviesDetail) {
     return  <div className="flex w-screen h-screen justify-center items-center bg-gray-100">
     <div className="flex flex-col items-center">
-      <svg className="animate-spin h-12 w-12 text-moradito" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <svg className="animate-spin h-12 w-12 text-moradito dark:text-lila" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
       </svg>
-      <p className="mt-2 text-moradito font-semibold text-lg">Cargando...</p>
+      <p className="mt-2 text-moradito font-semibold text-lg dark:text-lila">Cargando...</p>
     </div>
   </div>
   }
   return (
     <>
-      <div className="bg-white p-8 rounded-lg flex">
-        <div className="mr-4 ml-9">
+      <div className="p-8 rounded-lg flex">
+        <div className="mr-4">
           <img
             src={movie.Poster_Link}
             alt={movie.Series_Title}
@@ -137,7 +138,11 @@ if (!movieFromDb && !moviesDetail) {
               onClick={handleWatching}
               className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-xs font-poppins"
             >
-              {isWatching ? "Viendo" : "Ver más tarde"}
+               {isWatching ? (
+                <FaEyeSlash size={24} />
+              ) : (
+                <FaEye size={24} />
+              )}
             </button>
             
           </div>
@@ -145,18 +150,18 @@ if (!movieFromDb && !moviesDetail) {
           }
           
         </div>
-        <div className="flex flex-col items-center">
-          <h1 className="text-xl font-bold text-morado font-poppins">
+        <div className="flex flex-col items-center mt-10">
+          <h1 className="text-xl font-bold text-morado font-poppins dark:text-clarito">
             {movie.Series_Title}
           </h1>
-          <p className="text-l font-bold text-moradito font-poppins">
+          <p className="text-l font-bold text-moradito font-poppins dark:text-clarito">
             {movie.Released_Year}
           </p>
-          <p className="text-l font-bold text-moradito font-poppins mb-10">
+          <p className="text-l font-bold text-moradito font-poppins mb-10 dark:text-clarito">
             {movie.Genre}
           </p>
 
-          <div className="mx-[300px]">
+          <div className="mx-[500px]">
           <iframe
             title={movie.Series_Title}
             width="560"
@@ -170,42 +175,42 @@ if (!movieFromDb && !moviesDetail) {
           </div>
           
           <div className="text-center mt-10">
-            <h2 className="text-xl font-bold text-oscuro font-poppins mb-2">
+            <h2 className="text-xl font-bold text-oscuro font-poppins mb-2 dark:text-lila">
               Sinopsis:
             </h2>
             <div className="w-full max-w-md"> 
-              <p className="text-lg text-moradito font-poppins text-justify mt-3">
+              <p className="text-lg text-moradito font-poppins text-justify mt-3 dark:text-clarito">
                 {movie.Overview}
               </p>
             </div>
           </div>
         </div>
       </div>
-      <div className="ml-20 mt-3">
-        <h2 className="text-xl font-bold text-oscuro font-poppins mb-3">
+      <div className="ml-20">
+        <h2 className="text-xl font-bold text-oscuro font-poppins mb-3 dark:text-lila ml-20">
           Director:
         </h2>
         <ul className="list-disc list-inside">
-          <li key={movie.Director} className="font-poppins text-moradito">
+          <li key={movie.Director} className="font-poppins text-moradito dark:text-clarito ml-20">
             {movie.Director}
           </li>
         </ul>
       </div>
       <div className="ml-20 mt-8">
-        <h2 className="text-xl font-bold text-oscuro font-poppins mb-3">
+        <h2 className="text-xl font-bold text-oscuro font-poppins mb-3 dark:text-lila ml-20">
           Reparto:
         </h2>
         <ul className="list-disc list-inside space-y-3 mb-10">
-          <li key="Star1" className="font-poppins text-moradito">
+          <li key="Star1" className="font-poppins text-moradito dark:text-clarito ml-20">
             {movie.Star1}
           </li>
-          <li key="Star2" className="font-poppins text-moradito">
+          <li key="Star2" className="font-poppins text-moradito dark:text-clarito ml-20">
             {movie.Star2}
           </li>
-          <li key="Star3" className="font-poppins text-moradito">
+          <li key="Star3" className="font-poppins text-moradito dark:text-clarito ml-20">
             {movie.Star3}
           </li>
-          <li key="Star4" className="font-poppins text-moradito">
+          <li key="Star4" className="font-poppins text-moradito dark:text-clarito ml-20">
             {movie.Star4}
           </li>
         </ul>

@@ -67,13 +67,13 @@ function SeriesWatchingCard({ serieId }) {
 
     <div className="hola">
       <div className="w-48 p-2 rounded-lg shadow-md mb-4 mr-5">
-        <button onClick={() => markSerieAsCompleted(serieId)}>Marcar como vista </button>
+        <button className="text-lila hover:text-moradito" onClick={() => markSerieAsCompleted(serieId)}>Marcar como vista </button>
         <div className="serie-poster-container">
           {seriesDetails.image && seriesDetails.image.original && (
             <img src={seriesDetails.image.original} alt={seriesDetails.name} className="movie-poster" />
           )}
           <div className="movie-title-overlay">
-            <h3 className="movie-title">{seriesDetails.name}</h3>
+            <h3 className="text-lg font-medium font-poppins text-moradito dark:text-clarito">{seriesDetails.name}</h3>
           </div>
         </div>
       </div>

@@ -86,17 +86,17 @@ function MovieWatchingCard({ movieId }) {
   };
 
   return showCard && !markedAsCompleted && movieDetails ? (
-    <li>
+    <div>
       <div className="w-48 p-2 rounded-lg shadow-md mb-4 mr-5">
-        <button onClick={markMovieAsCompleted}>Marcar como vista</button>
+        <button className="text-lila hover:text-moradito" onClick={markMovieAsCompleted}>Marcar como vista</button>
         <div className="movie-poster-container">
           <img src={movieDetails.Poster_Link} alt={movieDetails.Series_Title} className="movie-poster" />
           <div className="movie-title-overlay">
-            <h3 className="movie-title">{movieDetails.Series_Title}</h3>
+            <h3 className="text-lg font-medium font-poppins text-moradito dark:text-clarito">{movieDetails.Series_Title}</h3>
           </div>
         </div>
       </div>
-    </li>
+    </div>
   ) : null;
 }
 

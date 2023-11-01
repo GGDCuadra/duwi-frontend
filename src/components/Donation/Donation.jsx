@@ -7,7 +7,7 @@ import Footer from '../Footer/Footer';
 
 function Donation() {
   const clientId = 'ASzWyoXmir_pj5IJspk5BfAbJvyIxvS13jjy_irfX3TUuqFMOAFra8bI0RrbU06SVpGHiFbOB1R3Jvmb';
-  const backendUrl = 'http://localhost:3001/donate';
+  const backendUrl = '/donate';
 
   const [donationAmount, setDonationAmount] = useState(0);
   const [showPayPalButton, setShowPayPalButton] = useState(false);
@@ -92,13 +92,13 @@ function Donation() {
 
   return (
     <>
-    <div className='bg-clarito justify-items-center w-100 flex justify-center h-screen'>
+    <div className='justify-items-center w-100 flex justify-center h-screen'>
     <div className='flex flex-wrap justify-center gap-4 w-3/4 mt-20'>
-        <h1 className='text-moradito text-8xl font-black font-poppins mb-4'>¿Quieres apoyar a </h1>
-        <h1 className='text-moradito text-8xl font-black font-poppins mb-4'>Did U Watch It?</h1>
+        <h1 className='text-moradito text-8xl font-black font-poppins dark:text-lila'>¿Quieres apoyar a </h1>
+        <h1 className='text-moradito text-8xl font-black font-poppins dark:text-lila'>Did U Watch It?</h1>
         <div>
           <label className=''>
-        <label className='text-moradito text-3xl font-normal font-poppins mr-9 mt-10'htmlFor="amount">Monto de la donación:</label>
+        <label className='text-moradito text-3xl font-normal font-poppins mr-9 mt-10 dark:text-lila'htmlFor="amount">Monto de la donación:</label>
         <input
           className='tex-8xl bg-clarito border-2 border-stone-800 rounded-lg p-2'
           type="text"

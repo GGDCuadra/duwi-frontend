@@ -108,7 +108,7 @@ const Peliculas = () => {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-      axios.put(`http://localhost:3001/movies/enable/${pelicula._id}`)
+      axios.put(`/movies/enable/${pelicula._id}`)
         .then(response => {
           const updatedPeliculas = peliculas.map(p =>
             p._id === pelicula._id
@@ -139,7 +139,7 @@ const Peliculas = () => {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-      axios.put(`http://localhost:3001/movies/disable/${pelicula._id}`)
+      axios.put(`/movies/disable/${pelicula._id}`)
         .then(response => {
           const updatedPeliculas = peliculas.map(p =>
             p._id === pelicula._id
@@ -162,24 +162,26 @@ const Peliculas = () => {
   return (
     <div className="flex justify-center flex-col items-center">
       <div className="w-4/5 p-4">
-        <h1 className="text-3xl font-bold text-center mb-8">Películas</h1>
+        <h1 className="text-3xl font-bold text-center mb-8 font-poppins text-moradito dark:text-lila">Películas</h1>
      
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6 font-poppins">
           <input
             type="text"
             placeholder="Buscar por título de película"
-            className="w-1/3 md:w-2/2 border border-gray-300 p-2 rounded-md"
+
+            className="w-1/3 md:w-2/2 border border-lila p-2 rounded-md "
+
             onChange={handleSearch}
           />
           
           <div className="flex items-center">
-            <label className="mr-2">Filtro</label>
+            <label className="mr-2 font-poppins">Filtro</label>
             <select
               value={filtro}
               onChange={(e) => setFiltro(e.target.value)}
-              className="border border-gray-300 p-2 rounded-md"
+              className="border border-lila p-2 rounded-md"
             >
-              <option disabled>Selecciona una opción</option>
+              <option disabled className='font-poppins'>Selecciona una opción</option>
               <option value="allmovies">Todas</option>
               <option value="habilitadas">Habilitadas</option>
               <option value="deshabilitadas">Deshabilitadas</option>
@@ -187,7 +189,7 @@ const Peliculas = () => {
           </div>
           
           <button
-            className=" bg-blue-200 font-bold border border-gray-400 rounded-md p-2 rounded-md  hover:bg-gray-400"
+            className=" bg-lila text-fondito font-bold rounded-xl p-2 hover:bg-moradito font-poppins"
             onClick={handleAddClick}
           >
             Agregar película
@@ -196,10 +198,10 @@ const Peliculas = () => {
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full border border-gray-400 table-auto">
-        <thead className="bg-blue-200">
+        <thead className="bg-lila">
           <tr>
             <th onClick={handleSortTitle} 
-            className="px-2 py-2 cursor-pointer">
+            className="px-2 py-2 cursor-pointer font-poppins text-clarito">
               Título{" "}
               {ordenarPor === "Series_Title" ? (
                 orden === "asc" ? (
@@ -210,8 +212,8 @@ const Peliculas = () => {
               ) : null}
             </th>
 
-            <th className="px-2 py-2">Poster</th>
-            <th onClick={() => handleSort('Released_Year')} className="px-2 py-2 cursor-pointer">
+            <th className="px-2 py-2 font-poppins text-clarito">Poster</th>
+            <th onClick={() => handleSort('Released_Year')} className="px-2 py-2 cursor-pointer font-poppins text-clarito">
               Año{' '}
               {ordenarPor === 'Released_Year' ? (
                 orden === 'asc' ? (
@@ -221,12 +223,12 @@ const Peliculas = () => {
                 )
               ) : null}
               </th>
-              <th className="px-2 py-2">Duración</th>
-              <th className="px-2 py-2">Género</th>
-              <th className="px-2 py-2">Reparto</th>
-              <th className="px-2 py-2">Trailer</th>
-              <th className="px-2 py-2">Deshabilitar</th>
-              <th className="px-2 py-2">Acción</th>
+              <th className="px-2 py-2 font-poppins text-clarito">Duración</th>
+              <th className="px-2 py-2 font-poppins text-clarito">Género</th>
+              <th className="px-2 py-2 font-poppins text-clarito">Reparto</th>
+              <th className="px-2 py-2 font-poppins text-clarito">Trailer</th>
+              <th className="px-2 py-2 font-poppins text-clarito">Deshabilitar</th>
+              <th className="px-2 py-2 font-poppins text-clarito">Acción</th>
           </tr>
         </thead>
 
@@ -237,18 +239,20 @@ const Peliculas = () => {
               <tr
                 key={pelicula._id}
                 className={`${
-                  index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
-                } hover:bg-gray-200 hover:dark:bg-gray-400`}
+                  index % 2 === 0 ? 'bg-clarito' : 'bg-white'
+                } hover:bg-lila hover:dark:bg-lila`}
               >
-                <td className="py-1 text-center">{pelicula.Series_Title}</td>
-                <td className="whitespace-nowrap px-2 py-2 text-center">
+
+                <td className="whitespace-nowrap py-1 text-center font-poppins">{pelicula.Series_Title}</td>
+                <td className="whitespace-nowrap px-2 py-2 text-center font-poppins">
+
                   <a href={pelicula.Poster_Link} target="_blank" rel="noopener noreferrer">
                     <img src={pelicula.Poster_Link} alt="Poster" className="w-10 h-auto" />
                   </a>
                 </td>
-                <td className="whitespace-nowrap px-2 py-2 text-center">{pelicula.Released_Year}</td>
-                <td className="whitespace-nowrap px-2 py-2 text-center">{pelicula.Runtime}</td>
-                <td className="whitespace-nowrap px-2 py-2 text-center">
+                <td className="whitespace-nowrap px-2 py-2 text-center font-poppins">{pelicula.Released_Year}</td>
+                <td className="whitespace-nowrap px-2 py-2 text-center font-poppins">{pelicula.Runtime}</td>
+                <td className="whitespace-nowrap px-2 py-2 text-center font-poppins">
                   <ul>
                     {typeof pelicula.Genre === 'string' ? (
                       pelicula.Genre.split(', ').map((genre, genreIndex) => (
@@ -259,7 +263,7 @@ const Peliculas = () => {
                     )}
                   </ul>
                 </td>
-                <td className="whitespace-nowrap px-2 py-2 text-center">
+                <td className="whitespace-nowrap px-2 py-2 text-center font-poppins">
                   <ul>
                     {[
                       pelicula.Star1,
@@ -271,7 +275,7 @@ const Peliculas = () => {
                     ))}
                   </ul>
                 </td>
-                <td className="whitespace-nowrap px-2 py-2 text-center">
+                <td className="whitespace-nowrap px-2 py-2 text-center font-poppins">
                   <a href={pelicula.Trailer} target="_blank" rel="noopener noreferrer">
                     Ver Trailer
                   </a>
@@ -335,16 +339,16 @@ const Peliculas = () => {
 
       <div className="mt-6 flex justify-between items-center">
         <div>
-          <span className="mr-2">Filas por página</span>
+          <span className="mr-2 font-poppins text-moradito dark:text-lila">Filas por página</span>
           <select
-            className="border border-gray-300 p-2 rounded-md"
+            className="border border-lila p-2 rounded-md font-poppins text-moradito"
             onChange={handleChangeRowsPerPage}
           >
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
           </select>
-          <span className="whitespace-nowrap px-6 ">
+          <span className="whitespace-nowrap px-6 font-poppins text-moradito dark:text-lila">
             Página {pagina + 1} de {totalPaginas}
           </span>
         </div>

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaMoon } from 'react-icons/fa';
+import { FaMoon, FaSun } from 'react-icons/fa';
 import logo from '../../assets/logoduwi.png';
 import SearchBar from '../SearchBar/SearchBar';
 import { useAuth0 } from "@auth0/auth0-react";
@@ -15,6 +15,7 @@ const NAVIGATION_LINKS = [
 ];
 
 const Navbar = () => {
+  const [darkMode, setDarkMode]= useState(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const [userInfo, setUserInfo] = useState(null);
 
@@ -50,16 +51,25 @@ const Navbar = () => {
       loginWithRedirect();
     }
   };
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  },[darkMode])
+
   return (
-    <nav className="bg-fondito p-4 pr-20 pl-10 flex justify-between items-center h-30">
-      <div className="text-2xl font-bold text-oscuro">
+    <nav className="bg-fondito p-4 pr-20 pl-10 flex justify-between items-center h-30 dark:bg-oscuro">
+      <div className="text-2xl font-bold text-oscuro dark:text-clarito">
         <img src={logo} alt="Logo" className="w-50 h-12 mt-2 ml-2" />
       </div>
       <div className="flex-1 flex justify-end mt-2 items-center">
         <ul className="flex space-x-10 pr-4 pl-4 justify-center mx-auto">
           {NAVIGATION_LINKS.map((link) => (
             <li key={link.path}>
-              <Link to={link.path} className="text-gray-800 hover:text-moradito font-poppins">
+              <Link to={link.path} className="text-oscuro hover:text-lila font-poppins dark:hover:text-lila dark:text-clarito">
                 {link.label}
               </Link>
             </li>
@@ -75,17 +85,21 @@ const Navbar = () => {
             </Link>
           </div>
         )}
-        <div className="ml-4 text-gray-800 hover:text-moradito">
-          <FaMoon />
-        </div>
-        <button className="ml-4 text-gray-800 hover:text-moradito font-poppins" onClick={handleLogout}>
+        <button type="button" onClick={() => setDarkMode(!darkMode)} className='ml-4 text-oscuro hover:text-lila font-poppins dark:hover:text-lila dark:text-clarito'>
+          {darkMode ? (
+            <FaMoon />
+          ):( 
+            <FaSun />
+          )}  
+        </button>
+        <button className="ml-4 text-oscuro hover:text-lila font-poppins dark:hover:text-lila dark:text-clarito" onClick={handleLogout}>
           {isAuthenticated ? "Cerrar Sesión" : "Iniciar Sesión"}
         </button>
         {
           isAuthenticated && userInfo && userInfo.rol === 'Admin' && (
               <Link to='/admin'>
-                <button className="ml-4 bg-lila py-2 px-6 text-white font-poppins rounded-md
-                tracking-wide uppercase border-none shadow-lg focus:outline-none hover:bg-morado hover:rounded-lg hover:
+                <button className="ml-4 bg-lila py-2 px-6 text-fondito font-poppins rounded-3xl
+                tracking-wide uppercase border-none shadow-lg focus:outline-none hover:bg-moradito hover:rounded-3xl hover:
                 transform duration-200 ease-in-out cursor-pointer">Admin</button>
               </Link>
           )
