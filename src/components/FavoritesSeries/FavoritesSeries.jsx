@@ -15,7 +15,7 @@ function FavoriteSeries({ userId }) {
   useEffect(() => {
     const fetchFavoriteSeries = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/favorites/ID_DEL_USUARIO`);
+        const response = await axios.get(`/favorites/ID_DEL_USUARIO`);
         setFavoriteSeries(response.data);
       } catch (error) {
         console.error(error);

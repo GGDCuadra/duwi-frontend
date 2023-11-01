@@ -45,9 +45,9 @@ function MovieDetailsDashboard({ movieId}) {
         />
       </div>
       <div className="mt-2">
-        <h3 className="text-sm font-medium font-poppins">{movieDetails.Series_Title}</h3>
-        <p className="text-moradito font-poppins">{movieDetails.Released_Year}</p>
-        <button onClick={handleRemoveFromFavorites}>Eliminar de Favoritos</button>
+        <h3 className="text-lg font-medium font-poppins text-moradito dark:text-clarito">{movieDetails.Series_Title}</h3>
+        <p className="text-moradito font-poppins dark:text-clarito">{movieDetails.Released_Year}</p>
+        <button className="text-lila hover:text-moradito" onClick={handleRemoveFromFavorites}>Eliminar de Favoritos</button>
       </div>
     </div>
   ) : null;

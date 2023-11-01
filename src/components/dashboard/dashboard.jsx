@@ -282,30 +282,16 @@ function Dashboard() {
     }
   };
   return (
-    <div className="text-center m-4 bg-fondito p-4 rounded-lg shadow-md">
+    <div className="text-center m-4 p-4 rounded-lg shadow-md">
       {isAuthenticated ? (
-        <div>
-          <div className="flex flex-col items-end">
-            {userInfoByEmail && userInfoByEmail.rol === "Admin" && (
-              <Link to="/admin">
-                {" "}
-                {/* Utiliza Link para redirigir a /admin */}
-                <button className="bg-8f8cc1 text-white border-none p-10 px-20 rounded-5 text-16 cursor-pointer h-45">
-                  Panel Administrador
-                </button>
-              </Link>
-            )}
-          </div>
-
-         
-
+        <div>         
           <img
             src={user.picture}
             alt={user.name}
             className="w-40 h-40 rounded-full block m-auto border-4 border-lila"
           />
 
-          <div className="mt-5 mb-5 font-poppins font-medium text-2xl text-moradito">
+          <div className="mt-5 mb-5 font-poppins font-medium text-2xl text-moradito dark:text-lila">
             <h1>
               Te damos la bienvenida,{" "}
               {userInfoByEmail && userInfoByEmail.apodo
@@ -345,11 +331,11 @@ function Dashboard() {
             <div className="favorite-section">
               {selectedSection === "favorites" && (
                 <div className="favorite-box">
-                  <h2 className="font-poppins text-xl font-bold text-moradito mb-3 text-center">
+                  <h2 className="font-poppins text-xl font-bold text-moradito mb-3 text-center dark:text-lila">
                     Películas Favoritas ⭐
                   </h2>
                   {favoriteMovies.length === 0 ? (
-                    <p className="font-poppins text-moradito text-center mb-5">
+                    <p className="font-poppins text-moradito text-center mb-5 dark:text-clarito">
                       Aún no tienes películas favoritas.
                     </p>
                   ) : (
@@ -366,11 +352,11 @@ function Dashboard() {
               )}
               {selectedSection === "series" && (
                 <div>
-                  <h2 className="font-poppins text-xl font-bold text-moradito mb-3 text-center">
+                  <h2 className="font-poppins text-xl font-bold text-moradito mb-3 text-center dark:text-lila">
                     Series Favoritas ⭐
                   </h2>
                   {favoriteSeries.length === 0 ? (
-                    <p className="font-poppins text-moradito text-center mb-5">
+                    <p className="font-poppins text-moradito text-center mb-5 dark:text-clarito">
                       Aún no tienes series favoritas.
                     </p>
                   ) : (
@@ -392,37 +378,37 @@ function Dashboard() {
   <div className="watching-section">
     <div className="watching-container">
       <div className="watching-box">
-        <h3 className="font-poppins text-xl font-bold text-moradito mb-3 text-center" >Películas que estás viendo</h3>
+        <h3 className="font-poppins text-xl font-bold text-moradito mb-3 text-center dark:text-lila" >Películas que estás viendo</h3>
         {moviesWatching.length === 0 ? (
-          <p>No estás viendo ninguna película</p>
+          <p className="font-poppins text-sm text-moradito mb-4 dark:text-clarito">No estás viendo ninguna película</p>
         ) : (
-          <ul div className="flex flex-wrap-10">
+          <div className="flex flex-wrap-10">
             {moviesWatching.map((movieId) => (
-              <li key={movieId}>
+              <div key={movieId}>
                 <MovieWatchingCard movieId={movieId} />
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
       </div>
       <div className="watching-box">
-        <h3 className="font-poppins text-xl font-bold text-moradito mb-3 text-center">Series que estás viendo</h3>
+        <h3 className="font-poppins text-xl font-bold text-moradito mb-3 text-center dark:text-lila">Series que estás viendo</h3>
         {watchingSeries.length === 0 ? (
-          <p>No estás viendo ninguna serie</p>
+          <p className="font-poppins text-sm text-moradito mb-4 dark:text-clarito">No estás viendo ninguna serie</p>
         ) : (
-          <ul div className="flex flex-wrap-10">
+          <div className="flex flex-wrap-10">
             {watchingSeries.map((serie) => {
               if (serie.serieId) {
                 return <SeriesWatchingCard key={serie._id} serieId={serie.serieId} />;
               }
               return null; // Otra opción es omitir elementos con serieId null
             })}
-          </ul>
+          </div>
         )}
       </div>
       {userInfoByEmail && userInfoByEmail._id !== 0 && userInfoByEmail.rol !== null && (
         <Link to="/completadas">
-          <button>Ver Completadas</button>
+          <button className="font-poppins mt-5 mx-4 px-4 py-2 text-clarito bg-lila hover:bg-moradito rounded-lg focus:outline-none transition-all duration-200">Ver Completadas</button>
         </Link>
       )}
     </div>
@@ -432,7 +418,7 @@ function Dashboard() {
                 <div>
                   <div>
                     {userInfoByEmail && (
-                      <div className="font-poppins text-moradito mb-10">
+                      <div className="font-poppins text-moradito mb-10 dark:text-lila">
                         <p className="mb-3">
                           ID Usuario: {userInfoByEmail._id}
                         </p>
@@ -500,7 +486,7 @@ function Dashboard() {
                                         });
                                       }}
                                     />
-                                    <span className="text-moradito mr-5 ml-1">
+                                    <span className="text-moradito mr-5 ml-1 dark:text-clarito">
                                       {genre}
                                     </span>
                                   </label>
