@@ -1,26 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Footer from "../Footer/Footer";
 import { Link } from "react-router-dom";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function MovieDetail() {
+
   const { _id } = useParams();
+  const { user, isAuthenticated } = useAuth0();
   const type = "movie";
   const allMovies = useSelector((state) => state.allMovies);
   const moviesDetail = allMovies.find((movie) => movie._id === _id);
   const dispatch = useDispatch();
   const [isWatching, setIsWatching] = useState(false); 
-
   const [isFav, setIsFav] = useState(false);
+  const [movieFromDb, setMovieFromDb] = useState("")
 
-  if (!moviesDetail) {
-    return <div>Loading...</div>;
-  }
 
-  const {
+  useEffect(() => {
+    if (!moviesDetail) {
+      getSeriesByObjectId();
+    }
+  }, [_id]);
+
+  const getSeriesByObjectId = async () => {
+    try {
+      const id = _id
+      const { data } = await axios.get(`http://localhost:3001/movies/byObjectId/${_id}`);
+      setMovieFromDb(data);
+    } catch (error) {
+      console.error('Error al obtener detalles de la serie:', error);
+    }
+  };
+
+
+  
+
+  /* const {
     Series_Title,
     Released_Year,
     Genre,
@@ -32,7 +51,9 @@ function MovieDetail() {
     Star2,
     Star3,
     Star4,
-  } = moviesDetail;
+  } = movieFromDb || moviesDetail; */
+  const movie = movieFromDb || moviesDetail
+
   const userData = localStorage.getItem("userData");
   const userInfo = JSON.parse(userData);
 
@@ -79,17 +100,29 @@ function MovieDetail() {
       // Esta parte dependerá de la lógica de tu aplicación.
     }
   };
-
+if (!movieFromDb && !moviesDetail) {
+    return  <div className="flex w-screen h-screen justify-center items-center bg-gray-100">
+    <div className="flex flex-col items-center">
+      <svg className="animate-spin h-12 w-12 text-moradito" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+      </svg>
+      <p className="mt-2 text-moradito font-semibold text-lg">Cargando...</p>
+    </div>
+  </div>
+  }
   return (
     <>
       <div className="bg-white p-8 rounded-lg flex">
         <div className="mr-4 ml-9">
           <img
-            src={Poster_Link}
-            alt={Series_Title}
+            src={movie.Poster_Link}
+            alt={movie.Series_Title}
             className="w-64 h-96 object-cover rounded-3xl shadow-lg mt-20 ml-10"
           />
-          <div className="mt-3 flex space-x-4 ml-20">
+          {
+            isAuthenticated ? (
+              <div className="mt-3 flex space-x-4 ml-20">
             <button
               onClick={handleFavorite}
               className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-xs font-poppins"
@@ -106,31 +139,29 @@ function MovieDetail() {
             >
               {isWatching ? "Viendo" : "Ver más tarde"}
             </button>
-            <Link
-              to={`/formCreateEdit/${type}/${_id}`}
-              className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-l font-poppins"
-            >
-              Editar
-            </Link>
+            
           </div>
+            ) : null
+          }
+          
         </div>
         <div className="flex flex-col items-center">
           <h1 className="text-xl font-bold text-morado font-poppins">
-            {Series_Title}
+            {movie.Series_Title}
           </h1>
           <p className="text-l font-bold text-moradito font-poppins">
-            {Released_Year}
+            {movie.Released_Year}
           </p>
           <p className="text-l font-bold text-moradito font-poppins mb-10">
-            {Genre}
+            {movie.Genre}
           </p>
 
           <div className="mx-[300px]">
           <iframe
-            title={Series_Title}
+            title={movie.Series_Title}
             width="560"
             height="315"
-            src={Trailer}
+            src={movie.Trailer}
             frameBorder="0"
             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
@@ -144,7 +175,7 @@ function MovieDetail() {
             </h2>
             <div className="w-full max-w-md"> 
               <p className="text-lg text-moradito font-poppins text-justify mt-3">
-                {Overview}
+                {movie.Overview}
               </p>
             </div>
           </div>
@@ -155,8 +186,8 @@ function MovieDetail() {
           Director:
         </h2>
         <ul className="list-disc list-inside">
-          <li key={Director} className="font-poppins text-moradito">
-            {Director}
+          <li key={movie.Director} className="font-poppins text-moradito">
+            {movie.Director}
           </li>
         </ul>
       </div>
@@ -166,16 +197,16 @@ function MovieDetail() {
         </h2>
         <ul className="list-disc list-inside space-y-3 mb-10">
           <li key="Star1" className="font-poppins text-moradito">
-            {Star1}
+            {movie.Star1}
           </li>
           <li key="Star2" className="font-poppins text-moradito">
-            {Star2}
+            {movie.Star2}
           </li>
           <li key="Star3" className="font-poppins text-moradito">
-            {Star3}
+            {movie.Star3}
           </li>
           <li key="Star4" className="font-poppins text-moradito">
-            {Star4}
+            {movie.Star4}
           </li>
         </ul>
       </div>

@@ -80,7 +80,9 @@ function Dashboard() {
       };
 
       checkEmailAndSetDefaultRole(user.email);
+      
     }
+    
   }, [isAuthenticated, user]);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -110,6 +112,7 @@ function Dashboard() {
       if (response.status === 200) {
         const userData = await response.json();
         setUserInfoByEmail(userData);
+        localStorage.setItem("userData", JSON.stringify(userData));
       }
     } catch (error) {
       console.error(
@@ -248,9 +251,7 @@ function Dashboard() {
     }
   };
 
-  if (isAuthenticated) {
-    localStorage.setItem("userData", JSON.stringify(userInfoByEmail));
-  }
+  
   useEffect(() => {
     if (userInfoByEmail && userInfoByEmail._id) {
       fetch(`http://localhost:3001/moviesvistas/${userInfoByEmail._id}`)
