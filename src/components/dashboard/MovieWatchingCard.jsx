@@ -12,7 +12,7 @@ function MovieWatchingCard({ movieId }) {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/movies/byObjectId/${movieId}`);
+        const response = await fetch(`https://duwi.onrender.com/movies/byObjectId/${movieId}`);
         if (response.status === 200) {
           const movieDetailsData = await response.json();
           setMovieDetails(movieDetailsData);
@@ -39,7 +39,7 @@ function MovieWatchingCard({ movieId }) {
     const shouldMarkAsCompleted = await showConfirmationDialog(confirmMessage);
     if (shouldMarkAsCompleted) {
       try {
-        const response = await fetch(`http://localhost:3001/moviesvistas/${userId}`);
+        const response = await fetch(`https://duwi.onrender.com/moviesvistas/${userId}`);
         if (response.status === 200) {
           const data = await response.json();
           const entryToUpdate = data.find(entry => entry.movieId === movieId && entry.completada === null);
@@ -47,7 +47,7 @@ function MovieWatchingCard({ movieId }) {
           if (entryToUpdate) {
             const entryId = entryToUpdate._id;
 
-            const updateUrl = `http://localhost:3001/moviesvistas/${entryId}`;
+            const updateUrl = `https://duwi.onrender.com/moviesvistas/${entryId}`;
             const updateResponse = await fetch(updateUrl, {
               method: 'PUT',
               headers: {

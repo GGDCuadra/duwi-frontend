@@ -23,7 +23,7 @@ const Navbar = () => {
     const userData = async () => {
       try {
         const email = user?.email
-        const {data} = await axios.get(`http://localhost:3001/usersByEmail?email=${email}`)
+        const {data} = await axios.get(`/usersByEmail?email=${email}`)
         setUserInfo(data)
       } catch (error) {
         console.error(error);

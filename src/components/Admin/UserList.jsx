@@ -12,7 +12,7 @@ function UserList() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/users')
+    axios.get('/users')
       .then(response => {
         setUsers(response.data);
       })
@@ -70,7 +70,7 @@ function UserList() {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.put(`http://localhost:3001/users/enable/${user._id}`)
+        axios.put(`/users/enable/${user._id}`)
           .then(response => {
             const updatedUsers = users.map(u =>
               u._id === user._id
@@ -97,7 +97,7 @@ function UserList() {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.put(`http://localhost:3001/users/disable/${user._id}`)
+        axios.put(`/users/disable/${user._id}`)
           .then(response => {
             const updatedUsers = users.map(u =>
               u._id === user._id

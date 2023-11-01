@@ -7,8 +7,6 @@ import store from './redux/store.jsx';
 import { Provider } from 'react-redux';
 import { Auth0Provider } from '@auth0/auth0-react'; // Importa Auth0Provider
 
-
-
 const root = document.getElementById('root');
 const rootElement = createRoot(root);
 
@@ -22,7 +20,7 @@ rootElement.render(
           <Auth0Provider
             domain="dev-yan4u8u82wxf2qfz.us.auth0.com"
             clientId="3tvQ9nFAkeQ6gs6UzoAN19PHHQTEl9N3"
-            redirectUri={window.location.origin + '/dashboard'}
+            redirectUri={"https://duwi-frontend.vercel.app"}
           >
             <App />
           </Auth0Provider>

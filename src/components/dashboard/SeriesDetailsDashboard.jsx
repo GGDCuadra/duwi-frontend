@@ -5,7 +5,7 @@ function SeriesDetailsDashboard({ seriesId }) {
 
  const fetchSeriesDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/series/${seriesId}`);
+        const response = await fetch(`https://duwi.onrender.com/series/${seriesId}`);
         if (response.status === 200) {
           const seriesDetailsData = await response.json();
           setSeriesDetails(seriesDetailsData);
