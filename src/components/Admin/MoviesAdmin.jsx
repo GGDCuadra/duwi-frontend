@@ -125,7 +125,7 @@ const Peliculas = () => {
   };
   
   const handleAddClick = () => {
-    navigate(`/formCreateEdit`); 
+    navigate(`/formCreateEdit/movie/id`); 
   };
 
   const handleToggleDeshabilitar = (pelicula) => {
@@ -159,7 +159,6 @@ const Peliculas = () => {
     navigate(`/movie/${_id}`); 
   };
 
-  
   return (
     <div className="flex justify-center flex-col items-center">
       <div className="w-4/5 p-4">
@@ -169,7 +168,7 @@ const Peliculas = () => {
           <input
             type="text"
             placeholder="Buscar por título de película"
-            className="w-1/3 md:w-2/2 border border-gray-300 p-2 rounded-md "
+            className="w-1/3 md:w-2/2 border border-gray-300 p-2 rounded-md"
             onChange={handleSearch}
           />
           
@@ -241,7 +240,7 @@ const Peliculas = () => {
                   index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
                 } hover:bg-gray-200 hover:dark:bg-gray-400`}
               >
-                <td className="whitespace-nowrap py-1 text-center">{pelicula.Series_Title}</td>
+                <td className="py-1 text-center">{pelicula.Series_Title}</td>
                 <td className="whitespace-nowrap px-2 py-2 text-center">
                   <a href={pelicula.Poster_Link} target="_blank" rel="noopener noreferrer">
                     <img src={pelicula.Poster_Link} alt="Poster" className="w-10 h-auto" />
@@ -304,7 +303,7 @@ const Peliculas = () => {
 
                 <td className="whitespace-nowrap px-2 py-2 text-center" style={{ position: 'relative' }}>
                   <FaEdit
-                    className="edit-icon"
+                    className="edit-icon text-2xl "
                     onClick={() => handleEditClick(pelicula._id)}
                     style={{
                       position: 'absolute',
@@ -316,11 +315,11 @@ const Peliculas = () => {
                     title="Editar"
                   />
                   <FaEye
-                    className="detail-icon"
+                    className="detail-icon text-2xl"
                     onClick={() => handleDetailClick(pelicula._id)} 
                     style={{
                       position: 'absolute',
-                      top: '40%',
+                      top: '35%',
                       left: '50%', 
                       transform: 'translate(-50%, -50%)',
                       cursor: 'pointer', 
