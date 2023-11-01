@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2'; // Importa SweetAlert2
 
-function MovieDetailsDashboard({ movieId}) {
+function MovieDetailsDashboard({ movieId }) {
   const [movieDetails, setMovieDetails] = useState(null);
 
   const fetchMovieDetails = async () => {
@@ -27,12 +28,24 @@ function MovieDetailsDashboard({ movieId}) {
   const handleRemoveFromFavorites = async () => {
     const userId = userInfo._id;
 
-    try {
-      const response = await axios.delete(`/favorites/movies/${userId}/${movieId}`);
-      fetchMovieDetails()
-    } catch (error) {
-      console.error('Error al eliminar película de favoritos:', error);
-    }
+    // Muestra un mensaje de confirmación con SweetAlert2
+    Swal.fire({
+      title: `¿Estás seguro de eliminar "${movieDetails.Series_Title}" de tus películas favoritas?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // El usuario confirmó la eliminación, realiza la eliminación
+        try {
+          axios.delete(`/favorites/movies/${userId}/${movieId}`);
+          fetchMovieDetails();
+        } catch (error) {
+          console.error('Error al eliminar película de favoritos:', error);
+        }
+      }
+    });
   };
 
   return movieDetails ? (
