@@ -1,5 +1,1 @@
-{
-    "rewrites": [
-      { "source": "/[^.]+", "destination": "/", "statusCode": 200 }
-    ]
-  }
+{ "rewrites": [{ "source": "/(.*)", "destination": "/" }] }
