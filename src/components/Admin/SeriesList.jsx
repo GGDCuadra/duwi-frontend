@@ -384,7 +384,9 @@ const SeriesList = () => {
           </div>
         </div>
       </div>
+      </div>
   );
+  
 };
 
 export default SeriesList;
