@@ -128,19 +128,19 @@ function SerieDetail() {
   return (
     <>
       <div className= "p-8 rounded-lg flex">
-        <div className="mr-4 ml-20">
+        <div className="mr-4 flex flex-col items-center ml-20">
           <img
             src={series.image ? series.image.original : ''}
             alt={series.name}
             className="w-64 h-96 object-cover rounded-3xl shadow-lg mt-20 ml-10"
           />
-          <div className="mt-3 flex space-x-4 ml-20">
+          <div className="mt-3 flex space-x-4 ml-10">
           {
             isAuthenticated ? (
               <>
             <button
               onClick={handleFavorite}
-              className="bg-moradito hover-bg-lila text-white rounded px-4 py-2 text-xs font-poppins"
+              className="bg-moradito hover:bg-lila text-white rounded px-4 py-2 text-xs font-poppins"
             >
               {isFav ? (
                 <MdFavorite size={24} />
@@ -193,7 +193,8 @@ function SerieDetail() {
           <p className="text-lg text-moradito font-poppins mb-20 dark:text-clarito ml-20">{series.summary}</p>
         </div>
       </div>
-      <div>
+      
+      <div className="flex flex-col items-center justify-center h-screen mt-[-20rem] ml-20">
       <div className="text-center mt-8">
         <h2 className="text-xl font-bold text-oscuro font-poppins mb-2 dark:text-lila">Calificación:</h2>
         <Rating
@@ -201,22 +202,26 @@ function SerieDetail() {
           value={rating} // Valor actual de la calificación
           onChange={handleRating} // Función que se llama al seleccionar una calificación
           size={30} // Tamaño de las estrellas
-          color="#f00" // Color de las estrellas activas
-          activeColor="#00f" // Color de la estrella seleccionada
+          color="#5F5985" // Color de las estrellas activas
+          activeColor="#A29EDA" // Color de la estrella seleccionada
         />
       </div>
 
       <div className="text-center mt-8">
           <h2 className="text-xl font-bold text-oscuro font-poppins mb-2 dark:text-lila">Calificación Promedio:</h2>
+          <div className='items-center ml-12'>
           <Rating
             count={5} // Number of stars
             value={averageRating} // Average rating as the value
             size={30} // Size of stars
             edit={false} // Don't allow user to edit the rating
-            color="#f00" // Color of active stars
-            activeColor="#00f" // Color of the selected star
+            color="#5F5985" // Color of active stars
+            activeColor="#A29EDA" // Color of the selected star
           />
+          </div>
         </div>
+        </div>
+        <div>
       <Footer />
       </div>
     </>
