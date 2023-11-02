@@ -18,12 +18,12 @@ const Peliculas = () => {
   const navigate = useNavigate();
 
   const obtenerPeliculasPorFiltro = (filtro) => {
-    let endpoint = 'http://localhost:3001/movies'; 
+    let endpoint = '/movies'; 
   
     if (filtro === 'habilitadas') {
-      endpoint = 'http://localhost:3001/enabledMovies'; 
+      endpoint = '/enabledMovies'; 
     } else if (filtro === 'deshabilitadas') {
-      endpoint = 'http://localhost:3001/disableMovies';
+      endpoint = '/disableMovies';
     }
   
     axios.get(endpoint)

@@ -14,7 +14,9 @@ function SearchBar() {
     const { value } = event.target;
     setSearchTerm(value);
   };
-
+  const handleSubmit = (event) => {
+    event.preventDefault(); 
+  };
   useEffect(() => {
     setLoading(true);
     const delayTimer = setTimeout(() => {
@@ -66,16 +68,16 @@ function SearchBar() {
   
   return (
     <div className="relative">
-  <form className="w-full">
+  <form className="w-full" onSubmit={handleSubmit}>
     <input
       className="bg-search outline-none focus:outline-none rounded-full px-4 py-2 shadow w-full font-poppins"
       placeholder="Buscar película o serie"
       value={searchTerm}
       onChange={handleSearch}
     />
-    <button className="absolute right-5 top-1/2 -translate-y-1/2">
+    {/* <button className="absolute right-5 top-1/2 -translate-y-1/2">
       <FaSistrix className="text-2xl pl-2 ml-1 text-moradito"></FaSistrix>
-    </button>
+    </button> */}
   </form>
   {searchTerm && (
     <div className="absolute mt-1 right-0 left-0 mx-auto max-h-40 overflow-y-auto z-10 rounded-xl">

@@ -19,12 +19,12 @@ const SeriesList = () => {
   const navigate = useNavigate();
 
   const obtenerSeriesPorFiltro = (filtro) => {
-    let endpoint = 'http://localhost:3001/allseries'; 
+    let endpoint = '/allseries'; 
   
     if (filtro === 'habilitadas') {
-      endpoint = 'http://localhost:3001/series'; 
+      endpoint = '/series'; 
     } else if (filtro === 'deshabilitadas') {
-      endpoint = 'http://localhost:3001/disableSeries';
+      endpoint = '/disableSeries';
     }
     axios.get(endpoint)
       .then(response => {
