@@ -1,44 +1,45 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
 
-
-
-
-function CrearUsuarioForm () {
+function UserRegistration() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const navigate = useNavigate();
 
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required('El nombre de usuario es obligatorio'),
+    email: Yup.string()
+      .email('Correo electrónico no válido')
+      .required('El correo electrónico es obligatorio'),
+    password: Yup.string()
+      .min(6, 'La contraseña debe tener al menos 6 caracteres')
+      .required('La contraseña es obligatoria'),
+  });
 
   const handleRegister = async () => {
-    if (!username || !email || !password) {
-      setMessage('Por favor, completa todos los campos');
-      return;
-    }
-
     try {
+      await validationSchema.validate({ username, email, password }, { abortEarly: false });
       const newUser = {
         username,
         email,
         password,
-        
       };
-
       const response = await axios.post('http://localhost:3001/users', newUser);
-
       if (response.status === 201) {
         setMessage('Usuario registrado con éxito');
-        navigate('/admin/userlist');
-   
       } else {
         setMessage('Error al registrar el usuario');
       }
     } catch (error) {
-      console.error('Error al registrar el usuario:', error);
-      setMessage('Error al registrar el usuario');
+      if (error instanceof Yup.ValidationError) {
+        const validationErrors = error.inner.map((e) => e.message);
+        setMessage(validationErrors.join(', '));
+      } else {
+        console.error('Error al registrar el usuario:', error);
+        setMessage('Error al registrar el usuario');
+      }
     }
   };
 
@@ -78,4 +79,4 @@ function CrearUsuarioForm () {
   );
 }
 
-export default CrearUsuarioForm ;
+export default UserRegistration;
