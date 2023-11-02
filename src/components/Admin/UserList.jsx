@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaSort } from 'react-icons/fa';
 import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
+
 
 function UserList() {
   const [users, setUsers] = useState([]);
@@ -10,17 +12,30 @@ function UserList() {
   const [sortBy, setSortBy] = useState(null);
   const [sortOrder, setSortOrder] = useState('asc');
   const [search, setSearch] = useState('');
+  const [userRoles, setUserRoles] = useState({});
 
   useEffect(() => {
     axios.get('http://localhost:3001/users')
       .then(response => {
         setUsers(response.data);
+        const roles = {};
+      response.data.forEach(user => {
+        roles[user._id] = user.rol || 'Usuario';
+      });
+      setUserRoles(roles);
       })
       .catch(error => {
         console.error('Error al obtener la lista de usuarios:', error);
       });
-  }, []);
 
+      axios.get('http://localhost:3001/userRoles')
+      .then(response => {
+        setUserRoles(response.data);
+      })
+      .catch(error => {
+        console.error('Error al obtener los roles de usuario:', error);
+      });
+  }, []);
 
   const filteredUsers = users.filter(user => {
     return user.username && user.username.toLowerCase().includes(search.toLowerCase());
@@ -60,8 +75,8 @@ function UserList() {
   };
 
   const handleToggleHabilitar = (user) => {
-    const confirmationMessage = `¿Está seguro de habilitar al usuario "${user.username}"?`;
-
+    const confirmationMessage = `¿Está seguro de habilitar al usuari "${user.username}"?`;
+  
     Swal.fire({
       title: confirmationMessage,
       icon: 'warning',
@@ -74,7 +89,7 @@ function UserList() {
           .then(response => {
             const updatedUsers = users.map(u =>
               u._id === user._id
-                ? { ...u, disabled: null }
+                ? { ...u, activo: null }
                 : u
             );
             setUsers(updatedUsers);
@@ -85,10 +100,10 @@ function UserList() {
       }
     });
   };
-
+  
   const handleToggleDeshabilitar = (user) => {
     const confirmationMessage = `¿Está seguro de deshabilitar al usuario "${user.username}"?`;
-
+  
     Swal.fire({
       title: confirmationMessage,
       icon: 'warning',
@@ -101,10 +116,10 @@ function UserList() {
           .then(response => {
             const updatedUsers = users.map(u =>
               u._id === user._id
-                ? { ...u, disabled: 'Disabled' }
+                ? { ...u, activo: false }
                 : u
             );
-
+  
             setUsers(updatedUsers);
           })
           .catch(error => {
@@ -115,7 +130,36 @@ function UserList() {
   };
 
   const handleAddClick = () => {
-    // Agrega tu lógica para agregar un usuario aquí
+    
+  };
+  
+  const handleUserRoleChange = (user, newRole) => {
+    const confirmationMessage = `¿Está seguro de cambiar el rol de "${user.username}" a "${newRole}"?`;
+  
+    Swal.fire({
+      title: confirmationMessage,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Determine the role to send to the server
+        const roleToSend = newRole === 'Admin' ? 'Admin' : 'Usuario';
+  
+        axios.put(`http://localhost:3001/updateRole/${user._id}`, { rol: roleToSend })
+          .then(response => {
+            // Update the userRoles state
+            setUserRoles(prevRoles => ({
+              ...prevRoles,
+              [user._id]: roleToSend
+            }));
+          })
+          .catch(error => {
+            console.error('Error al actualizar el rol del usuario:', error);
+          });
+      }
+    });
   };
 
   const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
@@ -134,10 +178,14 @@ function UserList() {
             onChange={handleSearch}
           />
           <button
-            className="bg-lila font-poppins text-fondito border p-2 rounded-md hover:bg-moradito"
-            onClick={handleAddClick}
+            //className="bg-lila font-poppins text-fondito border p-2 rounded-md hover:bg-moradito"
+            // onClick={handleAddClick}
           >
-            Agregar Usuario
+            <Link to="/crearusuario" className="bg-lila font-poppins text-fondito border p-2 rounded-md hover:bg-moradito">
+                Agregar Usuario
+          </Link>
+
+            {/* Agregar Usuario */}
           </button>
         </div>
   
@@ -174,7 +222,8 @@ function UserList() {
                     )
                   ) : null}
                 </th>
-                <th className="px-2 py-2 font-poppins">Deshabilitar</th>
+                <th className="px-2 py-2">Deshabilitar</th>
+                <th className="px-2 py-2">Rol</th>
               </tr>
             </thead>
   
@@ -193,26 +242,44 @@ function UserList() {
 
                     <td className="whitespace-nowrap text-center mt-2" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', width: '130px' }}>
-                      <button
+                    <button
                         onClick={() => handleToggleDeshabilitar(user)}
                         className={`${
-                          user.disabled ? 'bg-gray-300' : 'bg-red-500'
-                        } text-white rounded-md text-sm font-poppins`}
-                        disabled={user.disabled}
+                          user.activo === false ? 'bg-gray-300' : 'bg-red-500'
+                        } text-white rounded-md text-sm`}
+                        disabled={user.activo === false }
                       >
                         Deshabilitar
                       </button>
                       <button
                         onClick={() => handleToggleHabilitar(user)}
                         style={{
-                          backgroundColor: user.disabled ? 'green' : '#cccccc',
+                          backgroundColor: user.activo === false ? 'green' : '#cccccc',
                         }}
-                        className="text-white rounded-md text-sm mt-1 font-poppins"
-                        disabled={!user.disabled}
+                        className="text-white rounded-md text-sm mt-1"
+                        disabled={user.activo !== false}
                       >
                         Habilitar
                       </button>
-                    </div>
+                   </div>
+                  </td>
+                  <td className="text-center">
+                    
+                  <select
+                    value={userRoles[user._id]}
+                    onChange={(e) => handleUserRoleChange(user, e.target.value)}
+                    style={{
+                      width: '50%',
+                      padding: '5px',
+                      borderRadius: '5px',
+                      border: '2px solid #ccc',
+                      backgroundColor: '#f0f0f0',
+                    }}
+                  >
+                    <option value="Admin">Admin</option>
+                    <option value="Usuario">Usuario</option>
+                  </select>
+
                   </td>
                   </tr>
                 ))}
@@ -240,7 +307,7 @@ function UserList() {
             <button
               className={`flex font-poppins items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-morado border border-lila rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
               onClick={() => handleChangePage(page - 1)}
-              disabled={page === 0}
+              activo={page === 0}
             >
               Anterior
             </button>
@@ -261,7 +328,7 @@ function UserList() {
             <button
               className={`font-poppins flex items-center justify-center px-3 h-8 leading-tight text-lila bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
               onClick={() => handleChangePage(page + 1)}
-              disabled={page >= totalPages - 1}
+              activo={page >= totalPages - 1}
             >
               Siguiente
             </button>
@@ -272,4 +339,7 @@ function UserList() {
   );
 }  
 
-export default UserList;
+export default UserList;
+
+
+

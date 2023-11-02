@@ -56,34 +56,43 @@ function Dashboard() {
       // Check email existence and set a default role for users with email and password
       const checkEmailAndSetDefaultRole = async (email) => {
         try {
-          const response = await fetch(
-            `http://localhost:3001/users?email=${email}`
-          );
+          const response = await fetch(`http://localhost:3001/users?email=${email}`);
+          
           if (response.status === 200) {
             setIsEmailExists(true);
           }
-
+  
+          // Check if the user is disabled
+          const userResponse = await fetch(`http://localhost:3001/users?email=${email}`);
+          const userData = await userResponse.json();
+          
+          if (userData && userData[0] && userData[0].activo === false) {
+            // El usuario está deshabilitado, puedes mostrar un mensaje de error o redirigir
+            console.log('El usuario está deshabilitado');
+            // Puedes mostrar un mensaje de error o redirigir a una página de acceso denegado
+            return;
+          }
+  
           const userInfo = {
             username: user.given_name,
             email: user.email,
             rol: "Usuario", // Set a default role
           };
-
+  
           if (!isEmailExists) {
             await sendUserInfoToBackend(userInfo);
           }
-
+  
           fetchUserInfoByEmail(user.email);
         } catch (error) {
           console.error("Error al verificar la existencia del correo:", error);
         }
       };
-
+  
       checkEmailAndSetDefaultRole(user.email);
-      
     }
-    
   }, [isAuthenticated, user]);
+  
 
   const [isEditing, setIsEditing] = useState(false);
 

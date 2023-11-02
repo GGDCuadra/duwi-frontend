@@ -172,21 +172,22 @@ const SeriesList = () => {
     <div className="flex justify-center flex-col items-center">
       <div className="w-4/5 p-4">
 
-        <h1 className="text-2xl font-bold text-center mb-8 font-poppins text-moradito dark:text-lila">Series</h1>
+      <h1 className="text-3xl font-bold text-center mb-8 font-poppins text-moradito dark:text-lila">Series</h1>
+      <div className="flex justify-between items-center mb-6 font-poppins">
         <input
           type="text"
           placeholder="Buscar por título de serie"
-          className="w-full border border-lila p-2 rounded-md mb-4 font-poppins"
+          className="w-1/3 md:w-2/2 border border-lila p-2 rounded-md"
 
           onChange={handleSearch}
         />
 
           <div className="flex items-center">
-            <label className="mr-2">Filtro</label>
+            <label className="mr-2 font-poppins">Filtro</label>
             <select
               value={filtro}
               onChange={(e) => setFiltro(e.target.value)}
-              className="border border-gray-300 p-2 rounded-md"
+              className="border border-lila-300 p-2 rounded-md"
             >
               <option disabled>Selecciona una opción</option>
               <option value="allmovies">Todas</option>
@@ -196,7 +197,7 @@ const SeriesList = () => {
           </div>
 
           <button
-            className=" bg-blue-200 font-bold border border-gray-400 rounded-md p-2 rounded-md  hover:bg-gray-400"
+            className=" bg-lila text-fondito font-bold rounded-xl p-2 hover:bg-moradito font-poppins"
             onClick={handleAddClick}
           >
             Agregar Serie
@@ -209,7 +210,7 @@ const SeriesList = () => {
               <tr>
 
                 <th onClick={handleSortTitle}  
-                className="px-2 py-2 cursor-pointer">
+                className="px-2 py-2 cursor-pointer font-poppins text-clarito">
                   Título{" "}
                   {ordenarPor === "name" ? (
                     orden === "asc" ? (
@@ -221,7 +222,7 @@ const SeriesList = () => {
                 </th>
 
                 <th className="px-2 py-2">Poster</th>
-                <th onClick={() => handleSort('premiered')} className="px-2 py-2 cursor-pointer">
+                <th onClick={() => handleSort('premiered')} className="px-2 py-2 cursor-pointer font-poppins text-clarito">
                   Año{' '}
                   {ordenarPor === 'premiered' ? (
                     orden === 'asc' ? (
@@ -233,11 +234,11 @@ const SeriesList = () => {
                 </th>
 
 
-                <th className="px-2 py-2">Duración</th>
-                <th className="px-2 py-2">Género</th>
-                <th className="px-2 py-2">Trailer</th>
-                <th className="px-2 py-2">Deshabilitar</th>
-                <th className="px-2 py-2">Acción</th>
+                <th className="px-2 py-2 cursor-pointer font-poppins text-clarito">Duración</th>
+                <th className="px-2 py-2 cursor-pointer font-poppins text-clarito">Género</th>
+                <th className="px-2 py-2 cursor-pointer font-poppins text-clarito">Trailer</th>
+                <th className="px-2 py-2 cursor-pointer font-poppins text-clarito">Deshabilitar</th>
+                <th className="px-2 py-2 cursor-pointer font-poppins text-clarito">Acción</th>
 
               </tr>
             </thead>
@@ -302,7 +303,7 @@ const SeriesList = () => {
                       Habilitar
                     </button>
                   </div>
-                  </td>
+                  </td>
 
                    <td className="whitespace-nowrap px-2 py-2 text-center" style={{ position: 'relative' }}>
                   <FaEdit
@@ -354,7 +355,7 @@ const SeriesList = () => {
 
           <div className="inline-flex -space-x-px text-sm h-8">
             <button
-              className={`flex items-center justify-center px-3 h-8 ml-2 text-moradito bg-white border border-lila hover:bg-moradito hover:text-clarito dark:bg-lila dark:border-lila dark:text-clarito dark:hover:bg-moradito dark:hover:text-white`}
+              className={`flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-morado border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
               onClick={() => handleChangePage(pagina - 1)}
               disabled={pagina === 0}
             >
@@ -365,7 +366,7 @@ const SeriesList = () => {
                 <li key={numPagina}>
                   <button
                     onClick={() => handleChangePage(numPagina)}
-                    className={`flex items-center justify-center px-3 h-8 ml-2 text-moradito bg-white border border-lila hover:bg-moradito hover:text-clarito dark:bg-lila dark:border-lila dark:text-clarito dark:hover:bg-moradito dark:hover:text-white' : ''}`}
+                    className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${pagina === numPagina ? 'text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white' : ''}`}
                   >
                     {numPagina + 1}
                   </button>
@@ -374,7 +375,7 @@ const SeriesList = () => {
             </ul>
 
             <button
-              className={`flex items-center justify-center px-3 h-8 ml-2 text-moradito bg-white border border-lila hover:bg-moradito hover:text-clarito dark:bg-lila dark:border-lila dark:text-clarito dark:hover:bg-moradito dark:hover:text-white`}
+              className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-morado dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
               onClick={() => handleChangePage(pagina + 1)}
               disabled={pagina >= totalPaginas - 1}
             >
