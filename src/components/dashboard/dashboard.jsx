@@ -103,7 +103,7 @@ function Dashboard() {
   const checkEmailExistence = async (email) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/users?email=${email}`
+        `https://duwi.onrender.com/users?email=${email}`
       );
       if (response.status === 200) {
         setIsEmailExists(true);
@@ -116,7 +116,7 @@ function Dashboard() {
   const fetchUserInfoByEmail = async (email) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/usersByEmail?email=${email}`
+        `https://duwi.onrender.com/usersByEmail?email=${email}`
       );
       if (response.status === 200) {
         const userData = await response.json();
@@ -143,7 +143,7 @@ function Dashboard() {
       }
 
       // Si el correo no existe, crea el usuario
-      const response = await fetch("http://localhost:3001/users", {
+      const response = await fetch("https://duwi.onrender.com/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -185,7 +185,7 @@ function Dashboard() {
   const fetchFavoriteMovies = async (userId) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/favorites/movies/${userId}`
+        `https://duwi.onrender.com/favorites/movies/${userId}`
       );
       if (response.status === 200) {
         const favoriteMoviesData = await response.json();
@@ -199,7 +199,7 @@ function Dashboard() {
   // Nueva función para obtener series favoritas
   const fetchFavoriteSeries = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:3001/favorites/${userId}`);
+      const response = await fetch(`https://duwi.onrender.com/favorites/${userId}`);
       if (response.status === 200) {
         const favoriteSeriesData = await response.json();
         setFavoriteSeries(favoriteSeriesData);
@@ -231,7 +231,7 @@ function Dashboard() {
     try {
       // Enviar los campos editados al servidor a través de una solicitud PUT
       const response = await fetch(
-        `http://localhost:3001/users/${userInfoByEmail._id}`,
+        `https://duwi.onrender.com/users/${userInfoByEmail._id}`,
         {
           method: "PUT",
           headers: {
@@ -264,7 +264,7 @@ function Dashboard() {
   
   useEffect(() => {
     if (userInfoByEmail && userInfoByEmail._id) {
-      fetch(`http://localhost:3001/moviesvistas/${userInfoByEmail._id}`)
+      fetch(`https://duwi.onrender.com/moviesvistas/${userInfoByEmail._id}`)
         .then(response => response.json())
         .then(data => {
           const movieIdsNullCompletada = data
@@ -281,7 +281,7 @@ function Dashboard() {
   
   const fetchWatchingSeries = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:3001/seriesvistas/${userId}`);
+      const response = await fetch(`https://duwi.onrender.com/seriesvistas/${userId}`);
       if (response.status === 200) {
         const seriesData = await response.json();
         const nullCompletedSeries = seriesData.filter((item) => item.completada === null);

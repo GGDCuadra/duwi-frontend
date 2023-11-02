@@ -18,7 +18,7 @@ function SearchBar() {
   useEffect(() => {
     setLoading(true);
     const delayTimer = setTimeout(() => {
-      fetch("http://localhost:3001/enabledMovies")
+      fetch("https://duwi.onrender.com/enabledMovies")
         .then((response) => response.json())
         .then((data) => {
           setAllMovies(data); 
@@ -43,7 +43,7 @@ function SearchBar() {
   useEffect(() => {
     setLoading(true);
     const delayTimer = setTimeout(() => {
-      fetch("http://localhost:3001/series")
+      fetch("https://duwi.onrender.com/series")
         .then((response) => response.json())
         .then((data) => {
           setAllSeries(data); 

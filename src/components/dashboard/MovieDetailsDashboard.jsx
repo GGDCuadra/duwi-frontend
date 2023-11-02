@@ -10,7 +10,7 @@ function MovieDetailsDashboard({ movieId }) {
 
   const fetchMovieDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/movies/byObjectId/${movieId}`);
+      const response = await fetch(`https://duwi.onrender.com/movies/byObjectId/${movieId}`);
       if (response.status === 200) {
         const movieDetailsData = await response.json();
         setMovieDetails(movieDetailsData);

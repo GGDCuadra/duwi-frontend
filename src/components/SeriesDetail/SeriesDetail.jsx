@@ -64,7 +64,7 @@ function SerieDetail() {
       };
 
       // Realizar una solicitud POST al servidor para guardar la serie como favorita
-      await axios.post('http://localhost:3001/favorites', dataSeries);
+      await axios.post('/favorites', dataSeries);
     }
   };
   const handleWatching = async () => {
@@ -80,7 +80,7 @@ function SerieDetail() {
       try {
         // Realizar una solicitud POST a /seriesvistas para agregar a "series que estoy viendo"
         await axios.post(
-          "http://localhost:3001/seriesvistas",
+          "/seriesvistas",
           dataSerie
         );
       } catch (error) {
