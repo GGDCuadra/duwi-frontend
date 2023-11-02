@@ -5,6 +5,8 @@ import Swal from 'sweetalert2'; // Importa SweetAlert2
 
 function MovieDetailsDashboard({ movieId }) {
   const [movieDetails, setMovieDetails] = useState(null);
+  const [showCard, setShowCard] = useState(true)
+
 
   const fetchMovieDetails = async () => {
     try {
@@ -38,16 +40,14 @@ function MovieDetailsDashboard({ movieId }) {
     }).then((result) => {
       if (result.isConfirmed) {
         // El usuario confirmó la eliminación, realiza la eliminación
-        try {
-          axios.delete(`http://localhost:3001/favorites/movies/${userId}/${movieId}`);
-        } catch (error) {
-          console.error('Error al eliminar película de favoritos:', error);
-        }
+        axios.delete(`http://localhost:3001/favorites/movies/${userId}/${movieId}`);
+
+        setShowCard(false)
       }
     });
   };
 
-  return movieDetails ? (
+  return showCard && movieDetails ? (
     <div className="w-48 p-2 rounded-lg shadow-md mb-4 mr-5">
       <div className="relative rounded-lg overflow-hidden border-t-0">
         <img

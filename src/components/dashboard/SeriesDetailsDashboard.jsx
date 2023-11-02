@@ -4,7 +4,7 @@ import Swal from 'sweetalert2'; // Importa SweetAlert2
 
 function SeriesDetailsDashboard({ seriesId }) {
   const [seriesDetails, setSeriesDetails] = useState(null);
-
+  const [showCard, setShowCard] = useState(true)
   const fetchSeriesDetails = async () => {
     try {
       const response = await fetch(`http://localhost:3001/series/${seriesId}`);
@@ -37,17 +37,15 @@ function SeriesDetailsDashboard({ seriesId }) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         // El usuario confirmó la eliminación, realiza la eliminación
-        try {
+     
          await axios.delete(`http://localhost:3001/favorites/${userId}/${seriesId}`);
-                    // Maneja la respuesta o actualiza la interfaz si es necesario
-        } catch (error) {
-          console.error('Error al eliminar serie de favoritos:', error);
-        }
+         setShowCard(false)
+       
       }
     });
   };
 
-  return seriesDetails ? (
+  return  showCard && seriesDetails ? (
     <div className="w-48 p-2 rounded-lg shadow-md mb-4 mr-5">
       <div className="relative rounded-lg overflow-hidden border-t-0">
         <img
