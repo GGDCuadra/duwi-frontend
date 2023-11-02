@@ -17,6 +17,8 @@ function SeriesDetailsDashboard({ seriesId }) {
     }
   };
 
+  
+
   useEffect(() => {
     fetchSeriesDetails();
   }, [seriesId, seriesDetails]);
