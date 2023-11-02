@@ -15,6 +15,10 @@ function SearchBar() {
     setSearchTerm(value);
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault(); 
+  };
+
   useEffect(() => {
     setLoading(true);
     const delayTimer = setTimeout(() => {
@@ -66,7 +70,7 @@ function SearchBar() {
   
   return (
     <div className="relative">
-  <form className="w-full">
+  <form className="w-full" onSubmit={handleSubmit}>
     <input
       className="bg-search outline-none focus:outline-none rounded-full px-4 py-2 shadow w-full font-poppins"
       placeholder="Buscar película o serie"
