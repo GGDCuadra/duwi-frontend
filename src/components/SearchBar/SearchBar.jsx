@@ -14,11 +14,9 @@ function SearchBar() {
     const { value } = event.target;
     setSearchTerm(value);
   };
-
   const handleSubmit = (event) => {
     event.preventDefault(); 
   };
-
   useEffect(() => {
     setLoading(true);
     const delayTimer = setTimeout(() => {
