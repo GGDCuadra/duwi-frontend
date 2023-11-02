@@ -28,7 +28,7 @@ function SerieDetail() {
   const getSeriesByObjectId = async () => {
     try {
       const id = _id
-      const { data } = await axios.get(`/series/${id}`);
+      const { data } = await axios.get(`http://localhost:3001/series/${id}`);
       setSeriesFromDb(data);
     } catch (error) {
       console.error('Error al obtener detalles de la serie:', error);
@@ -79,7 +79,7 @@ function SerieDetail() {
     }
   };
   if (!series) {
-    return  <div className="flex w-screen h-screen justify-center items-center bg-gray-100">
+    return  <div className="flex w-screen h-screen justify-center items-center">
     <div className="flex flex-col items-center">
       <svg className="animate-spin h-12 w-12 text-moradito dark:text-lila" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

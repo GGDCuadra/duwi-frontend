@@ -383,7 +383,6 @@ const SeriesList = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

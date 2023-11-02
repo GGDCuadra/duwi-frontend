@@ -112,6 +112,7 @@ function Dashboard() {
       if (response.status === 200) {
         const userData = await response.json();
         setUserInfoByEmail(userData);
+        
         localStorage.setItem("userData", JSON.stringify(userData));
       }
     } catch (error) {
