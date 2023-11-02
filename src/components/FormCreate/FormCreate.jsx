@@ -13,7 +13,7 @@ const FormCreate = () => {
     const week=["Monday", "Tuesday","Wednesday","Thursday","Friday", "Saturday", "Sunday"];
     const initialValuesMoviesCreate = {
         id: '',
-        actors: [],
+        Actors: [],
         actorName: '',
         Poster_Link: '',
         Series_Title: '',
@@ -102,7 +102,7 @@ const FormCreate = () => {
                     
                     // data.Genre = data.Genre.split(',').map(genre => genre.trim());
                     const results = {...data,
-                    actors: []}
+                    Actors: []}
 
                     setInitialValuesMovies(results)
 
@@ -119,7 +119,7 @@ const FormCreate = () => {
                 try {
                     setLoading(true)
                     const {data} = await (axios.get(`http://localhost:3001/series/${id}`))
-                    console.log(data)
+                   
                     setInitialValuesSeries(data)
                     setLoading(false)
                 } catch (error) {
@@ -303,7 +303,6 @@ const FormCreate = () => {
                         }
                     }
                     postMovie();
-                    console.log(dataToSend)
 
                   } else if (buttonPressed === 'edit') {
                     const genresAsString = values.Genre.join(', ');
@@ -345,7 +344,6 @@ const FormCreate = () => {
             {({errors, values, setFieldValue, initialValues}) => (
                 
                 <div className="py-8 px-6">
-                    {console.log(initialValues)}
                     
                 <Form className="text-moradito font-poppins flex flex-col items-center space-y-4 mt-10 ">
                     
@@ -600,7 +598,7 @@ const FormCreate = () => {
                         type="text"
                         placeholder="Nombre del actor"
                         />
-                        <FieldArray name="actors">
+                        <FieldArray name="Actors">
                         {arrayHelpers => (
                             <div>
                             <button
@@ -615,7 +613,7 @@ const FormCreate = () => {
                             </button>
                             <div>
                                 <ul>
-                                {values.actors.map((actor, index) => (
+                                {values.Actors.map((actor, index) => (
                                     <li key={index}>{actor}<button className='text-sm ml-2 text-red-500' type='button' onClick={() => arrayHelpers.remove(index)}>X</button></li>
                                 ))}
                                 </ul>
@@ -633,7 +631,7 @@ const FormCreate = () => {
                         type="text"
                         placeholder="Nombre del actor"
                         />
-                        <FieldArray name="actors">
+                        <FieldArray name="Actors">
                         {arrayHelpers => (
                             <div>
                             <button
@@ -648,7 +646,7 @@ const FormCreate = () => {
                             </button>
                             <div>
                                 <ul>
-                                {values.actors.map((actor, index) => (
+                                {values.Actors.map((actor, index) => (
                                     <li key={index}>{actor}<button className='text-sm ml-2 text-red-500' type='button' onClick={() => arrayHelpers.remove(index)}>X</button></li>
                                 ))}
                                 </ul>
