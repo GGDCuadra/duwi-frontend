@@ -21,7 +21,7 @@ rootElement.render(
         <BrowserRouter>
           <Auth0Provider
             domain="dev-yan4u8u82wxf2qfz.us.auth0.com"
-            clientId="3tvQ9nFAkeQ6gs6UzoAN19PHHQTEl9N3"
+            clientId="4m7ITw6bxuQ5kCsIIl47C3y4A9DS0iB8"
             redirectUri={window.location.origin + '/dashboard'}
           >
             <App />
