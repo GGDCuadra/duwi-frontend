@@ -28,7 +28,7 @@ function UserList() {
         console.error('Error al obtener la lista de usuarios:', error);
       });
 
-      axios.get('http://localhost:3001/userRoles')
+      axios.get('/userRoles')
       .then(response => {
         setUserRoles(response.data);
       })
@@ -147,7 +147,7 @@ function UserList() {
         // Determine the role to send to the server
         const roleToSend = newRole === 'Admin' ? 'Admin' : 'Usuario';
   
-        axios.put(`http://localhost:3001/updateRole/${user._id}`, { rol: roleToSend })
+        axios.put(`/updateRole/${user._id}`, { rol: roleToSend })
           .then(response => {
             // Update the userRoles state
             setUserRoles(prevRoles => ({

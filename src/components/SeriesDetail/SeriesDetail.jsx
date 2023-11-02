@@ -25,7 +25,7 @@ function SerieDetail() {
 
   useEffect(() => {
     
-    axios.get(`http://localhost:3001/series/average-rating/${_id}`)
+    axios.get(`/series/average-rating/${_id}`)
       .then((response) => {
         setAverageRating(response.data.averageRating);
       })
@@ -42,7 +42,7 @@ function SerieDetail() {
   const getSeriesByObjectId = async () => {
     try {
       const id = _id
-      const { data } = await axios.get(`http://localhost:3001/series/${id}`);
+      const { data } = await axios.get(`/series/${id}`);
       setSeriesFromDb(data);
     } catch (error) {
       console.error('Error al obtener detalles de la serie:', error);
@@ -101,7 +101,7 @@ function SerieDetail() {
       puntuacion: newValue,
     };
     axios
-      .post('http://localhost:3001/series/rating', data)
+      .post('/series/rating', data)
       .then((response) => {
         Swal.fire({
           title: 'Mensaje',

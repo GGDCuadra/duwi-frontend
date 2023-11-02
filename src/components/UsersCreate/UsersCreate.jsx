@@ -29,7 +29,7 @@ function UserRegistration() {
         email,
         password,
       };
-      const response = await axios.post('http://localhost:3001/users', newUser);
+      const response = await axios.post('/users', newUser);
       if (response.status === 201) {
         setMessage('Usuario registrado con éxito');
         navigate('/admin/userlist');

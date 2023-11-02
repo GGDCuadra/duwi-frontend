@@ -33,7 +33,7 @@ function MovieDetail() {
 
 const getAverageRating = async () => {
   try {
-    const response = await axios.get(`http://localhost:3001/movie/average-rating/${_id}`);
+    const response = await axios.get(`/movie/average-rating/${_id}`);
     setAverageRating(response.data.averageRating); 
   } catch (error) {
     console.error('Error al obtener la calificación promedio:', error);
@@ -120,7 +120,7 @@ const getAverageRating = async () => {
       movieId: _id,
       puntuacion: newValue,
     };
-    axios.post("http://localhost:3001/movie/rating", data)
+    axios.post("/movie/rating", data)
       .then((response) => {
      Swal.fire({
         title: 'Mensaje',

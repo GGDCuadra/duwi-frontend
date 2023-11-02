@@ -98,7 +98,7 @@ const FormCreate = () => {
             async function getMovieById() {
                 try {
                     setLoading(true)
-                    const {data} = await (axios.get(`http://localhost:3001/movies/byObjectId/${id}`))
+                    const {data} = await (axios.get(`/movies/byObjectId/${id}`))
                     
                     // data.Genre = data.Genre.split(',').map(genre => genre.trim());
                     const results = {...data,
@@ -118,7 +118,7 @@ const FormCreate = () => {
             async function getSerieById() {
                 try {
                     setLoading(true)
-                    const {data} = await (axios.get(`http://localhost:3001/series/${id}`))
+                    const {data} = await (axios.get(`/series/${id}`))
                     console.log(data)
                     setInitialValuesSeries(data)
                     setLoading(false)
@@ -281,7 +281,7 @@ const FormCreate = () => {
                     delete dataToSend.actorName;
                     async function postMovie() {
                         try {
-                            await axios.post(`http://localhost:3001/movies`, dataToSend)
+                            await axios.post(`/movies`, dataToSend)
                             Swal.fire({
                                 icon:'success',
                                 title: 'Éxito',
@@ -314,7 +314,7 @@ const FormCreate = () => {
                     delete dataToSend.actorName;
                     async function putMovie() {
                         try {
-                            await axios.put(`http://localhost:3001/movies/byObjectId/${id}`, dataToSend)
+                            await axios.put(`/movies/byObjectId/${id}`, dataToSend)
                             Swal.fire({
                                 icon:'success',
                                 title: 'Éxito',
@@ -774,7 +774,7 @@ const FormCreate = () => {
                     
                     async function postSerie() {
                         try {
-                            await axios.post(`http://localhost:3001/postSeries`, dataToSend)
+                            await axios.post(`/postSeries`, dataToSend)
                             Swal.fire({
                                 icon:'success',
                                 title: 'Éxito',
@@ -802,7 +802,7 @@ const FormCreate = () => {
                    
                     async function putSerie() {
                         try {
-                            await axios.put(`http://localhost:3001/series/${id}`, values)
+                            await axios.put(`/series/${id}`, values)
                             Swal.fire({
                                 icon:'success',
                                 title: 'Éxito',
