@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
@@ -48,39 +48,50 @@ function UserRegistration() {
   };
 
   return (
-    <div>
-      <h1>Registro de Usuario</h1>
-      <div>
-        <label>Nombre de usuario:</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Escribe tu nombre de usuario"
-        />
+    <div className="h-screen flex justify-center items-center font-poppins">
+      <div className="bg-fondito p-8 rounded-lg shadow-md w-80 dark:bg-morado">
+        <h1 className="text-2xl font-semibold mb-4 text-oscuro dark:text-lila">Registro de Usuario</h1>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-moradito dark:text-clarito">Nombre de usuario:</label>
+          <input
+            className="w-full p-2 border rounded-md"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Escribe tu nombre de usuario"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-moradito dark:text-clarito">Correo electrónico:</label>
+          <input
+            className="w-full p-2 border rounded-md"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Escribe tu correo electrónico"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-moradito dark:text-clarito">Contraseña:</label>
+          <input
+            className="w-full p-2 border rounded-md"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Escribe tu contraseña"
+          />
+        </div>
+        <button
+          className="w-full bg-lila hover:bg-moradito text-fondito font-medium p-2 rounded-md"
+          onClick={handleRegister}
+        >
+          Registrar
+        </button>
+        <div className="mt-4 text-red-500">{message}</div>
       </div>
-      <div>
-        <label>Correo electrónico:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Escribe tu correo electrónico"
-        />
-      </div>
-      <div>
-        <label>Contraseña:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Escribe tu contraseña"
-        />
-      </div>
-      <button onClick={handleRegister}>Registrar</button>
-      <div>{message}</div>
     </div>
   );
+  
 }
 
 export default UserRegistration;
