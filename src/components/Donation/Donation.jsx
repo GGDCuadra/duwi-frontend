@@ -7,8 +7,8 @@ import Footer from '../Footer/Footer';
 
 function Donation() {
   const clientId = 'ASzWyoXmir_pj5IJspk5BfAbJvyIxvS13jjy_irfX3TUuqFMOAFra8bI0RrbU06SVpGHiFbOB1R3Jvmb';
-  const backendUrl = '/donate';
-
+  const backendUrl = 'http://localhost:3001/donate';
+  const urlNotificationDonation = 'http://localhost:3001/donation'
   const [donationAmount, setDonationAmount] = useState(0);
   const [showPayPalButton, setShowPayPalButton] = useState(false);
 
@@ -24,6 +24,9 @@ function Donation() {
       ],
     });
   };
+
+  const userData = localStorage.getItem('userData');
+  const userInfo = JSON.parse(userData);
 
   const onApprove = (data, actions) => {
     return actions.order.capture()
@@ -48,6 +51,10 @@ function Donation() {
           }).then((result) => {
             if (result.isConfirmed) {
               setShowPayPalButton(false)
+              if(userInfo) {
+                const {data} = axios.post(urlNotificationDonation, {email: userInfo.email, amount: donationAmount})
+                console.log(data);
+              }
             }
           })
         }

@@ -31,7 +31,25 @@ const Navbar = () => {
     }
     userData()
   }, [user]);
-  console.log(userInfo);
+
+  const banear = async() => {
+    try {
+      const result = await Swal.fire({
+      title: 'Usted ha sido baneado',
+      text: 'Contactese con un administrador',
+      icon: 'warning',
+      confirmButtonText: 'OK!',
+    });
+    if (result.isConfirmed) {
+      logout({ returnTo: window.location.origin });
+    }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  if (userInfo?.activo === false) {
+    banear()
+  }
 
   const handleLogout = async () => {
     if (isAuthenticated) {
