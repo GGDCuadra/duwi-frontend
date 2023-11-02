@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAuth0 } from "@auth0/auth0-react";
+import Rating from "react-rating-stars-component";
+import Swal from 'sweetalert2';
 
 function MovieDetail() {
 
@@ -19,14 +21,24 @@ function MovieDetail() {
   const [isWatching, setIsWatching] = useState(false); 
   const [isFav, setIsFav] = useState(false);
   const [movieFromDb, setMovieFromDb] = useState("")
-
+  const [rating, setRating] = useState(0);
+  const [averageRating, setAverageRating] = useState(null);
 
   useEffect(() => {
     if (!moviesDetail) {
       getSeriesByObjectId();
     }
+    getAverageRating();
   }, [_id]);
 
+const getAverageRating = async () => {
+  try {
+    const response = await axios.get(`http://localhost:3001/movie/average-rating/${_id}`);
+    setAverageRating(response.data.averageRating); 
+  } catch (error) {
+    console.error('Error al obtener la calificación promedio:', error);
+  }
+};
   const getSeriesByObjectId = async () => {
     try {
       const id = _id
@@ -96,12 +108,34 @@ function MovieDetail() {
         console.error("Error al agregar a películas que estoy viendo:", error);
       }
     } else {
-      // Si ya está marcada como "películas que estoy viendo", puedes implementar la lógica para quitarla si lo deseas.
-      // Puedes realizar una solicitud DELETE o similar para eliminarla de la lista.
-      // Esta parte dependerá de la lógica de tu aplicación.
+    
     }
   };
+
+
+  const handleRating = (newValue) => {
+    setRating(newValue);
+    const data = {
+      userId: userInfo._id,
+      movieId: _id,
+      puntuacion: newValue,
+    };
+    axios.post("http://localhost:3001/movie/rating", data)
+      .then((response) => {
+     Swal.fire({
+        title: 'Mensaje',
+        text: response.data.message,
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+      })
+      .catch((error) => {
+      });
+  };
+
+
 if (!movieFromDb && !moviesDetail) {
+
     return  <div className="flex w-screen h-screen justify-center items-center bg-gray-100">
     <div className="flex flex-col items-center">
       <svg className="animate-spin h-12 w-12 text-moradito dark:text-lila" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -215,6 +249,36 @@ if (!movieFromDb && !moviesDetail) {
           </li>
         </ul>
       </div>
+      <div className="text-center mt-8">
+        <h2 className="text-xl font-bold text-oscuro font-poppins mb-2 dark:text-lila">
+          Calificación:
+        </h2>
+        <Rating
+          count={5} // Número total de estrellas
+          value={rating} // Valor actual de la calificación
+          onChange={handleRating} // Función que se llama al seleccionar una calificación
+          size={30} // Tamaño de las estrellas
+          color="#f00" // Color de las estrellas activas
+          activeColor="#00f" // Color de la estrella seleccionada
+        />
+      </div>
+
+      <div className="text-center mt-8">
+  <h2 className="text-xl font-bold text-oscuro font-poppins mb-2 dark:text-lila">
+    Calificación Promedio:
+  </h2>
+  {averageRating !== null ? (
+    <Rating
+      value={averageRating}
+      edit={false} // Esto evita que los usuarios puedan cambiar la calificación promedio
+      size={30}
+      color="#f00"
+      activeColor="#00f"
+    />
+  ) : (
+    <p>Cargando calificación promedio...</p>
+  )}
+</div>
       <div>
         <Footer />
       </div>
