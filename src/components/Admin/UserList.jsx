@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaSort } from 'react-icons/fa';
 import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
+
 
 function UserList() {
   const [users, setUsers] = useState([]);
@@ -130,32 +132,7 @@ function UserList() {
   const handleAddClick = () => {
     
   };
-
-  // const handleUserRoleChange = (user, newRole) => {
-  //   const confirmationMessage = `¿Está seguro de cambiar el rol de "${user.username}" a "${newRole}"?`;
   
-  //   Swal.fire({
-  //     title: confirmationMessage,
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonText: 'Sí',
-  //     cancelButtonText: 'Cancelar',
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       const roleToSend = newRole === 'Admin' ? 'Admin' : 'Usuario';
-  //       axios.put(`http://localhost:3001/updateRole/${user._id}`, { rol: roleToSend })
-  //         .then(response => {
-  //           setUserRoles(prevRoles => ({
-  //             ...prevRoles,
-  //             [user._id]: roleToSend
-  //           }));
-  //         })
-  //         .catch(error => {
-  //           console.error('Error al actualizar el rol del usuario:', error);
-  //         });
-  //     }
-  //   });
-  // };
   const handleUserRoleChange = (user, newRole) => {
     const confirmationMessage = `¿Está seguro de cambiar el rol de "${user.username}" a "${newRole}"?`;
   
@@ -201,10 +178,14 @@ function UserList() {
             onChange={handleSearch}
           />
           <button
-            className="bg-lila font-poppins text-fondito border p-2 rounded-md hover:bg-moradito"
-            onClick={handleAddClick}
+            //className="bg-lila font-poppins text-fondito border p-2 rounded-md hover:bg-moradito"
+            // onClick={handleAddClick}
           >
-            Agregar Usuario
+            <Link to="/crearusuario" className="bg-lila font-poppins text-fondito border p-2 rounded-md hover:bg-moradito">
+                Agregar Usuario
+          </Link>
+
+            {/* Agregar Usuario */}
           </button>
         </div>
   
@@ -241,7 +222,7 @@ function UserList() {
                     )
                   ) : null}
                 </th>
-                <th className="px-2 py-2 font-poppins">Deshabilitar</th>
+                <th className="px-2 py-2">Deshabilitar</th>
                 <th className="px-2 py-2">Rol</th>
               </tr>
             </thead>
@@ -264,9 +245,9 @@ function UserList() {
                     <button
                         onClick={() => handleToggleDeshabilitar(user)}
                         className={`${
-                          user.disabled ? 'bg-gray-300' : 'bg-red-500'
-                        } text-white rounded-md text-sm font-poppins`}
-                        disabled={user.disabled}
+                          user.activo === false ? 'bg-gray-300' : 'bg-red-500'
+                        } text-white rounded-md text-sm`}
+                        disabled={user.activo === false }
                       >
                         Deshabilitar
                       </button>
@@ -275,8 +256,8 @@ function UserList() {
                         style={{
                           backgroundColor: user.activo === false ? 'green' : '#cccccc',
                         }}
-                        className="text-white rounded-md text-sm mt-1 font-poppins"
-                        disabled={!user.disabled}
+                        className="text-white rounded-md text-sm mt-1"
+                        disabled={user.activo !== false}
                       >
                         Habilitar
                       </button>
@@ -359,3 +340,6 @@ function UserList() {
 }  
 
 export default UserList;
+
+
+

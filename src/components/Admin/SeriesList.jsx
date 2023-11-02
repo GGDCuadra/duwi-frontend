@@ -303,7 +303,7 @@ const SeriesList = () => {
                       Habilitar
                     </button>
                   </div>
-                  </td>
+                  </td>
 
                    <td className="whitespace-nowrap px-2 py-2 text-center" style={{ position: 'relative' }}>
                   <FaEdit
@@ -386,6 +386,7 @@ const SeriesList = () => {
       </div>
       </div>
   );
+  
 };
 
 export default SeriesList;
