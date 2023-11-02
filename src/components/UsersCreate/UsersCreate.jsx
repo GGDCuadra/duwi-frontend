@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
 function UserRegistration() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+
+  const navigate = useNavigate(); 
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required('El nombre de usuario es obligatorio'),
@@ -29,6 +32,7 @@ function UserRegistration() {
       const response = await axios.post('http://localhost:3001/users', newUser);
       if (response.status === 201) {
         setMessage('Usuario registrado con éxito');
+        navigate('/admin/userlist');
       } else {
         setMessage('Error al registrar el usuario');
       }
