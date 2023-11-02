@@ -250,17 +250,24 @@ if (!movieFromDb && !moviesDetail) {
       
       <div className="flex flex-col items-center justify-center h-screen mt-[-35rem] ml-72">
         <div className="text-center mt-3">
-          <h2 className="text-xl font-bold text-oscuro font-poppins mb-2 dark:text-lila">
-            Calificación:
-          </h2>
-          <Rating
-            count={5}
-            value={rating}
-            onChange={handleRating}
-            size={30}
-            color="#5F5985"
-            activeColor="#A29EDA"
-          />
+          {
+            isAuthenticated ? (
+              <>
+                <h2 className="text-xl font-bold text-oscuro font-poppins mb-2 dark:text-lila">
+              Calificación:
+            </h2>
+            <Rating
+              count={5}
+              value={rating}
+              onChange={handleRating}
+              size={30}
+              color="#5F5985"
+              activeColor="#A29EDA"
+            />
+              </>
+            ) : null
+          }
+          
         </div>
         
         <div className="text-center mt-8">

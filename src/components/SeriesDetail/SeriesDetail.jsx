@@ -196,15 +196,22 @@ function SerieDetail() {
       
       <div className="flex flex-col items-center justify-center h-screen mt-[-20rem] ml-20">
       <div className="text-center mt-8">
-        <h2 className="text-xl font-bold text-oscuro font-poppins mb-2 dark:text-lila">Calificación:</h2>
-        <Rating
-          count={5} // Número total de estrellas
-          value={rating} // Valor actual de la calificación
-          onChange={handleRating} // Función que se llama al seleccionar una calificación
-          size={30} // Tamaño de las estrellas
-          color="#5F5985" // Color de las estrellas activas
-          activeColor="#A29EDA" // Color de la estrella seleccionada
-        />
+        {
+          isAuthenticated ? (
+            <>
+                <h2 className="text-xl font-bold text-oscuro font-poppins mb-2 dark:text-lila">Calificación:</h2>
+            <Rating
+              count={5} // Número total de estrellas
+              value={rating} // Valor actual de la calificación
+              onChange={handleRating} // Función que se llama al seleccionar una calificación
+              size={30} // Tamaño de las estrellas
+              color="#5F5985" // Color de las estrellas activas
+              activeColor="#A29EDA" // Color de la estrella seleccionada
+            />
+            </>
+          ) : null
+        }
+        
       </div>
 
       <div className="text-center mt-8">
